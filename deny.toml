@@ -1,0 +1,115 @@
+# cargo-deny configuration for slideglance.
+#
+# Run locally with `cargo deny check`. CI runs the same on every PR.
+#
+# References:
+# https://embarkstudios.github.io/cargo-deny/checks/cfg.html
+
+[graph]
+# We compile for native + wasm32-unknown-unknown. Restrict the dependency
+# graph to those targets; advisory / license / ban checks then ignore
+# platform-only crates that don't ship in our build.
+targets = [
+    { triple = "x86_64-unknown-linux-gnu" },
+    { triple = "x86_64-apple-darwin" },
+    { triple = "aarch64-apple-darwin" },
+    { triple = "x86_64-pc-windows-msvc" },
+    { triple = "wasm32-unknown-unknown" },
+]
+all-features = true
+
+[output]
+feature-depth = 1
+
+# --- Advisories (security) -------------------------------------------------
+
+[advisories]
+version = 2
+db-path = "~/.cargo/advisory-db"
+db-urls = ["https://github.com/rustsec/advisory-db"]
+yanked = "deny"
+# Tauri 2 still pulls the GTK-3 binding stack (gtk-rs / atk / gdk /
+# gdk-pixbuf / gdkx11 + their `*-sys` siblings) for its Linux WebView
+# integration. Upstream marked the GTK-3 row of those bindings
+# unmaintained in 2024; the GTK-4 successors aren't a drop-in for
+# Tauri yet. The advisories are *unmaintained* notifications, not
+# active CVEs — explicit ignore is the right escape hatch until
+# Tauri's Linux runtime moves to GTK-4.
+#
+# proc-macro-error / paste-rs / instant: same story — unmaintained
+# but pulled by transitive dependencies (tauri-utils, tauri-plugin-*,
+# clap-derive's older releases). Re-evaluate when Cargo.lock churn
+# drops them.
+ignore = [
+    "RUSTSEC-2024-0370",  # proc-macro-error: unmaintained
+    "RUSTSEC-2024-0411",  # gtk: unmaintained (GTK-3 binding)
+    "RUSTSEC-2024-0412",  # atk: unmaintained
+    "RUSTSEC-2024-0413",  # gdk: unmaintained
+    "RUSTSEC-2024-0414",  # gdk-pixbuf: unmaintained
+    "RUSTSEC-2024-0415",  # gtk-sys: unmaintained
+    "RUSTSEC-2024-0416",  # gdk-sys: unmaintained
+    "RUSTSEC-2024-0417",  # atk-sys: unmaintained
+    "RUSTSEC-2024-0418",  # gdkx11-sys: unmaintained
+    "RUSTSEC-2024-0419",  # gdkx11: unmaintained
+    "RUSTSEC-2024-0420",  # gdk-pixbuf-sys: unmaintained
+    "RUSTSEC-2025-0075",  # transitive — tauri stack
+    "RUSTSEC-2025-0080",  # transitive — tauri stack
+    "RUSTSEC-2025-0081",  # transitive — tauri stack
+    "RUSTSEC-2025-0098",  # transitive — tauri stack
+    "RUSTSEC-2025-0100",  # transitive — tauri stack
+]
+
+# --- Licenses --------------------------------------------------------------
+#
+# slideglance itself ships under MIT. Direct + transitive dependencies must
+# use a permissive OSI license — no copyleft (GPL/LGPL/AGPL) since we
+# vendor the dependency tree into a WASM artifact distributed by NPM.
+# Apache-2.0 stays in the allow list because much of the upstream Rust
+# ecosystem is Apache-2.0; MIT-licensed code can legally consume it.
+
+[licenses]
+version = 2
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "Zlib",
+    "MPL-2.0", # weak-copyleft, file-level only — acceptable for libraries we don't modify
+    "CC0-1.0",
+    # Boost Software License — OSI-approved permissive, dragged in by
+    # `xxhash-rust` (used for the renderer's font-blob deduplication
+    # cache). Compatible with our MIT distribution.
+    "BSL-1.0",
+]
+confidence-threshold = 0.93
+exceptions = []
+
+# --- Bans (forbidden / restricted crates) ---------------------------------
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+highlight = "all"
+workspace-default-features = "allow"
+external-default-features = "allow"
+allow = []
+deny = [
+    # The crate `openssl-sys` would force a system OpenSSL dependency we
+    # don't want; force `rustls`-based stacks if any TLS is needed.
+    { name = "openssl-sys" },
+]
+skip = []
+skip-tree = []
+
+# --- Sources ---------------------------------------------------------------
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

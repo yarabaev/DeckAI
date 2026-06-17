@@ -1,0 +1,81 @@
+<Fragment>
+  <!-- Chapter 12 — Matrix diagrams. -->
+  <Use template="section-peach"
+       number="12"
+       kicker="2-axis comparisons"
+       title="Diagrams · matrix."
+       subtitle="2×2 grids, comparison matrices, BCG-style maps."
+       inside1="2×2 grid · impact-vs-effort, BCG-style maps"
+       inside2="Comparison row · attribute / option / option layout"
+       inside3="Each quadrant carries an eyebrow + title + body"
+       inside4="Axis labels live in surrounding HStack lanes"
+       epigraph="A matrix succeeds when both axes are ruthless and the four corners earn their tile."
+       epigraphAttrib="builder design notes"
+       meta="Composed from VStack · HStack · Layer · Line"
+       leftMeta="2 matrix patterns · primitives only" />
+
+  <Use template="page" eyebrow="12 / Diagrams" kicker="2×2"
+       title="2×2 matrix — impact vs. effort"
+       lede="Two HStacks of two cards = 2×2 grid. No Layer, no x/y. The quadrant-card template paints each cell; the axis labels sit on plain caption rows above and below.">
+    <Slot name="default">
+      <VStack class="card-canvas" gap="6" padding="20">
+        <!-- Top axis label. -->
+        <HStack alignItems="center" justifyContent="spaceBetween">
+          <Text class="caption" color="41454D">low effort →</Text>
+          <Text class="caption" color="41454D">high effort</Text>
+        </HStack>
+
+        <!-- Top row: Q1 (peach) | Q2 (coral). -->
+        <HStack gap="6" alignItems="stretch">
+          <Use template="quadrant-card" surface="card-peach"
+               eyebrow="QUADRANT I · QUICK WINS"  eyebrowColor="6B2C0A"
+               title="Coral hero · cream callout" titleColor="181D26"
+               body="High impact, low effort. Ship first."
+               bodyColor="333840" />
+          <Use template="quadrant-card" surface="card-coral"
+               eyebrow="QUADRANT II · STRATEGIC"  eyebrowColor="F5E0D6"
+               title="Forest signature · pricing dialect" titleColor="FFFFFF"
+               body="High impact, high effort. Roadmap."
+               bodyColor="FFD9C8" />
+        </HStack>
+
+        <!-- Bottom row: Q3 (soft) | Q4 (mustard). -->
+        <HStack gap="6" alignItems="stretch">
+          <Use template="quadrant-card" surface="card-soft"
+               eyebrow="QUADRANT III · DEPRIORITISE" eyebrowColor="41454D"
+               title="Hover-state styling" titleColor="181D26"
+               body="Low impact, low effort. Pass."
+               bodyColor="333840" />
+          <Use template="quadrant-card" surface="card-mustard"
+               eyebrow="QUADRANT IV · RECONSIDER"  eyebrowColor="6B4A1A"
+               title="Atmospheric gradient hero" titleColor="181D26"
+               body="Low impact, high effort. Defer."
+               bodyColor="6B4A1A" />
+        </HStack>
+      </VStack>
+
+      <Use template="h2" text="Comparison row · primary vs. pricing CTA" />
+      <!-- All four rows share the column contract through `compare-row`.
+           The label column sits on the soft tone; both value columns sit
+           on canvas so the comparison reads as a true 2-column table. -->
+      <VStack class="card-canvas" gap="0">
+        <Use template="compare-row" bg1="F8FAFC" bg2="FFFFFF" bg3="FFFFFF">
+          <Slot name="c1"><Text class="caption" color="AA2D00">ATTRIBUTE</Text></Slot>
+          <Slot name="c2"><Text class="caption" color="AA2D00">button-primary</Text></Slot>
+          <Slot name="c3"><Text class="caption" color="AA2D00">button-pill</Text></Slot>
+        </Use>
+        <Foreach items='[
+          {"c1":"borderRadius","c2":"12 (rounded.lg)","c3":"9999 (rounded.pill)"},
+          {"c1":"surface","c2":"primary (#181D26)","c3":"canvas (#FFFFFF)"},
+          {"c1":"used on","c2":"every editorial hero","c3":"pricing surface only"}
+        ]' as="r">
+          <Use template="compare-row" bg1="F8FAFC" bg2="FFFFFF" bg3="FFFFFF">
+            <Slot name="c1"><Text class="body-ink">{r.c1}</Text></Slot>
+            <Slot name="c2"><Text class="body-ink">{r.c2}</Text></Slot>
+            <Slot name="c3"><Text class="body-ink">{r.c3}</Text></Slot>
+          </Use>
+        </Foreach>
+      </VStack>
+    </Slot>
+  </Use>
+</Fragment>

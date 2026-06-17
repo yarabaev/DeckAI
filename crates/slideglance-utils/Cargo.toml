@@ -1,0 +1,22 @@
+[package]
+name = "slideglance-utils"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Unit types (EMU/Pt/HundredthPt) and conversion helpers for slideglance"
+readme = "../../README.md"
+keywords = ["pptx", "powerpoint", "ooxml", "units", "emu"]
+categories = ["data-structures"]
+
+[lints]
+workspace = true
+
+[dependencies]
+serde = { workspace = true, optional = true }
+
+[features]
+default = []
+serde = ["dep:serde"]

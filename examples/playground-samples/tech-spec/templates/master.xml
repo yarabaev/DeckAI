@@ -1,0 +1,45 @@
+<Fragment>
+  <!--
+    Tech-spec masters. 16:9 (1280×720).
+
+      COVER — gray paper with left accent bar; document title sits
+              with section meta and revision tag.
+      DOC   — every body page. Top bar with document slug + section,
+              bottom bar with rev/date + page number.
+  -->
+  <Master name="COVER" backgroundColor="F4F5F7">
+    <MasterRect x="0" y="0" w="12" h="720" fill.color="2563EB" />
+    <MasterText x="48" y="40" w="600" h="16"
+                fontFamily="Inter" fontSize="11" bold="true" color="6B7280">
+      ATLAS · TECHNICAL DESIGN DOCUMENT  ·  v0.4 DRAFT
+    </MasterText>
+  </Master>
+
+  <Master name="DOC" backgroundColor="F4F5F7">
+    <!-- Top bar: doc slug + section. -->
+    <MasterText x="48" y="32" w="500" h="14"
+                fontFamily="Inter" fontSize="10" bold="true" color="6B7280">
+      TDD · ATLAS GATEWAY  ·  REV 0.4 (DRAFT)
+    </MasterText>
+    <MasterText x="780" y="32" w="452" h="14"
+                fontFamily="Inter" fontSize="10" bold="true" color="2563EB"
+                textAlign="right">
+      INTERNAL · ENGINEERING REVIEW
+    </MasterText>
+    <MasterRect x="48" y="52" w="1184" h="1" fill.color="D1D5DB" />
+
+    <!-- Bottom bar: meta + page number. -->
+    <MasterRect x="48" y="680" w="1184" h="1" fill.color="D1D5DB" />
+    <MasterText x="48" y="692" w="400" h="14"
+                fontFamily="Inter" fontSize="10" color="6B7280">
+      atlas-tdd.confluence  ·  reviewers: @platform-leads
+    </MasterText>
+    <MasterText x="540" y="692" w="200" h="14"
+                fontFamily="Inter" fontSize="10" bold="true" color="6B7280"
+                textAlign="center">
+      DRAFT · 2026.05.10
+    </MasterText>
+    <SlideNumber x="1168" y="688" w="64" h="18"
+                 fontFamily="Inter" fontSize="11" color="111827" />
+  </Master>
+</Fragment>

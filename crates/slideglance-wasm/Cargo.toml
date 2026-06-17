@@ -1,0 +1,54 @@
+[package]
+name = "slideglance-wasm"
+# wasm-pack's manifest parser does not understand cargo workspace
+# inheritance (`field.workspace = true`) — it deserializes Cargo.toml
+# with its own struct, not cargo's, and a `license` field that
+# arrives as `{ workspace: true }` is rejected with
+# "invalid type: map, expected a string for key package.license".
+# Every published-style metadata field on this crate therefore lives
+# inline. The `version` is kept in sync with the rest of the
+# workspace by `scripts/sync-versions.mjs` (run on every prebuild).
+version = "0.1.3"
+edition = "2021"
+rust-version = "1.88"
+license = "MIT"
+repository = "https://github.com/SlideGlance/slideglance"
+authors = ["Dmitry Yarabaev"]
+description = "wasm-bindgen entry point for slideglance"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+# wasm-pack's bundled wasm-opt is too old for resvg (rejects
+# i64.trunc_sat_f64_s and other contemporary wasm features). We pass
+# explicit flags through to a system-installed binaryen
+# (`brew install binaryen`) which understands the modern feature set.
+# `-Oz` optimizes for size, `--enable-bulk-memory` /
+# `--enable-nontrapping-float-to-int` cover the features rustc emits
+# for resvg. Phase 6 plan.md tracks this follow-up.
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = [
+    "-Oz",
+    "--enable-bulk-memory",
+    "--enable-nontrapping-float-to-int",
+    "--enable-mutable-globals",
+    "--enable-reference-types",
+    "--enable-sign-ext",
+]
+
+[lints]
+workspace = true
+
+[dependencies]
+slideglance-utils.workspace = true
+slideglance = { workspace = true }
+slideglance-png = { workspace = true }
+slideglance-font = { workspace = true }
+wasm-bindgen.workspace = true
+js-sys.workspace = true
+web-sys.workspace = true
+serde.workspace = true
+serde-wasm-bindgen.workspace = true
+serde_bytes.workspace = true
+console_error_panic_hook.workspace = true

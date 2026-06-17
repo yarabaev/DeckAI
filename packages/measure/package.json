@@ -1,0 +1,68 @@
+{
+  "name": "@slideglance/measure",
+  "version": "0.1.3",
+  "author": "Dmitry Yarabaev",
+  "description": "Deterministic OpenType text width / line-metrics measurement (WebAssembly).",
+  "license": "MIT",
+  "homepage": "https://github.com/SlideGlance/slideglance#readme",
+  "bugs": {
+    "url": "https://github.com/SlideGlance/slideglance/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlideGlance/slideglance.git",
+    "directory": "packages/measure"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "files": [
+    "dist/node/**",
+    "dist/bundler/**",
+    "dist/web/**",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "prepublishOnly": "node -e \"['dist/node/slideglance_measure_wasm.js','dist/node/slideglance_measure_wasm.d.ts','dist/bundler/slideglance_measure_wasm.js','dist/web/slideglance_measure_wasm.js'].forEach(p=>require('node:fs').accessSync(p))\""
+  },
+  "main": "./dist/node/slideglance_measure_wasm.js",
+  "types": "./dist/node/slideglance_measure_wasm.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/bundler/slideglance_measure_wasm.d.ts",
+      "node": {
+        "types": "./dist/node/slideglance_measure_wasm.d.ts",
+        "default": "./dist/node/slideglance_measure_wasm.js"
+      },
+      "browser": {
+        "types": "./dist/bundler/slideglance_measure_wasm.d.ts",
+        "default": "./dist/bundler/slideglance_measure_wasm.js"
+      },
+      "default": "./dist/bundler/slideglance_measure_wasm.js"
+    },
+    "./node": {
+      "types": "./dist/node/slideglance_measure_wasm.d.ts",
+      "default": "./dist/node/slideglance_measure_wasm.js"
+    },
+    "./bundler": {
+      "types": "./dist/bundler/slideglance_measure_wasm.d.ts",
+      "default": "./dist/bundler/slideglance_measure_wasm.js"
+    },
+    "./web": {
+      "types": "./dist/web/slideglance_measure_wasm.d.ts",
+      "default": "./dist/web/slideglance_measure_wasm.js"
+    }
+  },
+  "keywords": [
+    "opentype",
+    "text-measurement",
+    "pptx",
+    "powerpoint",
+    "wasm"
+  ]
+}

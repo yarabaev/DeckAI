@@ -1,0 +1,159 @@
+<Fragment>
+  <!-- Chapter 13 — Recipes (KPIs, callouts, chips, swatches, steps, signature, pricing). -->
+  <Use template="section-coral"
+       number="13"
+       kicker="Reusable composition patterns"
+       title="Recipes."
+       subtitle="Reusable patterns built from primitives."
+       inside1="KPI strip · 4-up metric cards"
+       inside2="Callout · info / success / warn / danger"
+       inside3="Steps · numbered cards with desc bodies"
+       inside4="Pricing trio · two canvas tiers + featured"
+       epigraph="A recipe is editorial muscle memory — the same shape, varied content, every time."
+       epigraphAttrib="builder design notes"
+       meta="KPIs · callouts · chips · swatches · steps · signature · pricing"
+       leftMeta="7 recipe families · all composed from VStack · HStack · Text" />
+
+  <!-- KPI cards -->
+  <Use template="page" eyebrow="13 / Recipes" kicker="KPIs"
+       title="KPI strip · four metrics with trend"
+       lede="A KPI row carries a label, a large number, and a coloured trend pill. Card surface alternates between the canvas tone and a signature surface to break monotony.">
+    <Slot name="default">
+      <!-- Four KPI cards with no `w` — HStack auto-distributes equal share. -->
+      <HStack gap="14" w="100%" alignItems="stretch">
+        <VStack class="card-canvas" gap="6">
+          <Text class="caption" color="AA2D00">ACTIVE USERS</Text>
+          <Text fontFamily="Inter Display" fontSize="32" bold="true" color="181D26" lineHeight="1.05">128k</Text>
+          <Text class="metric-trend-up">+12.4%</Text>
+        </VStack>
+        <VStack class="card-coral" gap="6" padding="16">
+          <Text fontFamily="Inter Display" fontSize="11" bold="true" color="F5E0D6">REVENUE Q3</Text>
+          <Text fontFamily="Inter Display" fontSize="32" bold="true" color="FFFFFF" lineHeight="1.05">$1.18M</Text>
+          <Text fontFamily="Inter Display" fontSize="11" bold="true" color="FFD9C8">on plan</Text>
+        </VStack>
+        <VStack class="card-canvas" gap="6">
+          <Text class="caption" color="AA2D00">RETENTION (M3)</Text>
+          <Text fontFamily="Inter Display" fontSize="32" bold="true" color="181D26" lineHeight="1.05">88%</Text>
+          <Text class="metric-trend-up">+1.4 pp</Text>
+        </VStack>
+        <VStack class="card-dark" gap="6" padding="16">
+          <Text fontFamily="Inter Display" fontSize="11" bold="true" color="9297A0">UPTIME</Text>
+          <Text fontFamily="Inter Display" fontSize="32" bold="true" color="FFFFFF" lineHeight="1.05">99.94%</Text>
+          <Text fontFamily="Inter Display" fontSize="11" bold="true" color="DDEEDF">+0.4 pp</Text>
+        </VStack>
+      </HStack>
+
+      <Use template="h2" text="Callout strip · info / success / warn / danger" />
+      <!-- 4 callouts in 2 rows of 2. Each row's bodies auto-equalize so
+           the danger / warn tinted backgrounds end at the same y. -->
+      <HStack gap="14" alignItems="stretch" w="100%">
+        <Use template="callout-eq" cls="callout-info" titleColor="254FAD" bodyH="auto"
+             kind="INFO" title="Section padding is universal."
+             body="Every editorial band uses 96px top + bottom internal padding. Anchoring this constant keeps rhythm consistent." />
+        <Use template="callout-eq" cls="callout-success" titleColor="006400" bodyH="auto"
+             kind="SUCCESS" title="Brand voltage holds."
+             body="Coral and forest signature cards passed cross-team approval at the December review." />
+      </HStack>
+      <HStack gap="14" alignItems="stretch" w="100%">
+        <Use template="callout-eq" cls="callout-warn" titleColor="92400E" bodyH="auto"
+             kind="WARN" title="Mustard variant ships next quarter."
+             body="Hold off on shipping mustard surfaces until the Q3 design audit lands. Use coral or forest in the meantime." />
+        <Use template="callout-eq" cls="callout-danger" titleColor="AA2D00" bodyH="auto"
+             kind="DANGER" title="Don't use link-blue as the primary CTA."
+             body="#1B61C9 is the link colour, not the brand action. Use #181D26 (near-black) for primary buttons." />
+      </HStack>
+
+      <Use template="h2" text="Chip row · semantic + brand-coloured" />
+      <HStack gap="6" alignItems="center" alignSelf="start" flexWrap="wrap">
+        <Foreach items='[
+          {"cls":"chip-coral","label":"CORAL"},
+          {"cls":"chip-forest","label":"FOREST"},
+          {"cls":"chip-cream","label":"CREAM"},
+          {"cls":"chip-peach","label":"PEACH"},
+          {"cls":"chip-mint","label":"MINT"},
+          {"cls":"chip-yellow","label":"YELLOW"},
+          {"cls":"chip-mustard","label":"MUSTARD"},
+          {"cls":"chip-link","label":"LINK"},
+          {"cls":"chip-ink","label":"INK"}
+        ]' as="c">
+          <Text class="{c.cls}">{c.label}</Text>
+        </Foreach>
+        <Foreach items='["⌘K","Enter","Esc"]' as="k">
+          <Text class="kbd">{k}</Text>
+        </Foreach>
+      </HStack>
+    </Slot>
+  </Use>
+
+  <!-- Steps + Testimonial + Summary band + Pricing trio. Print edition:
+       no interactive elements; all CTAs replaced with static captions. -->
+  <Use template="page" eyebrow="13 / Recipes" kicker="Process"
+       title="Numbered steps · summary band · pricing tier card"
+       lede="Common composite recipes for the editorial body. Each is built from primitives — VStack containers + Text labels — so swap any signature surface or palette without touching the structure.">
+    <Slot name="default">
+      <!-- 4 numbered steps. desc bodies auto-equalize so the cards
+           end at the same y regardless of how many lines each desc wraps. -->
+      <HStack gap="14" w="100%" alignItems="stretch">
+        <Use template="step-eq" n="1" descH="auto"
+             title="Sketch surface"
+             desc="Pick the signature surface for this band." />
+        <Use template="step-eq" n="2" descH="auto"
+             title="Draft type"
+             desc="Pick a display size; avoid weight 700." />
+        <Use template="step-eq" n="3" descH="auto"
+             title="Pair primary CTA"
+             desc="One near-black primary CTA per viewport." />
+        <Use template="step-eq" n="4" descH="auto"
+             title="Anchor rhythm"
+             desc="96px section padding for vertical rhythm." />
+      </HStack>
+
+      <Use template="h2" text="Testimonial · quote with avatar" />
+      <Use template="testimonial"
+           quote="The signature card system is the smartest thing Airtable did to its marketing site this year — voltage where you need it, calm where you don't."
+           initials="JS" author="Janet Sun" role="Design partner · 2026 review" />
+
+      <Use template="h2" text="Summary band · light grey static strip" />
+      <!-- Print edition: the right-hand slot carries a static reference
+           caption rather than a CTA button. -->
+      <Use template="summary-band"
+           title="Build presentations with @slideglance/builder."
+           body="Ship a deck the same week you sketch it. The entire builder fits inside one TypeScript package."
+           meta="docs.slideglance.dev / builder · ch.14 · ch.15" />
+
+      <Use template="h2" text="Pricing trio · canvas + featured + canvas" />
+      <!-- taglineH="auto" lets the equalize preprocessor reserve the
+           same tagline height across all three cards so the hairline
+           rule and feature list line up across columns. -->
+      <HStack gap="14" alignItems="stretch" w="100%">
+        <Use template="pricing-card" plan="Starter" price="$0" footer="Free · self-serve"
+             taglineH="auto"
+             tagline="For solo authors writing one deck a month.">
+          <Slot name="features">
+            <Foreach items='["Unlimited slides","A4 + 16:9 + 4:3","Community support"]' as="t">
+              <Use template="pricing-feature" text="{t}" />
+            </Foreach>
+          </Slot>
+        </Use>
+        <Use template="pricing-card-featured" plan="Team" price="$24" footer="Per editor · annual billing"
+             taglineH="auto"
+             tagline="Per editor, per month. Includes the signature surface kit.">
+          <Slot name="features">
+            <Foreach items='["Everything in Starter","Signature card library","Master-pptx imports","Priority email support"]' as="t">
+              <Use template="pricing-feature" text="{t}" />
+            </Foreach>
+          </Slot>
+        </Use>
+        <Use template="pricing-card" plan="Enterprise" price="Talk" footer="Custom pricing · contract"
+             taglineH="auto"
+             tagline="Custom pricing for orgs with 50+ editors.">
+          <Slot name="features">
+            <Foreach items='["SAML / SSO","Audit log + retention","Dedicated CSM"]' as="t">
+              <Use template="pricing-feature" text="{t}" />
+            </Foreach>
+          </Slot>
+        </Use>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

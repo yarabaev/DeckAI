@@ -1,0 +1,57 @@
+<Fragment>
+  <!-- ================================================================
+       Table of contents — issue index with rule between columns.
+       Layout note: every column inside the kv-row HStack must have an
+       explicit width. The middle title column owns the slack via
+       w="max"; left (row.n) and right (row.p) get fixed widths so they
+       never get squeezed to the intrinsic-min (1ch) when the title is
+       long.
+       ================================================================ -->
+  <Use template="feature"
+       eyebrow="ISSUE 14 · INDEX"
+       title="Inside this number."
+       lede="Six pieces on the work that happens after a release. A reading order, plus a guide to the figures that recur across the feature.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="14" w="50%">
+          <Foreach items='[
+            {"n":"01","t":"After the launch, the slow work","p":"3"},
+            {"n":"02","t":"The shape of operational debt","p":"6"},
+            {"n":"03","t":"What dashboards forget","p":"11"},
+            {"n":"04","t":"A field guide to the on-call rotation","p":"15"}
+          ]' as="row">
+            <HStack gap="12" alignItems="baseline" w="100%">
+              <Text fontFamily="Georgia" fontSize="13" bold="true" color="9A2A1F" w="24" lineHeight="1.0" textVAlign="middle">{row.n}</Text>
+              <Text class="body-lead" w="max" lineHeight="1.0" textVAlign="middle">{row.t}</Text>
+              <Text class="folio" w="28" textAlign="right" lineHeight="1.0" textVAlign="middle">{row.p}</Text>
+            </HStack>
+            <VStack class="hairline" />
+          </Foreach>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="14" w="50%">
+          <Foreach items='[
+            {"n":"05","t":"Documentation, archaeology, and forgetting","p":"19"},
+            {"n":"06","t":"The next ten years are about maintenance","p":"24"},
+            {"n":"--","t":"Letters, errata, and a long bibliography","p":"29"},
+            {"n":"--","t":"Colophon · production notes · contributors","p":"32"}
+          ]' as="row">
+            <HStack gap="12" alignItems="baseline" w="100%">
+              <Text fontFamily="Georgia" fontSize="13" bold="true" color="9A2A1F" w="24" lineHeight="1.0" textVAlign="middle">{row.n}</Text>
+              <Text class="body-lead" w="max" lineHeight="1.0" textVAlign="middle">{row.t}</Text>
+              <Text class="folio" w="28" textAlign="right" lineHeight="1.0" textVAlign="middle">{row.p}</Text>
+            </HStack>
+            <VStack class="hairline" />
+          </Foreach>
+        </VStack>
+      </HStack>
+
+      <VStack padding.top="20" gap="10">
+        <Text class="eyebrow">PRODUCTION NOTE</Text>
+        <Text class="body">Each piece pairs the field report with a <Span class="kw-mustard">graph or table</Span> drawn from the underlying incident data. Where a contributor's name is set in red, the piece is co-bylined with the on-call team that lived the event.</Text>
+      </VStack>
+    </Slot>
+  </Use>
+</Fragment>

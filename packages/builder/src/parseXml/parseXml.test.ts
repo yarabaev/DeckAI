@@ -1,0 +1,1912 @@
+import { describe, it, expect } from "vitest";
+import { parseXml, ParseXmlError, parseBuilderDocument } from "./parseXml.ts";
+
+describe("parseXml", () => {
+  // ===== Basic node conversion =====
+  describe("ノードタイプ変換", () => {
+    it("Styles/class で Table cell の属性を再利用できる", () => {
+      const result = parseXml(`
+        <Styles>
+          <Style
+            name="th"
+            fontSize="11"
+            color="FFFFFF"
+            bold="true"
+            textAlign="center"
+            backgroundColor="1A1980"
+          />
+          <Style name="accent" color="FFEE00" />
+        </Styles>
+        <Table>
+          <Tr>
+            <Td class="th">項目</Td>
+            <Td class="th accent" color="00FF00">当期実績</Td>
+          </Tr>
+        </Table>
+      `);
+
+      expect(result).toEqual([
+        {
+          type: "table",
+          columns: [{}, {}],
+          rows: [
+            {
+              cells: [
+                {
+                  text: "項目",
+                  fontSize: 11,
+                  color: "FFFFFF",
+                  bold: true,
+                  textAlign: "center",
+                  backgroundColor: "1A1980",
+                },
+                {
+                  text: "当期実績",
+                  fontSize: 11,
+                  color: "00FF00",
+                  bold: true,
+                  textAlign: "center",
+                  backgroundColor: "1A1980",
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+
+    it("Styles/class で 일반 노드 속성도 재사용할 수 있다", () => {
+      const result = parseXml(`
+        <Styles>
+          <Style name="page" padding="48" backgroundColor="F8FAFC" />
+          <Style name="title" fontSize="28" bold="true" color="1E293B" />
+          <Style name="center" textAlign="center" />
+        </Styles>
+        <VStack class="page">
+          <Text class="title center">Hello</Text>
+        </VStack>
+      `);
+
+      expect(result).toEqual([
+        {
+          type: "vstack",
+          padding: 48,
+          backgroundColor: "F8FAFC",
+          children: [
+            {
+              type: "text",
+              text: "Hello",
+              fontSize: 28,
+              bold: true,
+              color: "1E293B",
+              textAlign: "center",
+            },
+          ],
+        },
+      ]);
+    });
+
+    it("未定義 style class を参照するとエラーになる", () => {
+      expect(() => parseXml('<Text class="missing">Hello</Text>')).toThrow(
+        /Unknown style class "missing"/,
+      );
+    });
+
+    it("Text ノードを変換する", () => {
+      const result = parseXml('<Text fontSize="32" bold="true">Hello</Text>');
+      expect(result).toEqual([
+        { type: "text", text: "Hello", fontSize: 32, bold: true },
+      ]);
+    });
+
+    it("Image ノードを変換する（self-closing）", () => {
+      const result = parseXml('<Image src="image.png" w="400" h="300" />');
+      expect(result).toEqual([
+        { type: "image", src: "image.png", w: 400, h: 300 },
+      ]);
+    });
+
+    it("Shape ノードを変換する", () => {
+      const result = parseXml(
+        '<Shape shapeType="rect" w="200" h="100">Hello</Shape>',
+      );
+      expect(result).toEqual([
+        { type: "shape", shapeType: "rect", w: 200, h: 100, text: "Hello" },
+      ]);
+    });
+
+    it("Chart ノードを変換する", () => {
+      const data = JSON.stringify([
+        { name: "Q1", labels: ["1月", "2月"], values: [100, 120] },
+      ]);
+      const result = parseXml(
+        `<Chart chartType="bar" w="400" h="300" data='${data}' />`,
+      );
+      expect(result).toEqual([
+        {
+          type: "chart",
+          chartType: "bar",
+          w: 400,
+          h: 300,
+          data: [{ name: "Q1", labels: ["1月", "2月"], values: [100, 120] }],
+        },
+      ]);
+    });
+
+    it("Line ノードを変換する", () => {
+      const result = parseXml(
+        '<Line x1="0" y1="0" x2="100" y2="100" color="FF0000" lineWidth="2" />',
+      );
+      expect(result).toEqual([
+        {
+          type: "line",
+          x1: 0,
+          y1: 0,
+          x2: 100,
+          y2: 100,
+          color: "FF0000",
+          lineWidth: 2,
+        },
+      ]);
+    });
+
+    it("Icon ノードを変換する", () => {
+      const result = parseXml('<Icon name="cpu" size="32" color="#1D4ED8" />');
+      expect(result).toEqual([
+        { type: "icon", name: "cpu", size: 32, color: "#1D4ED8" },
+      ]);
+    });
+
+    it("Icon ノードでデフォルト値を使う", () => {
+      const result = parseXml('<Icon name="star" />');
+      expect(result).toEqual([{ type: "icon", name: "star" }]);
+    });
+
+    it("Icon ノードで不正な name はエラーになる", () => {
+      expect(() => parseXml('<Icon name="invalid-icon" />')).toThrow();
+    });
+
+    it("Icon ノードで不正な size はエラーになる", () => {
+      expect(() => parseXml('<Icon name="cpu" size="-1" />')).toThrow();
+    });
+
+    it("Icon ノードで # なし hex color を受け付け、# 付きに正規化する", () => {
+      const result = parseXml('<Icon name="cpu" color="1D4ED8" />');
+      expect(result).toEqual([{ type: "icon", name: "cpu", color: "#1D4ED8" }]);
+    });
+
+    it("Icon ノードで不正な color はエラーになる", () => {
+      expect(() =>
+        parseXml('<Icon name="cpu" color="not-a-color" />'),
+      ).toThrow();
+    });
+
+    it("Icon ノードで子要素はエラーになる", () => {
+      expect(() =>
+        parseXml(
+          '<Icon name="cpu"><svg viewBox="0 0 24 24"><path d="M12 2"/></svg></Icon>',
+        ),
+      ).toThrow();
+    });
+
+    it("Icon ノードで name がない場合はエラーになる", () => {
+      expect(() => parseXml("<Icon />")).toThrow();
+    });
+
+    it("Svg ノードでインライン SVG を変換する", () => {
+      const result = parseXml(
+        '<Svg w="32" h="32"><svg viewBox="0 0 24 24"><path d="M12 2L2 22h20z"/></svg></Svg>',
+      );
+      expect(result).toEqual([
+        {
+          type: "svg",
+          w: 32,
+          h: 32,
+          svgContent: expect.stringContaining("<svg"),
+        },
+      ]);
+      // Confirm svgContent contains a path.
+      expect((result[0] as Record<string, unknown>).svgContent).toContain(
+        "M12 2L2 22h20z",
+      );
+    });
+
+    it("Svg ノードで color を指定できる", () => {
+      const result = parseXml(
+        '<Svg w="32" h="32" color="1D4ED8"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></Svg>',
+      );
+      expect(result).toEqual([
+        {
+          type: "svg",
+          w: 32,
+          h: 32,
+          color: "#1D4ED8",
+          svgContent: expect.stringContaining("<svg"),
+        },
+      ]);
+    });
+
+    it("Svg ノードで svg 以外の子要素はエラーになる", () => {
+      expect(() => parseXml("<Svg><Text>hello</Text></Svg>")).toThrow();
+    });
+
+    it("Svg ノードで svg 子要素がない場合はエラーになる", () => {
+      expect(() => parseXml("<Svg />")).toThrow();
+    });
+
+    it("Table ノードを変換する", () => {
+      const columns = JSON.stringify([{ width: 100 }, { width: 200 }]);
+      const rows = JSON.stringify([{ cells: [{ text: "A" }, { text: "B" }] }]);
+      const result = parseXml(`<Table columns='${columns}' rows='${rows}' />`);
+      expect(result).toEqual([
+        {
+          type: "table",
+          columns: [{ width: 100 }, { width: 200 }],
+          rows: [{ cells: [{ text: "A" }, { text: "B" }] }],
+        },
+      ]);
+    });
+
+    it("Table の cellBorder を JSON 形式で変換する", () => {
+      const result = parseXml(
+        `<Table cellBorder='{"color":"334155","width":1}'><Tr><Td>A</Td></Tr></Table>`,
+      );
+      const table = result[0] as Record<string, unknown>;
+      expect(table.cellBorder).toEqual({ color: "334155", width: 1 });
+    });
+
+    it("Table の cellBorder をドット記法で変換する", () => {
+      const result = parseXml(
+        `<Table cellBorder.color="334155" cellBorder.width="2"><Tr><Td>A</Td></Tr></Table>`,
+      );
+      const table = result[0] as Record<string, unknown>;
+      expect(table.cellBorder).toEqual({ color: "334155", width: 2 });
+    });
+
+    it("Table の cellBorder 省略時はプロパティが存在しない", () => {
+      const result = parseXml(`<Table><Tr><Td>A</Td></Tr></Table>`);
+      const table = result[0] as Record<string, unknown>;
+      expect(table.cellBorder).toBeUndefined();
+    });
+  });
+
+  // ===== Container nodes =====
+  describe("コンテナノード", () => {
+    it("VStack で children を配列として変換する", () => {
+      const xml = `
+        <VStack gap="16">
+          <Text>A</Text>
+          <Text>B</Text>
+        </VStack>
+      `;
+      const result = parseXml(xml);
+      expect(result).toEqual([
+        {
+          type: "vstack",
+          gap: 16,
+          children: [
+            { type: "text", text: "A" },
+            { type: "text", text: "B" },
+          ],
+        },
+      ]);
+    });
+
+    it("HStack で children を配列として変換する", () => {
+      const xml = `
+        <HStack gap="8" alignItems="center">
+          <Text>Left</Text>
+          <Text>Right</Text>
+        </HStack>
+      `;
+      const result = parseXml(xml);
+      expect(result).toEqual([
+        {
+          type: "hstack",
+          gap: 8,
+          alignItems: "center",
+          children: [
+            { type: "text", text: "Left" },
+            { type: "text", text: "Right" },
+          ],
+        },
+      ]);
+    });
+
+    it("Layer で children を配列として変換する", () => {
+      const xml = `
+        <Layer w="800" h="600">
+          <Text x="10" y="20" fontSize="32">Hello</Text>
+          <Image x="100" y="200" src="img.png" />
+        </Layer>
+      `;
+      const result = parseXml(xml);
+      expect(result).toEqual([
+        {
+          type: "layer",
+          w: 800,
+          h: 600,
+          children: [
+            { type: "text", x: 10, y: 20, fontSize: 32, text: "Hello" },
+            { type: "image", x: 100, y: 200, src: "img.png" },
+          ],
+        },
+      ]);
+    });
+  });
+
+  // ===== Attribute value coercion =====
+  describe("属性値の型変換", () => {
+    it("number 型に変換する", () => {
+      const result = parseXml('<Text fontSize="24">test</Text>');
+      expect(result[0]).toHaveProperty("fontSize", 24);
+      expect(typeof (result[0] as Record<string, unknown>).fontSize).toBe(
+        "number",
+      );
+    });
+
+    it("boolean 型に変換する", () => {
+      const result = parseXml('<Text bold="true" italic="false">test</Text>');
+      expect(result[0]).toHaveProperty("bold", true);
+      expect(result[0]).toHaveProperty("italic", false);
+    });
+
+    it("string 型をそのまま保持する", () => {
+      const result = parseXml('<Text color="FF0000">test</Text>');
+      expect(result[0]).toHaveProperty("color", "FF0000");
+      expect(typeof (result[0] as Record<string, unknown>).color).toBe(
+        "string",
+      );
+    });
+
+    it("array 型を JSON.parse で変換する", () => {
+      const data = JSON.stringify([{ name: "S1", labels: ["A"], values: [1] }]);
+      const result = parseXml(`<Chart chartType="bar" data='${data}' />`);
+      expect((result[0] as Record<string, unknown>).data).toEqual([
+        { name: "S1", labels: ["A"], values: [1] },
+      ]);
+    });
+
+    it("ドット記法で object 型属性を変換する", () => {
+      const result = parseXml(
+        '<Text border.color="000000" border.width="2">test</Text>',
+      );
+      expect((result[0] as Record<string, unknown>).border).toEqual({
+        color: "000000",
+        width: 2,
+      });
+    });
+
+    it("union 型（number | string）の length を正しく変換する", () => {
+      // number
+      const r1 = parseXml('<Text w="400">test</Text>');
+      expect((r1[0] as Record<string, unknown>).w).toBe(400);
+
+      // literal "max"
+      const r2 = parseXml('<Text w="max">test</Text>');
+      expect((r2[0] as Record<string, unknown>).w).toBe("max");
+
+      // percentage string
+      const r3 = parseXml('<Text w="50%">test</Text>');
+      expect((r3[0] as Record<string, unknown>).w).toBe("50%");
+    });
+
+    it("union 型（boolean | object）の underline を正しく変換する", () => {
+      // boolean
+      const r1 = parseXml('<Text underline="true">test</Text>');
+      expect((r1[0] as Record<string, unknown>).underline).toBe(true);
+
+      // Object form (dot notation).
+      const r2 = parseXml(
+        '<Text underline.style="dbl" underline.color="FF0000">test</Text>',
+      );
+      expect((r2[0] as Record<string, unknown>).underline).toEqual({
+        style: "dbl",
+        color: "FF0000",
+      });
+    });
+
+    it("Ul + Li を正しくパースする", () => {
+      const result = parseXml(
+        '<Ul fontSize="14"><Li>Item A</Li><Li>Item B</Li></Ul>',
+      );
+      expect(result).toHaveLength(1);
+      const node = result[0] as Record<string, unknown>;
+      expect(node.type).toBe("ul");
+      expect(node.fontSize).toBe(14);
+      expect(node.items).toEqual([{ text: "Item A" }, { text: "Item B" }]);
+    });
+
+    it("Ol + Li を正しくパースする", () => {
+      const result = parseXml(
+        '<Ol fontSize="14" numberType="alphaLcPeriod" numberStartAt="3"><Li>A</Li><Li>B</Li></Ol>',
+      );
+      expect(result).toHaveLength(1);
+      const node = result[0] as Record<string, unknown>;
+      expect(node.type).toBe("ol");
+      expect(node.fontSize).toBe(14);
+      expect(node.numberType).toBe("alphaLcPeriod");
+      expect(node.numberStartAt).toBe(3);
+      expect(node.items).toEqual([{ text: "A" }, { text: "B" }]);
+    });
+
+    it("Li にスタイル属性がある場合を正しくパースする", () => {
+      const result = parseXml(
+        '<Ul><Li bold="true">Bold</Li><Li color="FF0000">Red</Li></Ul>',
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.items).toEqual([
+        { text: "Bold", bold: true },
+        { text: "Red", color: "FF0000" },
+      ]);
+    });
+
+    it("enum 型をそのまま文字列として保持する", () => {
+      const result = parseXml('<Text textAlign="center">test</Text>');
+      expect((result[0] as Record<string, unknown>).textAlign).toBe("center");
+    });
+
+    it("padding の number 変換", () => {
+      const r1 = parseXml('<VStack padding="32"><Text>A</Text></VStack>');
+      expect((r1[0] as Record<string, unknown>).padding).toBe(32);
+    });
+
+    it("padding の object 変換", () => {
+      const padding = JSON.stringify({ top: 10, bottom: 20 });
+      const r = parseXml(
+        `<VStack padding='${padding}'><Text>A</Text></VStack>`,
+      );
+      expect((r[0] as Record<string, unknown>).padding).toEqual({
+        top: 10,
+        bottom: 20,
+      });
+    });
+
+    it("opacity を number に変換する", () => {
+      const result = parseXml('<Text opacity="0.5">test</Text>');
+      expect((result[0] as Record<string, unknown>).opacity).toBe(0.5);
+    });
+  });
+
+  // ===== Handling of text content =====
+  describe("テキストコンテンツ", () => {
+    it("Text ノードのテキストコンテンツを text プロパティに設定する", () => {
+      const result = parseXml("<Text>Hello World</Text>");
+      expect(result[0]).toHaveProperty("text", "Hello World");
+    });
+
+    it("Shape ノードのテキストコンテンツを text プロパティに設定する", () => {
+      const result = parseXml('<Shape shapeType="rect">Hello</Shape>');
+      expect(result[0]).toHaveProperty("text", "Hello");
+    });
+
+    it("text 属性がある場合はテキストコンテンツで上書きしない", () => {
+      const result = parseXml('<Text text="from attr">from content</Text>');
+      expect(result[0]).toHaveProperty("text", "from attr");
+    });
+
+    it("self-closing の Text で text 属性を使用する", () => {
+      const result = parseXml('<Text text="hello" fontSize="16" />');
+      expect(result[0]).toHaveProperty("text", "hello");
+    });
+  });
+
+  // ===== Inline formatting (B/I tags) =====
+  describe("インラインフォーマット", () => {
+    it("B タグを太字の run に変換する", () => {
+      const result = parseXml("<Text>通常 <B>太字</B> テキスト</Text>");
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "通常 太字 テキスト",
+        runs: [
+          { text: "通常 " },
+          { text: "太字", bold: true },
+          { text: " テキスト" },
+        ],
+      });
+    });
+
+    it("I タグを斜体の run に変換する", () => {
+      const result = parseXml("<Text>通常 <I>斜体</I> テキスト</Text>");
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "通常 斜体 テキスト",
+        runs: [
+          { text: "通常 " },
+          { text: "斜体", italic: true },
+          { text: " テキスト" },
+        ],
+      });
+    });
+
+    it("B と I のネストを処理する", () => {
+      const result = parseXml("<Text><B><I>太字斜体</I></B></Text>");
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "太字斜体",
+        runs: [{ text: "太字斜体", bold: true, italic: true }],
+      });
+    });
+
+    it("B/I が無い場合は runs を持たない", () => {
+      const result = parseXml("<Text>プレーンテキスト</Text>");
+      expect(result[0]).toEqual({
+        type: "text",
+        text: "プレーンテキスト",
+      });
+      expect(result[0]).not.toHaveProperty("runs");
+    });
+
+    it("Li 内の B タグを処理する", () => {
+      const result = parseXml("<Ul><Li>通常 <B>太字</B></Li></Ul>");
+      const ulNode = result[0] as Record<string, unknown>;
+      const items = ulNode.items as Record<string, unknown>[];
+      expect(items[0]).toMatchObject({
+        text: "通常 太字",
+        runs: [{ text: "通常 " }, { text: "太字", bold: true }],
+      });
+    });
+
+    it("Td 内の B タグを処理する", () => {
+      const result = parseXml(
+        "<Table><Tr><Td><B>太字</B> セル</Td></Tr></Table>",
+      );
+      const tableNode = result[0] as Record<string, unknown>;
+      const rows = tableNode.rows as Record<string, unknown>[];
+      const cells = rows[0].cells as Record<string, unknown>[];
+      expect(cells[0]).toMatchObject({
+        text: "太字 セル",
+        runs: [{ text: "太字", bold: true }, { text: " セル" }],
+      });
+    });
+
+    it("A タグを href 付きの run に変換する", () => {
+      const result = parseXml(
+        '<Text>通常 <A href="https://example.com">リンク</A> テキスト</Text>',
+      );
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "通常 リンク テキスト",
+        runs: [
+          { text: "通常 " },
+          { text: "リンク", href: "https://example.com" },
+          { text: " テキスト" },
+        ],
+      });
+    });
+
+    it("A タグと B タグのネストを処理する", () => {
+      const result = parseXml(
+        '<Text><A href="https://example.com"><B>太字リンク</B></A></Text>',
+      );
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "太字リンク",
+        runs: [{ text: "太字リンク", bold: true, href: "https://example.com" }],
+      });
+    });
+
+    it("Li 内の A タグを処理する", () => {
+      const result = parseXml(
+        '<Ul><Li>詳細は <A href="https://example.com">こちら</A></Li></Ul>',
+      );
+      const ulNode = result[0] as Record<string, unknown>;
+      const items = ulNode.items as Record<string, unknown>[];
+      expect(items[0]).toMatchObject({
+        text: "詳細は こちら",
+        runs: [
+          { text: "詳細は " },
+          { text: "こちら", href: "https://example.com" },
+        ],
+      });
+    });
+
+    it("Td 内の A タグを処理する", () => {
+      const result = parseXml(
+        '<Table><Tr><Td><A href="https://example.com">リンク</A></Td></Tr></Table>',
+      );
+      const tableNode = result[0] as Record<string, unknown>;
+      const rows = tableNode.rows as Record<string, unknown>[];
+      const cells = rows[0].cells as Record<string, unknown>[];
+      expect(cells[0]).toMatchObject({
+        text: "リンク",
+        runs: [{ text: "リンク", href: "https://example.com" }],
+      });
+    });
+
+    it("U タグを下線の run に変換する", () => {
+      const result = parseXml("<Text>通常 <U>下線</U> テキスト</Text>");
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "通常 下線 テキスト",
+        runs: [
+          { text: "通常 " },
+          { text: "下線", underline: true },
+          { text: " テキスト" },
+        ],
+      });
+    });
+
+    it("S タグを取り消し線の run に変換する", () => {
+      const result = parseXml("<Text>通常 <S>取り消し</S> テキスト</Text>");
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "通常 取り消し テキスト",
+        runs: [
+          { text: "通常 " },
+          { text: "取り消し", strike: true },
+          { text: " テキスト" },
+        ],
+      });
+    });
+
+    it("Mark タグをハイライトの run に変換する", () => {
+      const result = parseXml(
+        '<Text>通常 <Mark color="FFFF00">ハイライト</Mark> テキスト</Text>',
+      );
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "通常 ハイライト テキスト",
+        runs: [
+          { text: "通常 " },
+          { text: "ハイライト", highlight: "FFFF00" },
+          { text: " テキスト" },
+        ],
+      });
+    });
+
+    it("Mark タグの color 省略時はデフォルト FFFF00 になる", () => {
+      const result = parseXml("<Text><Mark>ハイライト</Mark></Text>");
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "ハイライト",
+        runs: [{ text: "ハイライト", highlight: "FFFF00" }],
+      });
+    });
+
+    it("B と U のネストを処理する", () => {
+      const result = parseXml("<Text><B><U>太字下線</U></B></Text>");
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "太字下線",
+        runs: [{ text: "太字下線", bold: true, underline: true }],
+      });
+    });
+
+    it("Li 内の U タグを処理する", () => {
+      const result = parseXml("<Ul><Li>通常 <U>下線</U></Li></Ul>");
+      const ulNode = result[0] as Record<string, unknown>;
+      const items = ulNode.items as Record<string, unknown>[];
+      expect(items[0]).toMatchObject({
+        text: "通常 下線",
+        runs: [{ text: "通常 " }, { text: "下線", underline: true }],
+      });
+    });
+
+    it("Td 内の S タグを処理する", () => {
+      const result = parseXml(
+        "<Table><Tr><Td><S>取り消し</S> セル</Td></Tr></Table>",
+      );
+      const tableNode = result[0] as Record<string, unknown>;
+      const rows = tableNode.rows as Record<string, unknown>[];
+      const cells = rows[0].cells as Record<string, unknown>[];
+      expect(cells[0]).toMatchObject({
+        text: "取り消し セル",
+        runs: [{ text: "取り消し", strike: true }, { text: " セル" }],
+      });
+    });
+
+    it("Li 内の Mark タグを処理する", () => {
+      const result = parseXml(
+        '<Ul><Li><Mark color="00FF00">ハイライト</Mark> アイテム</Li></Ul>',
+      );
+      const ulNode = result[0] as Record<string, unknown>;
+      const items = ulNode.items as Record<string, unknown>[];
+      expect(items[0]).toMatchObject({
+        text: "ハイライト アイテム",
+        runs: [
+          { text: "ハイライト", highlight: "00FF00" },
+          { text: " アイテム" },
+        ],
+      });
+    });
+
+    it("Td 内の Mark タグを処理する", () => {
+      const result = parseXml(
+        '<Table><Tr><Td><Mark color="FFFF00">ハイライト</Mark> セル</Td></Tr></Table>',
+      );
+      const tableNode = result[0] as Record<string, unknown>;
+      const rows = tableNode.rows as Record<string, unknown>[];
+      const cells = rows[0].cells as Record<string, unknown>[];
+      expect(cells[0]).toMatchObject({
+        text: "ハイライト セル",
+        runs: [{ text: "ハイライト", highlight: "FFFF00" }, { text: " セル" }],
+      });
+    });
+
+    it("Mark タグの color が空文字の場合はデフォルト FFFF00 になる", () => {
+      const result = parseXml('<Text><Mark color="">ハイライト</Mark></Text>');
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "ハイライト",
+        runs: [{ text: "ハイライト", highlight: "FFFF00" }],
+      });
+    });
+
+    it("Span タグをインラインカラーの run に変換する", () => {
+      const result = parseXml(
+        '<Text>通常 <Span color="FF0000">赤色</Span> テキスト</Text>',
+      );
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "通常 赤色 テキスト",
+        runs: [
+          { text: "通常 " },
+          { text: "赤色", color: "FF0000" },
+          { text: " テキスト" },
+        ],
+      });
+    });
+
+    it("Span タグと B タグをネストできる", () => {
+      const result = parseXml(
+        '<Text><B><Span color="1D4ED8">太字で青</Span></B></Text>',
+      );
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "太字で青",
+        runs: [{ text: "太字で青", bold: true, color: "1D4ED8" }],
+      });
+    });
+
+    it("Li 内の Span タグを処理する", () => {
+      const result = parseXml(
+        '<Ul><Li><Span color="FF0000">赤</Span> アイテム</Li></Ul>',
+      );
+      const ulNode = result[0] as Record<string, unknown>;
+      const items = ulNode.items as Record<string, unknown>[];
+      expect(items[0]).toMatchObject({
+        text: "赤 アイテム",
+        runs: [{ text: "赤", color: "FF0000" }, { text: " アイテム" }],
+      });
+    });
+
+    it("Span ネスト時に内側が color 未指定なら親の色を継承する", () => {
+      const result = parseXml(
+        '<Text><Span color="FF0000">A<Span>B</Span>C</Span></Text>',
+      );
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "ABC",
+        runs: [
+          { text: "A", color: "FF0000" },
+          { text: "B", color: "FF0000" },
+          { text: "C", color: "FF0000" },
+        ],
+      });
+    });
+
+    it("Span ネスト時に内側が color 指定なら上書きする", () => {
+      const result = parseXml(
+        '<Text><Span color="FF0000">A<Span color="1D4ED8">B</Span>C</Span></Text>',
+      );
+      expect(result[0]).toMatchObject({
+        type: "text",
+        text: "ABC",
+        runs: [
+          { text: "A", color: "FF0000" },
+          { text: "B", color: "1D4ED8" },
+          { text: "C", color: "FF0000" },
+        ],
+      });
+    });
+
+    it("Td 内の Span タグを処理する", () => {
+      const result = parseXml(
+        '<Table><Tr><Td><Span color="1D4ED8">青</Span> セル</Td></Tr></Table>',
+      );
+      const tableNode = result[0] as Record<string, unknown>;
+      const rows = tableNode.rows as Record<string, unknown>[];
+      const cells = rows[0].cells as Record<string, unknown>[];
+      expect(cells[0]).toMatchObject({
+        text: "青 セル",
+        runs: [{ text: "青", color: "1D4ED8" }, { text: " セル" }],
+      });
+    });
+
+    it("Text 内のインラインフォーマットタグ以外の子要素はエラーになる", () => {
+      expect(() => parseXml("<Text><B>ok</B><Foo>ng</Foo></Text>")).toThrow();
+    });
+  });
+
+  // ===== Nested structures =====
+  describe("ネスト構造", () => {
+    it("深いネスト構造を正しく変換する", () => {
+      const xml = `
+        <VStack gap="16" padding="32">
+          <Text fontSize="32" bold="true">Title</Text>
+          <HStack gap="16">
+            <Text fontSize="18" color="00AA00">Left</Text>
+            <Text fontSize="18">Right</Text>
+          </HStack>
+        </VStack>
+      `;
+      const result = parseXml(xml);
+      expect(result).toEqual([
+        {
+          type: "vstack",
+          gap: 16,
+          padding: 32,
+          children: [
+            { type: "text", text: "Title", fontSize: 32, bold: true },
+            {
+              type: "hstack",
+              gap: 16,
+              children: [
+                { type: "text", text: "Left", fontSize: 18, color: "00AA00" },
+                { type: "text", text: "Right", fontSize: 18 },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+  });
+
+  // ===== Unknown-tag errors =====
+  describe("未知タグのエラー", () => {
+    it("組み込みノード以外のタグでエラーをスローする", () => {
+      const xml = '<SectionCard title="KPI Summary" />';
+      expect(() => parseXml(xml)).toThrow("Unknown tag: <SectionCard>");
+    });
+
+    it("未知タグがコンテナ内にある場合もエラーをスローする", () => {
+      const xml = `
+        <VStack>
+          <MyComponent />
+        </VStack>
+      `;
+      expect(() => parseXml(xml)).toThrow("Unknown tag: <MyComponent>");
+    });
+  });
+
+  // ===== Multiple root elements =====
+  describe("複数ルート要素", () => {
+    it("複数のルート要素を配列として返す", () => {
+      const xml = "<Text>Slide 1</Text><Text>Slide 2</Text>";
+      const result = parseXml(xml);
+      expect(result).toHaveLength(2);
+      expect(result[0]).toEqual({ type: "text", text: "Slide 1" });
+      expect(result[1]).toEqual({ type: "text", text: "Slide 2" });
+    });
+  });
+
+  // ===== Edge cases =====
+  describe("エッジケース", () => {
+    it("空文字列で空配列を返す", () => {
+      expect(parseXml("")).toEqual([]);
+      expect(parseXml("  ")).toEqual([]);
+    });
+
+    it("backgroundImage をドット記法で変換する", () => {
+      const result = parseXml(
+        '<VStack backgroundImage.src="bg.png" backgroundImage.sizing="cover"><Text>A</Text></VStack>',
+      );
+      expect((result[0] as Record<string, unknown>).backgroundImage).toEqual({
+        src: "bg.png",
+        sizing: "cover",
+      });
+    });
+
+    it("shadow をドット記法で変換する", () => {
+      const result = parseXml(
+        '<VStack shadow.type="outer" shadow.blur="4" shadow.offset="2" shadow.color="000000"><Text>A</Text></VStack>',
+      );
+      expect((result[0] as Record<string, unknown>).shadow).toEqual({
+        type: "outer",
+        blur: 4,
+        offset: 2,
+        color: "000000",
+      });
+    });
+
+    it("VStack の shadow をドット記法で変換する", () => {
+      const result = parseXml(
+        '<VStack shadow.type="outer" shadow.blur="6" shadow.offset="3" shadow.color="000000"><Text>A</Text></VStack>',
+      );
+      expect((result[0] as Record<string, unknown>).shadow).toEqual({
+        type: "outer",
+        blur: 6,
+        offset: 3,
+        color: "000000",
+      });
+    });
+
+    it("HStack の shadow をドット記法で変換する", () => {
+      const result = parseXml(
+        '<HStack shadow.type="inner" shadow.blur="4" shadow.offset="2" shadow.color="333333"><Text>A</Text></HStack>',
+      );
+      expect((result[0] as Record<string, unknown>).shadow).toEqual({
+        type: "inner",
+        blur: 4,
+        offset: 2,
+        color: "333333",
+      });
+    });
+
+    it("ドット記法で fill 属性を変換する", () => {
+      const result = parseXml(
+        '<Shape shapeType="rect" fill.color="1D4ED8" fill.transparency="0.5" />',
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.fill).toEqual({ color: "1D4ED8", transparency: 0.5 });
+    });
+
+    it("ドット記法で endArrow（union: boolean | object）を変換する", () => {
+      const result = parseXml(
+        '<Line x1="0" y1="0" x2="100" y2="100" endArrow.type="diamond" />',
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.endArrow).toEqual({ type: "diamond" });
+    });
+
+    it("ドット記法で未知のサブ属性はエラーになる", () => {
+      expect(() =>
+        parseXml('<Shape shapeType="rect" fill.unknown="value" />'),
+      ).toThrow('Unknown sub-attribute "fill.unknown"');
+    });
+
+    it("endArrow='true' とドット記法 endArrow.type の共存を許容する", () => {
+      const result = parseXml(
+        '<Line x1="0" y1="0" x2="100" y2="100" endArrow="true" endArrow.type="triangle" />',
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.endArrow).toEqual({ type: "triangle" });
+    });
+
+    it("beginArrow='true' とドット記法 beginArrow.type の共存を許容する", () => {
+      const result = parseXml(
+        '<Line x1="0" y1="0" x2="100" y2="100" beginArrow="true" beginArrow.type="diamond" />',
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.beginArrow).toEqual({ type: "diamond" });
+    });
+
+    it("endArrow='false' とドット記法 endArrow.type の共存を許容する（ドット記法優先）", () => {
+      const result = parseXml(
+        '<Line x1="0" y1="0" x2="100" y2="100" endArrow="false" endArrow.type="triangle" />',
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.endArrow).toEqual({ type: "triangle" });
+    });
+
+    it("padding と dot 記法を混在指定できる（number shorthand を 4方向展開）", () => {
+      const result = parseXml(
+        '<VStack padding="16" padding.top="4"><Text>A</Text></VStack>',
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.padding).toEqual({ top: 4, right: 16, bottom: 16, left: 16 });
+    });
+
+    it("margin と dot 記法を混在指定できる（number shorthand を 4方向展開）", () => {
+      const result = parseXml(
+        '<VStack margin="12" margin.left="20"><Text>A</Text></VStack>',
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.margin).toEqual({
+        top: 12,
+        right: 12,
+        bottom: 12,
+        left: 20,
+      });
+    });
+
+    it("border の JSON shorthand と dot 記法を混在指定できる", () => {
+      const border = JSON.stringify({ color: "000000", width: 2 });
+      const result = parseXml(
+        `<Text border='${border}' border.color="FF0000">test</Text>`,
+      );
+      expect((result[0] as Record<string, unknown>).border).toEqual({
+        color: "FF0000",
+        width: 2,
+      });
+    });
+
+    it("cellBorder の JSON shorthand と dot 記法を混在指定できる", () => {
+      const result = parseXml(
+        `<Table cellBorder='{"color":"334155","width":1}' cellBorder.width="2"><Tr><Td>A</Td></Tr></Table>`,
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.cellBorder).toEqual({ color: "334155", width: 2 });
+    });
+
+    it("line の JSON shorthand と dot 記法を混在指定できる", () => {
+      const result = parseXml(
+        `<Shape shapeType="rect" line='{"color":"333333","width":1}' line.width="4" />`,
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.line).toEqual({ color: "333333", width: 4 });
+    });
+
+    it("fill の JSON shorthand と dot 記法を混在指定できる", () => {
+      const result = parseXml(
+        `<Shape shapeType="rect" fill='{"color":"1D4ED8","transparency":0.1}' fill.transparency="0.4" />`,
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.fill).toEqual({ color: "1D4ED8", transparency: 0.4 });
+    });
+
+    it("shadow の JSON shorthand と dot 記法を混在指定できる", () => {
+      const result = parseXml(
+        `<VStack shadow='{"type":"outer","color":"000000","blur":2}' shadow.blur="6"><Text>A</Text></VStack>`,
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.shadow).toEqual({ type: "outer", color: "000000", blur: 6 });
+    });
+
+    it("underline の JSON shorthand と dot 記法を混在指定できる", () => {
+      const result = parseXml(
+        `<Text underline='{"style":"sng","color":"000000"}' underline.color="FF0000">test</Text>`,
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.underline).toEqual({ style: "sng", color: "FF0000" });
+    });
+
+    it("beginArrow の object shorthand と dot 記法を混在指定できる", () => {
+      const result = parseXml(
+        `<Line x1="0" y1="0" x2="100" y2="100" beginArrow='{"type":"oval"}' beginArrow.type="diamond" />`,
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.beginArrow).toEqual({ type: "diamond" });
+    });
+
+    it("backgroundImage の JSON shorthand と dot 記法を混在指定できる", () => {
+      const result = parseXml(
+        `<VStack backgroundImage='{"src":"bg.png","sizing":"contain"}' backgroundImage.sizing="cover"><Text>A</Text></VStack>`,
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.backgroundImage).toEqual({ src: "bg.png", sizing: "cover" });
+    });
+
+    it("sizing の JSON shorthand と dot 記法を混在指定できる", () => {
+      const result = parseXml(
+        `<Image src="image.png" sizing='{"type":"crop","x":0,"y":0,"w":100,"h":100}' sizing.w="120" />`,
+      );
+      const node = result[0] as Record<string, unknown>;
+      expect(node.sizing).toEqual({ type: "crop", x: 0, y: 0, w: 120, h: 100 });
+    });
+
+    it("展開できない shorthand は従来どおり競合エラーになる", () => {
+      expect(() =>
+        parseXml('<Text border="solid" border.color="FF0000">test</Text>'),
+      ).toThrow("conflicts with dot-notation");
+    });
+
+    it("Master.backgroundImage 属性は廃止された (T5 — RV-M-ST-R2-1, option b)", () => {
+      // backgroundImage was a string-only alias for backgroundPath; removed in 8.0.0.
+      // backgroundPath remains as the canonical key.
+      expect(() =>
+        parseXml(
+          '<SlideGlance><Master name="X" backgroundImage="bg.png"/><Slide master="X"><Text>x</Text></Slide></SlideGlance>',
+        ),
+      ).toThrow(/backgroundImage|Unknown/i);
+    });
+
+    it("Tr の height 不正値で error を返す (T8 — RV-M-ST7)", () => {
+      // height routed through standard child coercion → length rule
+      expect(() =>
+        parseXml(`
+          <Table>
+            <Tr h="abcd"><Td>x</Td></Tr>
+          </Table>
+        `),
+      ).toThrow(/length|height|Cannot convert/i);
+    });
+
+    it("Tr の h alias でも length rule を通る (T8)", () => {
+      // After T8, Tr accepts both height and h via standard coercion.
+      // 100 should be coerced to number 100 via length rule.
+      const xml = '<Table><Tr h="40"><Td>x</Td></Tr></Table>';
+      expect(() => parseXml(xml)).not.toThrow();
+    });
+
+    it("parseBuilderDocument は { document, diagnostics } を返す (T11.5)", async () => {
+      // ParseResult shape: document on .document, diagnostics on .diagnostics.
+      const { parseBuilderDocument } = await import("./parseXml.ts");
+      const result = parseBuilderDocument("<VStack><Text>x</Text></VStack>");
+      expect(result).toHaveProperty("document");
+      expect(result).toHaveProperty("diagnostics");
+      expect(Array.isArray(result.diagnostics)).toBe(true);
+      expect(result.document.nodes).toHaveLength(1);
+    });
+
+    it("Slide 以外で master 属性は unknown-attribute (T10 — RV-M-ST2)", () => {
+      // master should be Slide-only — Text or VStack uses are unknown attributes.
+      expect(() => parseXml('<Text master="X">test</Text>')).toThrow(
+        /master|Unknown/i,
+      );
+    });
+
+    it("Slide.master は引き続き受け付ける (T10 regression)", () => {
+      expect(() =>
+        parseXml(
+          '<SlideGlance><Master name="X"/><Slide master="X"><Text>x</Text></Slide></SlideGlance>',
+        ),
+      ).not.toThrow();
+    });
+
+    it('Layer 直下 Text の x が "true" だと error (T9 — RV-M-ST1)', () => {
+      // Without BASE_RULES.x being explicit number, coerceFallback
+      // would convert "true" to boolean. After T9 it becomes a diagnostic.
+      expect(() =>
+        parseXml('<Layer><Text x="true" y="100">x</Text></Layer>'),
+      ).toThrow(/x|number|Cannot convert/i);
+    });
+
+    it("Layer 直下 Text の x/y は number に変換される (T9 regression)", () => {
+      const result = parseXml('<Layer><Text x="50" y="100">x</Text></Layer>');
+      const layer = result[0] as Record<string, unknown>;
+      const children = layer.children as Record<string, unknown>[];
+      expect(children[0].x).toBe(50);
+      expect(children[0].y).toBe(100);
+    });
+
+    it("Master.backgroundPath は引き続き動作する (T5 regression)", () => {
+      expect(() =>
+        parseXml(
+          '<SlideGlance><Master name="X" backgroundPath="bg.png"/><Slide master="X"><Text>x</Text></Slide></SlideGlance>',
+        ),
+      ).not.toThrow();
+    });
+
+    it("ドット記法で未知のベース属性はエラーになる", () => {
+      expect(() => parseXml('<Text unknown.color="value">test</Text>')).toThrow(
+        'Unknown attribute "unknown"',
+      );
+    });
+
+    it("Chart の showLegend, showTitle を boolean に変換する", () => {
+      const data = JSON.stringify([{ labels: ["A"], values: [1] }]);
+      const result = parseXml(
+        `<Chart chartType="pie" data='${data}' showLegend="true" showTitle="false" />`,
+      );
+      expect((result[0] as Record<string, unknown>).showLegend).toBe(true);
+      expect((result[0] as Record<string, unknown>).showTitle).toBe(false);
+    });
+
+    it("不正な JSON 属性値でエラーをスローする", () => {
+      expect(() =>
+        parseXml('<Chart chartType="bar" data="not-json" />'),
+      ).toThrow();
+    });
+
+    it("boolean の不正値でエラーをスローする", () => {
+      expect(() => parseXml('<Text bold="TRUE">x</Text>')).toThrow(
+        'Cannot convert "TRUE" to boolean',
+      );
+      expect(() => parseXml('<Text bold="yes">x</Text>')).toThrow(
+        'Cannot convert "yes" to boolean',
+      );
+    });
+
+    it("Issue の比較例（XML）を正しく変換する", () => {
+      const xml = `
+        <VStack gap="16" padding="32">
+          <Text fontSize="32" bold="true">売上レポート</Text>
+          <HStack gap="16">
+            <Chart chartType="bar" w="400" h="300"
+              data='[{ "name": "Q1", "labels": ["1月","2月","3月"], "values": [100,120,90] }]'
+            />
+            <Text fontSize="18" color="00AA00">前年比 +15%</Text>
+          </HStack>
+        </VStack>
+      `;
+      const result = parseXml(xml);
+      expect(result).toEqual([
+        {
+          type: "vstack",
+          gap: 16,
+          padding: 32,
+          children: [
+            {
+              type: "text",
+              text: "売上レポート",
+              fontSize: 32,
+              bold: true,
+            },
+            {
+              type: "hstack",
+              gap: 16,
+              children: [
+                {
+                  type: "chart",
+                  chartType: "bar",
+                  w: 400,
+                  h: 300,
+                  data: [
+                    {
+                      name: "Q1",
+                      labels: ["1月", "2月", "3月"],
+                      values: [100, 120, 90],
+                    },
+                  ],
+                },
+                {
+                  type: "text",
+                  text: "前年比 +15%",
+                  fontSize: 18,
+                  color: "00AA00",
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+  });
+
+  // ===== Child-element notation =====
+  describe("子要素記法", () => {
+    // ----- Chart -----
+    describe("Chart", () => {
+      it("ChartSeries/ChartDataPoint 子要素から data を構築する", () => {
+        const xml = `
+          <Chart chartType="bar">
+            <ChartSeries name="Q1">
+              <ChartDataPoint label="1月" value="100" />
+              <ChartDataPoint label="2月" value="120" />
+              <ChartDataPoint label="3月" value="90" />
+            </ChartSeries>
+          </Chart>
+        `;
+        const result = parseXml(xml);
+        expect(result).toEqual([
+          {
+            type: "chart",
+            chartType: "bar",
+            data: [
+              {
+                name: "Q1",
+                labels: ["1月", "2月", "3月"],
+                values: [100, 120, 90],
+              },
+            ],
+          },
+        ]);
+      });
+
+      it("複数 ChartSeries を処理する", () => {
+        const xml = `
+          <Chart chartType="line">
+            <ChartSeries name="2023">
+              <ChartDataPoint label="Q1" value="100" />
+              <ChartDataPoint label="Q2" value="200" />
+            </ChartSeries>
+            <ChartSeries name="2024">
+              <ChartDataPoint label="Q1" value="150" />
+              <ChartDataPoint label="Q2" value="250" />
+            </ChartSeries>
+          </Chart>
+        `;
+        const result = parseXml(xml);
+        const data = (result[0] as Record<string, unknown>).data as Record<
+          string,
+          unknown
+        >[];
+        expect(data).toHaveLength(2);
+        expect(data[0].name).toBe("2023");
+        expect(data[1].name).toBe("2024");
+      });
+
+      it("name なしの ChartSeries を処理する", () => {
+        const xml = `
+          <Chart chartType="pie">
+            <ChartSeries>
+              <ChartDataPoint label="A" value="60" />
+              <ChartDataPoint label="B" value="40" />
+            </ChartSeries>
+          </Chart>
+        `;
+        const result = parseXml(xml);
+        const data = (result[0] as Record<string, unknown>).data as Record<
+          string,
+          unknown
+        >[];
+        expect(data[0].name).toBeUndefined();
+        expect(data[0].labels).toEqual(["A", "B"]);
+        expect(data[0].values).toEqual([60, 40]);
+      });
+
+      it("JSON 属性のみでも引き続き動作する（後方互換性）", () => {
+        const data = JSON.stringify([
+          { name: "S1", labels: ["A"], values: [1] },
+        ]);
+        const result = parseXml(`<Chart chartType="bar" data='${data}' />`);
+        expect((result[0] as Record<string, unknown>).data).toEqual([
+          { name: "S1", labels: ["A"], values: [1] },
+        ]);
+      });
+
+      it("Chart 内の未知タグでエラーをスローする", () => {
+        expect(() =>
+          parseXml('<Chart chartType="bar"><Unknown /></Chart>'),
+        ).toThrow(
+          "Unknown child element <Unknown> inside <Chart>. Expected: <ChartSeries>",
+        );
+      });
+
+      it("ChartSeries 内の未知タグでエラーをスローする", () => {
+        expect(() =>
+          parseXml(
+            '<Chart chartType="bar"><ChartSeries><Unknown /></ChartSeries></Chart>',
+          ),
+        ).toThrow(
+          "Unknown child element <Unknown> inside <ChartSeries>. Expected: <ChartDataPoint>",
+        );
+      });
+    });
+
+    // ----- Table -----
+    describe("Table", () => {
+      it("Col/Tr/Td 子要素から columns/rows を構築する", () => {
+        const xml = `
+          <Table>
+            <Col w="200" />
+            <Col w="100" />
+            <Tr>
+              <Td>太郎</Td>
+              <Td>30</Td>
+            </Tr>
+            <Tr>
+              <Td>花子</Td>
+              <Td>25</Td>
+            </Tr>
+          </Table>
+        `;
+        const result = parseXml(xml);
+        expect(result).toEqual([
+          {
+            type: "table",
+            columns: [{ w: 200 }, { w: 100 }],
+            rows: [
+              { cells: [{ text: "太郎" }, { text: "30" }] },
+              { cells: [{ text: "花子" }, { text: "25" }] },
+            ],
+          },
+        ]);
+      });
+
+      it("Td に属性（fontSize, bold等）を設定する", () => {
+        const xml = `
+          <Table>
+            <Col w="200" />
+            <Tr>
+              <Td fontSize="14" bold="true" color="FF0000">Header</Td>
+            </Tr>
+          </Table>
+        `;
+        const result = parseXml(xml);
+        const rows = (result[0] as Record<string, unknown>).rows as Record<
+          string,
+          unknown
+        >[];
+        const cells = rows[0].cells as Record<string, unknown>[];
+        expect(cells[0]).toEqual({
+          text: "Header",
+          fontSize: 14,
+          bold: true,
+          color: "FF0000",
+        });
+      });
+
+      it("Td に verticalAlign を設定する", () => {
+        const xml = `
+          <Table>
+            <Col w="200" />
+            <Tr>
+              <Td verticalAlign="bottom">Header</Td>
+            </Tr>
+          </Table>
+        `;
+        const result = parseXml(xml);
+        const rows = (result[0] as Record<string, unknown>).rows as Record<
+          string,
+          unknown
+        >[];
+        const cells = rows[0].cells as Record<string, unknown>[];
+        expect(cells[0]).toEqual({
+          text: "Header",
+          verticalAlign: "bottom",
+        });
+      });
+
+      it("Td の text 属性がテキストコンテンツより優先される", () => {
+        const xml = `
+          <Table>
+            <Col />
+            <Tr>
+              <Td text="from attr">from content</Td>
+            </Tr>
+          </Table>
+        `;
+        const result = parseXml(xml);
+        const rows = (result[0] as Record<string, unknown>).rows as Record<
+          string,
+          unknown
+        >[];
+        const cells = rows[0].cells as Record<string, unknown>[];
+        expect(cells[0].text).toBe("from attr");
+      });
+
+      it("Tr に height 属性を設定する (T21: h に移行)", () => {
+        const xml = `
+          <Table>
+            <Col />
+            <Tr h="50">
+              <Td>A</Td>
+            </Tr>
+          </Table>
+        `;
+        const result = parseXml(xml);
+        const rows = (result[0] as Record<string, unknown>).rows as Record<
+          string,
+          unknown
+        >[];
+        // T21: height is deprecated — migrated to h
+        expect(rows[0].h).toBe(50);
+      });
+
+      it("Col なしで Tr のみを指定する", () => {
+        const xml = `
+          <Table>
+            <Tr>
+              <Td>A</Td>
+              <Td>B</Td>
+            </Tr>
+          </Table>
+        `;
+        const result = parseXml(xml);
+        const node = result[0] as Record<string, unknown>;
+        expect(node.columns).toEqual([{}, {}]);
+        expect(node.rows).toEqual([{ cells: [{ text: "A" }, { text: "B" }] }]);
+      });
+
+      it("Col なしで colspan を含む Tr から正しい列数を推定する", () => {
+        const xml = `
+          <Table>
+            <Tr>
+              <Td colspan="3">Header</Td>
+            </Tr>
+            <Tr>
+              <Td>A</Td>
+              <Td>B</Td>
+              <Td>C</Td>
+            </Tr>
+          </Table>
+        `;
+        const result = parseXml(xml);
+        const node = result[0] as Record<string, unknown>;
+        expect(node.columns).toEqual([{}, {}, {}]);
+      });
+
+      it("JSON 属性のみでも引き続き動作する（後方互換性）", () => {
+        const columns = JSON.stringify([{ width: 100 }]);
+        const rows = JSON.stringify([{ cells: [{ text: "A" }] }]);
+        const result = parseXml(
+          `<Table columns='${columns}' rows='${rows}' />`,
+        );
+        const node = result[0] as Record<string, unknown>;
+        expect(node.columns).toEqual([{ width: 100 }]);
+        expect(node.rows).toEqual([{ cells: [{ text: "A" }] }]);
+      });
+
+      it("Tr 内の未知タグでエラーをスローする", () => {
+        expect(() =>
+          parseXml("<Table><Tr><Unknown>x</Unknown></Tr></Table>"),
+        ).toThrow(
+          "Unknown child element <Unknown> inside <Tr>. Expected: <Td>",
+        );
+      });
+
+      it("Table 内の未知タグでエラーをスローする", () => {
+        expect(() =>
+          parseXml('<Table><Unknown width="100" /></Table>'),
+        ).toThrow(
+          "Unknown child element <Unknown> inside <Table>. Expected: <Col> or <Tr>",
+        );
+      });
+
+      it("Td に colspan/rowspan を設定する", () => {
+        const xml = `
+          <Table>
+            <Col w="100" />
+            <Col w="100" />
+            <Col w="100" />
+            <Tr>
+              <Td colspan="3">Header</Td>
+            </Tr>
+            <Tr>
+              <Td rowspan="2">Left</Td>
+              <Td>A</Td>
+              <Td>B</Td>
+            </Tr>
+          </Table>
+        `;
+        const result = parseXml(xml);
+        const rows = (result[0] as Record<string, unknown>).rows as Record<
+          string,
+          unknown
+        >[];
+        const row0Cells = rows[0].cells as Record<string, unknown>[];
+        expect(row0Cells[0]).toEqual({ text: "Header", colspan: 3 });
+        const row1Cells = rows[1].cells as Record<string, unknown>[];
+        expect(row1Cells[0]).toEqual({ text: "Left", rowspan: 2 });
+      });
+    });
+
+    // ----- Nesting inside containers -----
+    describe("コンテナ内でのネスト", () => {
+      it("VStack 内で Chart の子要素記法を使用できる", () => {
+        const xml = `
+          <VStack gap="16">
+            <Text fontSize="24" bold="true">売上</Text>
+            <Chart chartType="bar" w="400" h="300">
+              <ChartSeries name="Q1">
+                <ChartDataPoint label="1月" value="100" />
+              </ChartSeries>
+            </Chart>
+          </VStack>
+        `;
+        const result = parseXml(xml);
+        expect(result).toEqual([
+          {
+            type: "vstack",
+            gap: 16,
+            children: [
+              { type: "text", text: "売上", fontSize: 24, bold: true },
+              {
+                type: "chart",
+                chartType: "bar",
+                w: 400,
+                h: 300,
+                data: [{ name: "Q1", labels: ["1月"], values: [100] }],
+              },
+            ],
+          },
+        ]);
+      });
+
+      it("HStack 内で Table の子要素記法を使用できる (T20: Col w に移行)", () => {
+        const xml = `
+          <HStack gap="16">
+            <Table>
+              <Col w="200" />
+              <Tr><Td>A</Td></Tr>
+            </Table>
+            <Text>Notes</Text>
+          </HStack>
+        `;
+        const result = parseXml(xml);
+        expect(result).toEqual([
+          {
+            type: "hstack",
+            gap: 16,
+            children: [
+              {
+                type: "table",
+                columns: [{ w: 200 }],
+                rows: [{ cells: [{ text: "A" }] }],
+              },
+              { type: "text", text: "Notes" },
+            ],
+          },
+        ]);
+      });
+    });
+  });
+
+  // ===== Validation improvements =====
+  describe("バリデーション改善", () => {
+    describe("未知の属性名の検出", () => {
+      it("未知の属性でエラーをスローする", () => {
+        expect(() => parseXml('<Text fonPx="32">test</Text>')).toThrow(
+          ParseXmlError,
+        );
+        try {
+          parseXml('<Text fontSiz="32">test</Text>');
+        } catch (e) {
+          const err = e as ParseXmlError;
+          expect(err.errors).toHaveLength(1);
+          expect(err.errors[0]).toContain('Unknown attribute "fontSiz"');
+          expect(err.errors[0]).toContain('Did you mean "fontSize"');
+        }
+      });
+
+      it("類似候補がない場合もエラーをスローする", () => {
+        expect(() => parseXml('<Text zzzzz="32">test</Text>')).toThrow(
+          ParseXmlError,
+        );
+        try {
+          parseXml('<Text zzzzz="32">test</Text>');
+        } catch (e) {
+          const err = e as ParseXmlError;
+          expect(err.errors[0]).toContain('Unknown attribute "zzzzz"');
+          expect(err.errors[0]).not.toContain("Did you mean");
+        }
+      });
+
+      it("子要素の未知属性もエラーをスローする", () => {
+        const xml = `
+          <Table>
+            <Tr><Td texxt="A" /></Tr>
+          </Table>
+        `;
+        expect(() => parseXml(xml)).toThrow(ParseXmlError);
+        try {
+          parseXml(xml);
+        } catch (e) {
+          const err = e as ParseXmlError;
+          expect(
+            err.errors.some((e) => e.includes('Unknown attribute "texxt"')),
+          ).toBe(true);
+        }
+      });
+
+      it("x/y 属性は許可される（Layer 子要素用）", () => {
+        const xml = '<Text x="10" y="20">test</Text>';
+        const result = parseXml(xml);
+        expect(result[0]).toHaveProperty("x", 10);
+        expect(result[0]).toHaveProperty("y", 20);
+      });
+    });
+
+    describe("属性値の型不一致", () => {
+      it("enum 不一致でエラーをスローする", () => {
+        expect(() => parseXml('<Text textAlign="LEFT">test</Text>')).toThrow(
+          ParseXmlError,
+        );
+        try {
+          parseXml('<Text textAlign="LEFT">test</Text>');
+        } catch (e) {
+          const err = e as ParseXmlError;
+          expect(err.errors.some((e) => e.includes("textAlign"))).toBe(true);
+        }
+      });
+
+      it("数値範囲違反でエラーをスローする", () => {
+        expect(() => parseXml('<Text opacity="2">test</Text>')).toThrow(
+          ParseXmlError,
+        );
+        try {
+          parseXml('<Text opacity="2">test</Text>');
+        } catch (e) {
+          const err = e as ParseXmlError;
+          expect(err.errors.some((e) => e.includes("opacity"))).toBe(true);
+        }
+      });
+
+      it("不正な shapeType でエラーをスローする", () => {
+        expect(() =>
+          parseXml('<Shape shapeType="invalid_shape" w="100" h="100" />'),
+        ).toThrow(ParseXmlError);
+        try {
+          parseXml('<Shape shapeType="invalid_shape" w="100" h="100" />');
+        } catch (e) {
+          const err = e as ParseXmlError;
+          expect(err.errors.some((e) => e.includes("shapeType"))).toBe(true);
+        }
+      });
+    });
+
+    describe("必須属性の欠落", () => {
+      it("Image の src 欠落でエラーをスローする", () => {
+        expect(() => parseXml('<Image w="400" h="300" />')).toThrow(
+          ParseXmlError,
+        );
+        try {
+          parseXml('<Image w="400" h="300" />');
+        } catch (e) {
+          const err = e as ParseXmlError;
+          expect(err.errors.some((e) => e.includes('"src"'))).toBe(true);
+        }
+      });
+
+      it("Line の座標欠落でエラーをスローする", () => {
+        expect(() => parseXml('<Line x1="0" y1="0" />')).toThrow(ParseXmlError);
+        try {
+          parseXml('<Line x1="0" y1="0" />');
+        } catch (e) {
+          const err = e as ParseXmlError;
+          expect(
+            err.errors.some((e) => e.includes('"x2"') || e.includes('"y2"')),
+          ).toBe(true);
+        }
+      });
+    });
+
+    describe("不正な子要素の検出", () => {
+      it("リーフノードに子要素があるとエラーをスローする", () => {
+        const xml = "<Image><Text>x</Text></Image>";
+        expect(() => parseXml(xml)).toThrow(ParseXmlError);
+        try {
+          parseXml(xml);
+        } catch (e) {
+          const err = e as ParseXmlError;
+          expect(
+            err.errors.some((e) =>
+              e.includes("does not accept child elements"),
+            ),
+          ).toBe(true);
+        }
+      });
+    });
+
+    describe("複数エラーの一括報告", () => {
+      it("1つの XML に複数のエラーがある場合すべて報告する", () => {
+        const xml = `
+          <VStack>
+            <Text fonPx="32" textAlign="LEFT">A</Text>
+            <Image w="400" />
+          </VStack>
+        `;
+        expect(() => parseXml(xml)).toThrow(ParseXmlError);
+        try {
+          parseXml(xml);
+        } catch (e) {
+          const err = e as ParseXmlError;
+          // At least two errors must be reported.
+          expect(err.errors.length).toBeGreaterThanOrEqual(2);
+          // Unknown attribute fonPx
+          expect(err.errors.some((e) => e.includes("fonPx"))).toBe(true);
+          // Missing src on Image
+          expect(err.errors.some((e) => e.includes("src"))).toBe(true);
+        }
+      });
+
+      it("ParseXmlError の errors プロパティでプログラム的にアクセスできる", () => {
+        expect.assertions(4);
+        try {
+          parseXml('<Image w="400" />');
+        } catch (e) {
+          expect(e).toBeInstanceOf(ParseXmlError);
+          const err = e as ParseXmlError;
+          expect(Array.isArray(err.errors)).toBe(true);
+          expect(err.errors.length).toBeGreaterThan(0);
+          expect(err.message).toContain("XML validation failed");
+        }
+      });
+    });
+
+    describe("正常な XML は引き続き動作する", () => {
+      it("有効な属性のみの場合エラーにならない", () => {
+        const xml = `
+          <VStack gap="16" padding="32">
+            <Text fontSize="32" bold="true" color="FF0000">Hello</Text>
+            <Image src="test.png" w="400" h="300" />
+            <Shape shapeType="rect" w="200" h="100">Label</Shape>
+          </VStack>
+        `;
+        expect(() => parseXml(xml)).not.toThrow();
+      });
+
+      it("opacity の有効な範囲の値は通る", () => {
+        expect(() => parseXml('<Text opacity="0">test</Text>')).not.toThrow();
+        expect(() => parseXml('<Text opacity="1">test</Text>')).not.toThrow();
+        expect(() => parseXml('<Text opacity="0.5">test</Text>')).not.toThrow();
+      });
+    });
+
+    describe("ネストデータのバリデーション", () => {
+      it("Chart の data 内で labels 欠落をエラーにする", () => {
+        const data = JSON.stringify([{ name: "S", values: [1] }]);
+        expect(() =>
+          parseXml(`<Chart chartType="bar" data='${data}' />`),
+        ).toThrow(ParseXmlError);
+      });
+    });
+  });
+
+  // ===== Whitespace preservation in text content =====
+  describe("テキストコンテンツの空白処理", () => {
+    it("スペースのみのテキストコンテンツを保持する", () => {
+      const result = parseXml('<Text fontSize="1" color="D61E1E"> </Text>');
+      expect(result).toEqual([
+        { type: "text", fontSize: 1, color: "D61E1E", text: " " },
+      ]);
+    });
+
+    it("通常のテキストコンテンツを正しくパースする", () => {
+      const result = parseXml(
+        '<Text fontSize="34" bold="true" color="FFFFFF">Hello World</Text>',
+      );
+      expect(result).toEqual([
+        {
+          type: "text",
+          fontSize: 34,
+          bold: true,
+          color: "FFFFFF",
+          text: "Hello World",
+        },
+      ]);
+    });
+
+    it("属性値の前後空白は trim される", () => {
+      const result = parseXml('<Text fontSize="32">test</Text>');
+      expect((result[0] as Record<string, unknown>).fontSize).toBe(32);
+    });
+  });
+
+  describe("T42 — lang attribute on text runs", () => {
+    it("<Span lang> propagates lang to the text run", () => {
+      const result = parseXml(
+        '<Text fontSize="16"><Span lang="ja-JP">日本語</Span></Text>',
+      );
+      expect(result[0].runs).toBeDefined();
+      const runs = result[0].runs as Array<Record<string, unknown>>;
+      expect(runs[0].lang).toBe("ja-JP");
+    });
+
+    it("lang is omitted from run when not specified", () => {
+      const result = parseXml('<Text fontSize="16"><B>Bold</B></Text>');
+      expect(result[0].runs).toBeDefined();
+      const runs = result[0].runs as Array<Record<string, unknown>>;
+      expect(runs[0].lang).toBeUndefined();
+    });
+  });
+
+  describe("T48 — standard size aliases", () => {
+    it('size="A4" resolves to 793x1122', () => {
+      const result = parseBuilderDocument(
+        '<SlideGlance><Document size="A4" /><Slide><Text>x</Text></Slide></SlideGlance>',
+      );
+      expect(result.document.slideSize).toEqual({ w: 793, h: 1122 });
+    });
+
+    it('size="A3" resolves to 1122x1587', () => {
+      const result = parseBuilderDocument(
+        '<SlideGlance><Document size="A3" /><Slide><Text>x</Text></Slide></SlideGlance>',
+      );
+      expect(result.document.slideSize).toEqual({ w: 1122, h: 1587 });
+    });
+
+    it('size="Letter" resolves to 816x1056', () => {
+      const result = parseBuilderDocument(
+        '<SlideGlance><Document size="Letter" /><Slide><Text>x</Text></Slide></SlideGlance>',
+      );
+      expect(result.document.slideSize).toEqual({ w: 816, h: 1056 });
+    });
+  });
+
+  describe("T49 — INVALID_NUMBER_TYPE diagnostic for off-enum <Ol numberType>", () => {
+    it("emits INVALID_NUMBER_TYPE diagnostic when numberType is not a valid enum value", () => {
+      const result = parseBuilderDocument(
+        '<SlideGlance><Slide><Ol numberType="invalidValue"><Li>item</Li></Ol></Slide></SlideGlance>',
+      );
+      const diags = result.diagnostics.filter(
+        (d) => d.code === "INVALID_NUMBER_TYPE",
+      );
+      expect(diags.length).toBeGreaterThanOrEqual(1);
+      expect(diags[0].message).toContain("invalidValue");
+    });
+
+    it("does not emit INVALID_NUMBER_TYPE for a valid numberType", () => {
+      const result = parseBuilderDocument(
+        '<SlideGlance><Slide><Ol numberType="arabicPeriod"><Li>item</Li></Ol></Slide></SlideGlance>',
+      );
+      const diags = result.diagnostics.filter(
+        (d) => d.code === "INVALID_NUMBER_TYPE",
+      );
+      expect(diags).toHaveLength(0);
+    });
+
+    it("does not emit INVALID_NUMBER_TYPE when numberType is absent", () => {
+      const result = parseBuilderDocument(
+        "<SlideGlance><Slide><Ol><Li>item</Li></Ol></Slide></SlideGlance>",
+      );
+      const diags = result.diagnostics.filter(
+        (d) => d.code === "INVALID_NUMBER_TYPE",
+      );
+      expect(diags).toHaveLength(0);
+    });
+  });
+});

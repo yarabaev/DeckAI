@@ -1,0 +1,43 @@
+<Fragment>
+  <!--
+    Airtable-derived palette. Hex literals live in this file ONLY;
+    every other surface references these names through `class="..."`.
+    Keep tokens 1:1 with .claude/design/airtable.design.md frontmatter.
+  -->
+  <Styles>
+    <!-- Surfaces -->
+    <Style name="bg-canvas"   backgroundColor="FFFFFF" />
+    <Style name="bg-soft"     backgroundColor="F8FAFC" />
+    <Style name="bg-strong"   backgroundColor="E0E2E6" />
+    <Style name="bg-dark"     backgroundColor="181D26" />
+    <Style name="bg-dark-elv" backgroundColor="1D1F25" />
+    <Style name="bg-hairline" backgroundColor="DDDDDD" />
+
+    <!-- Signature surfaces (full-bleed brand voltage) -->
+    <Style name="bg-coral"   backgroundColor="AA2D00" />
+    <Style name="bg-forest"  backgroundColor="0A2E0E" />
+    <Style name="bg-cream"   backgroundColor="F5E9D4" />
+    <Style name="bg-peach"   backgroundColor="FCAB79" />
+    <Style name="bg-mint"    backgroundColor="A8D8C4" />
+    <Style name="bg-yellow"  backgroundColor="F4D35E" />
+    <Style name="bg-mustard" backgroundColor="D9A441" />
+
+    <!-- Type colours -->
+    <Style name="t-ink"        color="181D26" />
+    <Style name="t-body"       color="333840" />
+    <Style name="t-muted"      color="41454D" />
+    <Style name="t-border"     color="9297A0" />
+    <Style name="t-on-dark"    color="FFFFFF" />
+    <Style name="t-on-coral"   color="FFFFFF" />
+    <Style name="t-on-forest"  color="FFFFFF" />
+    <Style name="t-on-cream"   color="181D26" />
+    <Style name="t-link"       color="1B61C9" />
+    <Style name="t-info"       color="254FAD" />
+    <Style name="t-success"    color="006400" />
+
+    <!-- Inline keyword tone (used inside body copy) -->
+    <Style name="t-coral"   color="AA2D00" />
+    <Style name="t-forest"  color="0A2E0E" />
+    <Style name="t-mustard" color="8B5E14" />
+  </Styles>
+</Fragment>

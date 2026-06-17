@@ -1,0 +1,89 @@
+<Fragment>
+  <!-- ================================================================
+       Risk matrix + delivery plan.
+       ================================================================ -->
+  <Use template="section"
+       eyebrow="04 · RISK &amp; PLAN"
+       title="Six risks, owned, with explicit triggers."
+       lede="Each risk has a designated owner, a mitigation, and a measurable trigger that escalates the risk one grade. The migration plan is sequenced so that an escalation in any single risk does not block the next milestone.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="10" w="58%">
+          <Text class="title">Risk register.</Text>
+          <Table w="100%" cellBorder.color="D1D5DB" cellBorder.width="0.5" cellMargin="6" defaultRowHeight="22">
+            <Col w="42%" />
+            <Col w="20%" />
+            <Col w="20%" />
+            <Col w="18%" />
+            <Tr>
+              <Td text="Risk" backgroundColor="E5E7EB" fontSize="10" bold="true" color="111827" />
+              <Td text="Owner" backgroundColor="E5E7EB" fontSize="10" bold="true" color="111827" />
+              <Td text="Grade" backgroundColor="E5E7EB" fontSize="10" bold="true" color="111827" textAlign="center" />
+              <Td text="Trigger" backgroundColor="E5E7EB" fontSize="10" bold="true" color="111827" />
+            </Tr>
+            <Tr>
+              <Td text="Control plane Raft membership churn" fontSize="10" />
+              <Td text="@yuki" fontSize="10" />
+              <Td text="WARN" fontSize="10" bold="true" color="92400E" textAlign="center" backgroundColor="FEF3C7" />
+              <Td text="&gt;3 elections / day" fontSize="10" />
+            </Tr>
+            <Tr>
+              <Td text="Edge memory regression under HTTP/3 fan-out" fontSize="10" />
+              <Td text="@marco" fontSize="10" />
+              <Td text="OK" fontSize="10" bold="true" color="166534" textAlign="center" backgroundColor="DCFCE7" />
+              <Td text="p95 &gt; 9 GB" fontSize="10" />
+            </Tr>
+            <Tr>
+              <Td text="Vendor X SDK pin (admission-push interop)" fontSize="10" />
+              <Td text="@hari" fontSize="10" />
+              <Td text="WARN" fontSize="10" bold="true" color="92400E" textAlign="center" backgroundColor="FEF3C7" />
+              <Td text="&gt;1 SDK CVE / month" fontSize="10" />
+            </Tr>
+            <Tr>
+              <Td text="Legacy WAF rule incompat. (P1 customer)" fontSize="10" />
+              <Td text="@joon" fontSize="10" />
+              <Td text="BLOCK" fontSize="10" bold="true" color="991B1B" textAlign="center" backgroundColor="FEE2E2" />
+              <Td text="WAF coverage &lt; 100%" fontSize="10" />
+            </Tr>
+            <Tr>
+              <Td text="On-call training gap (15 → 6 oncall surfaces)" fontSize="10" />
+              <Td text="@sara" fontSize="10" />
+              <Td text="OK" fontSize="10" bold="true" color="166534" textAlign="center" backgroundColor="DCFCE7" />
+              <Td text="dry-run pass rate &lt; 90%" fontSize="10" />
+            </Tr>
+            <Tr>
+              <Td text="Cross-region clock skew on identity-resolve cache" fontSize="10" />
+              <Td text="@yuki" fontSize="10" />
+              <Td text="OK" fontSize="10" bold="true" color="166534" textAlign="center" backgroundColor="DCFCE7" />
+              <Td text="skew &gt; 50ms p99" fontSize="10" />
+            </Tr>
+          </Table>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="10" w="max">
+          <Text class="title">Delivery plan.</Text>
+          <Foreach items='[
+            {"step":"M1","title":"Control plane bring-up","note":"single region, dark deploy, no real traffic"},
+            {"step":"M2","title":"Director shadowing","note":"capture traffic, compare decisions against legacy"},
+            {"step":"M3","title":"Edge canary, us-east","note":"5% traffic, kill switch &lt; 30s"},
+            {"step":"M4","title":"Region-by-region GA","note":"two-week per region, with one-week soak"},
+            {"step":"M5","title":"Legacy LB decom","note":"deprovision, archive runbooks, post-mortem"}
+          ]' as="m">
+            <HStack gap="12" alignItems="start" w="100%">
+              <VStack class="bg-accent" w="36" h="36" borderRadius="6"
+                      alignItems="center" justifyContent="center">
+                <Text fontFamily="Inter" fontSize="12" bold="true" color="FFFFFF" textAlign="center">{m.step}</Text>
+              </VStack>
+              <VStack gap="2" w="max">
+                <Text class="body" bold="true">{m.title}</Text>
+                <Text class="body-soft">{m.note}</Text>
+              </VStack>
+            </HStack>
+          </Foreach>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

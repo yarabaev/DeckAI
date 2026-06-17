@@ -1,0 +1,30 @@
+diff --git a/dist/index.js b/dist/index.js
+index ba825b5d9faebc6fa7d4e0271afdc42de1bc0fb2..29e2b2564b0c962cc40cb596dfd4de7d434e13b7 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1152,8 +1152,8 @@ var MAX_2BYTE_DIST = 512;
+ var PRELOAD_SIZE = 2 * 32 * 96 + 4 * 256;
+ var LEN_MIN = 2;
+ var DIST_MIN = 1;
+-var MAX_OUT_LEN = 4 * 1024 * 1024;
+-var MAX_OUT = 16 * 1024 * 1024;
++var MAX_OUT_LEN = 64 * 1024 * 1024;
++var MAX_OUT = 64 * 1024 * 1024;
+ var RLE_INITIAL = 0;
+ var RLE_NORMAL = 1;
+ var RLE_SEEN_ESCAPE = 2;
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 02f855713851cb1e3af7c2bd7d80dea79c5d564e..309e6b7f88718b7576db4b68f0c255af7609295a 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -1150,8 +1150,8 @@ var MAX_2BYTE_DIST = 512;
+ var PRELOAD_SIZE = 2 * 32 * 96 + 4 * 256;
+ var LEN_MIN = 2;
+ var DIST_MIN = 1;
+-var MAX_OUT_LEN = 4 * 1024 * 1024;
+-var MAX_OUT = 16 * 1024 * 1024;
++var MAX_OUT_LEN = 64 * 1024 * 1024;
++var MAX_OUT = 64 * 1024 * 1024;
+ var RLE_INITIAL = 0;
+ var RLE_NORMAL = 1;
+ var RLE_SEEN_ESCAPE = 2;

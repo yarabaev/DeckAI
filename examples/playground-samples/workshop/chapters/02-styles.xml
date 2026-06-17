@@ -1,0 +1,46 @@
+<Fragment>
+  <Use template="lesson"
+       step="02"
+       eyebrow="PART 2 · STYLES"
+       title="Tokens first. Hex literals never."
+       lede="Your style sheet is the visual contract for the entire deck. Define every color, font, and rule in one place; everything downstream references them by name.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="14" w="58%">
+          <Text class="title">Define a token.</Text>
+          <Use template="code-block" caption="styles/colors.xml">
+            <Slot name="default">
+              <Text class="code"><Span class="code-keyword">&lt;Styles&gt;</Span></Text>
+              <Text class="code">  <Span class="code-keyword">&lt;Style</Span> name=<Span class="code-string">"bg-coral"</Span> backgroundColor=<Span class="code-string">"EF6C42"</Span> <Span class="code-keyword">/&gt;</Span></Text>
+              <Text class="code">  <Span class="code-keyword">&lt;Style</Span> name=<Span class="code-string">"t-coral"</Span> color=<Span class="code-string">"EF6C42"</Span> <Span class="code-keyword">/&gt;</Span></Text>
+              <Text class="code"><Span class="code-keyword">&lt;/Styles&gt;</Span></Text>
+            </Slot>
+          </Use>
+
+          <Text class="title" margin.top="6">Use it anywhere.</Text>
+          <Use template="code-block" caption="any chapter file">
+            <Slot name="default">
+              <Text class="code"><Span class="code-keyword">&lt;VStack</Span> class=<Span class="code-string">"bg-coral"</Span> w=<Span class="code-string">"100"</Span> h=<Span class="code-string">"100"</Span><Span class="code-keyword">/&gt;</Span></Text>
+              <Text class="code"><Span class="code-keyword">&lt;Text</Span> class=<Span class="code-string">"t-coral"</Span><Span class="code-keyword">&gt;</Span>highlight<Span class="code-keyword">&lt;/Text&gt;</Span></Text>
+            </Slot>
+          </Use>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="14" w="max">
+          <Use template="callout-info" label="WHY THIS HELPS"
+               body="When the brand changes — and it will — you touch one file. The other 30 in your deck pick up the change because they reference the token, not the hex." />
+          <Use template="callout-note" label="STYLE CHEAT"
+               body="A class= can stack multiple Style names separated by spaces. The first wins on conflicts. Use this for utility-style additive composition." />
+        </VStack>
+      </HStack>
+
+      <Use template="exercise-card" n="1"
+           duration="12 min"
+           title="Build a 6-token palette."
+           body="Open your deck and define six bg-* and three t-* styles using the colors of your favourite local coffee shop. Apply each to a 50×50 square in chapters/playground.xml."
+           deliverable="A row of six coloured squares + three colored text labels." />
+    </Slot>
+  </Use>
+</Fragment>

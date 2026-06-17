@@ -1,0 +1,27 @@
+[package]
+name = "slideglance-model"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "OOXML PPTX semantic model: shapes, fills, text, tables, charts, themes, slides"
+readme = "../../README.md"
+keywords = ["pptx", "powerpoint", "ooxml", "model", "presentation"]
+categories = ["data-structures", "parser-implementations"]
+
+[lints]
+workspace = true
+
+[dependencies]
+slideglance-utils = { workspace = true, features = ["serde"] }
+slideglance-color = { workspace = true, features = ["serde"] }
+serde = { workspace = true, optional = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+
+[features]
+default = []
+serde = ["dep:serde", "slideglance-utils/serde", "slideglance-color/serde"]

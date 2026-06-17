@@ -1,0 +1,310 @@
+<Fragment>
+  <!-- Chapter 01 — Stack containers (VStack / HStack / Layer / base attrs). -->
+  <Use template="section-coral"
+       number="01"
+       kicker="Flex layout primitives"
+       title="Stack containers."
+       subtitle="Flex by default. Absolute when you need it."
+       inside1="VStack · top-to-bottom flex column"
+       inside2="HStack · left-to-right flex row"
+       inside3="Layer · absolute pixel positioning"
+       inside4="The shared base-attribute surface every node accepts"
+       epigraph="Yoga handles 95% of editorial layout. Reach for Layer only when pixels demand it."
+       epigraphAttrib="builder design notes"
+       meta="VStack · HStack · Layer · base attributes"
+       leftMeta="3 nodes · 1 absolute layout · base attribute set" />
+
+  <!-- VStack page -->
+  <Use template="page" eyebrow="01 / Stack" kicker="VStack"
+       title="VStack — vertical layout"
+       lede="Stacks children top-to-bottom with a uniform gap. Cross-axis alignment is set via alignItems; main-axis distribution via justifyContent.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Attributes" />
+          <Foreach items='[
+            {"attr":"gap","type":"number","desc":"Pixel gap between children."},
+            {"attr":"alignItems","type":"enum","desc":"start · center · end · stretch (default: stretch)."},
+            {"attr":"justifyContent","type":"enum","desc":"start · center · end · spaceBetween · spaceAround · spaceEvenly."},
+            {"attr":"flexWrap","type":"enum","desc":"nowrap (default) · wrap · wrapReverse."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <Use template="rule-soft" />
+
+          <Use template="h2" text="Patterns" />
+          <Foreach items='[
+            {"attr":"alignItems","value":"=\"center\"","desc":"Centre cards horizontally inside a column."},
+            {"attr":"justifyContent","value":"=\"spaceBetween\"","desc":"Distribute three rows so first / last hug the column edges."},
+            {"attr":"flexWrap","value":"=\"wrap\"","desc":"Let chips overflow into a second row when the column is too narrow."}
+          ]' as="r">
+            <Use template="pattern-row" attr="{r.attr}" value="{r.value}" desc="{r.desc}" />
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="alignItems = center" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">column with three pills, each centred horizontally</Text>
+            <VStack gap="6" alignItems="center" backgroundColor="F8FAFC" padding="12" borderRadius="8">
+              <VStack backgroundColor="AA2D00" w="60" h="20" borderRadius="4" />
+              <VStack backgroundColor="0A2E0E" w="100" h="20" borderRadius="4" />
+              <VStack backgroundColor="D9A441" w="80" h="20" borderRadius="4" />
+            </VStack>
+          </VStack>
+          <Use template="h2" text="justify = spaceBetween" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">three rows distributed across a 140px column</Text>
+            <VStack justifyContent="spaceBetween" h="140" backgroundColor="F8FAFC" padding="12" borderRadius="8">
+              <VStack class="bg-coral" h="20" borderRadius="4" />
+              <VStack class="bg-forest" h="20" borderRadius="4" />
+              <VStack class="bg-mustard" h="20" borderRadius="4" />
+            </VStack>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-row-1" label="VStack · gap + alignItems" rightLabel="rendered output">
+        <Slot name="code">
+          <Text class="code-text">&lt;VStack gap="6" alignItems="center"</Text>
+          <Text class="code-text">        backgroundColor="F8FAFC"</Text>
+          <Text class="code-text">        padding="12" borderRadius="8"&gt;</Text>
+          <Text class="code-text">  &lt;VStack class="bg-coral"</Text>
+          <Text class="code-text">          w="60" h="20" borderRadius="4" /&gt;</Text>
+          <Text class="code-text">  &lt;VStack class="bg-forest"</Text>
+          <Text class="code-text">          w="100" h="20" borderRadius="4" /&gt;</Text>
+          <Text class="code-text">  &lt;VStack class="bg-mustard"</Text>
+          <Text class="code-text">          w="80" h="20" borderRadius="4" /&gt;</Text>
+          <Text class="code-text">&lt;/VStack&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <VStack gap="6" alignItems="center" backgroundColor="F8FAFC" padding="12" borderRadius="8" h="120">
+            <VStack backgroundColor="AA2D00" w="60" h="20" borderRadius="4" />
+            <VStack backgroundColor="0A2E0E" w="100" h="20" borderRadius="4" />
+            <VStack backgroundColor="D9A441" w="80" h="20" borderRadius="4" />
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <!-- HStack page -->
+  <Use template="page" eyebrow="01 / Stack" kicker="HStack"
+       title="HStack — horizontal layout"
+       lede="Mirrors VStack on the row axis. Children share a uniform gap; widths default to flexGrow=1 with flexBasis=0 (equal-share) when the parent has a definite width.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Attributes" />
+          <Foreach items='[
+            {"attr":"gap","type":"number","desc":"Horizontal gap between children."},
+            {"attr":"alignItems","type":"enum","desc":"start · center · end · stretch (default: stretch) — cross-axis is vertical."},
+            {"attr":"justifyContent","type":"enum","desc":"start · center · end · spaceBetween · spaceAround · spaceEvenly."},
+            {"attr":"flexWrap","type":"enum","desc":"nowrap (default) · wrap · wrapReverse — wraps once total width exceeds the row."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <Use template="rule-soft" />
+          <Use template="callout" cls="callout-info" kind="HEADS-UP"
+               title="Equal-share defaults" titleColor="254FAD"
+               body="Children with no w attribute receive flexGrow=1 and flexBasis=0 
+               when the parent HStack itself has a definite width. Set w on each child if you need natural sizing." />
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · alignItems=center" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">icon + label rendered as a single row</Text>
+            <HStack gap="10" alignItems="center" backgroundColor="F8FAFC" padding="12" borderRadius="8">
+              <Icon name="check" size="20" color="006400" />
+              <Text class="body fill-x">A row of icon + label uses HStack for vertical alignment.</Text>
+            </HStack>
+          </VStack>
+
+          <Use template="h2" text="Sample · 3-up grid" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">three equal columns — no w attr, HStack auto-distributes</Text>
+            <HStack gap="8" alignItems="stretch">
+              <VStack class="bg-coral" h="60" borderRadius="6" alignItems="center" justifyContent="center">
+                <Text color="FFFFFF" bold="true" fontSize="14">A</Text>
+              </VStack>
+              <VStack class="bg-forest" h="60" borderRadius="6" alignItems="center" justifyContent="center">
+                <Text color="FFFFFF" bold="true" fontSize="14">B</Text>
+              </VStack>
+              <VStack class="bg-mustard" h="60" borderRadius="6" alignItems="center" justifyContent="center">
+                <Text color="181D26" bold="true" fontSize="14">C</Text>
+              </VStack>
+            </HStack>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-row" label="HStack · 3-up via auto-distribute" rightLabel="rendered output">
+        <Slot name="code">
+          <Text class="code-text">&lt;!-- No w on children → flexGrow=1,</Text>
+          <Text class="code-text">     flexBasis=0 → equal columns. --&gt;</Text>
+          <Text class="code-text">&lt;HStack gap="8"&gt;</Text>
+          <Text class="code-text">  &lt;VStack h="60" class="bg-coral" radius="6"/&gt;</Text>
+          <Text class="code-text">  &lt;VStack h="60" class="bg-forest" radius="6"/&gt;</Text>
+          <Text class="code-text">  &lt;VStack h="60" class="bg-mustard" radius="6"/&gt;</Text>
+          <Text class="code-text">&lt;/HStack&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <HStack gap="8" alignItems="stretch">
+            <VStack class="bg-coral" h="60" borderRadius="6" />
+            <VStack class="bg-forest" h="60" borderRadius="6" />
+            <VStack class="bg-mustard" h="60" borderRadius="6" />
+          </HStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <!-- Layer page -->
+  <Use template="page" eyebrow="01 / Stack" kicker="Layer"
+       title="Layer — absolute placement"
+       lede="An absolutely-positioned container. Each child must declare x and y in pixels relative to the layer's top-left corner. Use it for badges, pixel-precise overlap, or diagrams.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Attributes" />
+          <Foreach items='[
+            {"attr":"w / h","type":"length","desc":"Layer&apos;s pixel dimensions. Children position relative to the top-left corner."},
+            {"attr":"backgroundColor","type":"color","desc":"6-digit hex backdrop (no alpha)."},
+            {"attr":"borderRadius","type":"number","desc":"Clip rounding for child overflow."},
+            {"attr":"zIndex","type":"number","desc":"Order children explicitly when they overlap."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <Use template="rule-soft" />
+          <Use template="callout" cls="callout-warn" kind="USE LAYER FOR"
+               title="Pixel-perfect overlap" titleColor="92400E"
+               body="Badges, rotated annotations, and connector lines that sit on top of cards. Avoid Layer for editorial body content — Yoga flex handles it better." />
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · three overlapping shapes" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">three coloured rectangles with explicit x, y</Text>
+            <Layer class="frame-sm" backgroundColor="F8FAFC" borderRadius="8">
+              <VStack x="10" y="20" w="110" h="56" backgroundColor="AA2D00" borderRadius="6" alignItems="center" justifyContent="center">
+                <Text color="FFFFFF" bold="true" fontSize="12">A · z=0</Text>
+              </VStack>
+              <VStack x="50" y="60" w="110" h="56" backgroundColor="D9A441" borderRadius="6" alignItems="center" justifyContent="center">
+                <Text color="181D26" bold="true" fontSize="12">B · z=1</Text>
+              </VStack>
+              <VStack x="110" y="100" w="110" h="56" backgroundColor="0A2E0E" borderRadius="6" alignItems="center" justifyContent="center">
+                <Text color="FFFFFF" bold="true" fontSize="12">C · z=2</Text>
+              </VStack>
+            </Layer>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-stack" label="Layer · three overlapping cards" rightLabel="rendered output">
+        <Slot name="code">
+          <Text class="code-text">&lt;Layer w="600" h="220" backgroundColor="F8FAFC" borderRadius="8"&gt;</Text>
+          <Text class="code-text">  &lt;VStack x="20"  y="20"  w="200" h="80" backgroundColor="AA2D00" borderRadius="6"&gt;…&lt;/VStack&gt;</Text>
+          <Text class="code-text">  &lt;VStack x="160" y="60"  w="200" h="80" backgroundColor="D9A441" borderRadius="6"&gt;…&lt;/VStack&gt;</Text>
+          <Text class="code-text">  &lt;VStack x="300" y="100" w="200" h="80" backgroundColor="0A2E0E" borderRadius="6"&gt;…&lt;/VStack&gt;</Text>
+          <Text class="code-text">&lt;/Layer&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <Layer w="100%" h="220" backgroundColor="F8FAFC" borderRadius="8">
+            <VStack x="20" y="20" w="200" h="80" backgroundColor="AA2D00" borderRadius="6" alignItems="center" justifyContent="center">
+              <Text color="FFFFFF" bold="true" fontSize="13">A</Text>
+            </VStack>
+            <VStack x="160" y="60" w="200" h="80" backgroundColor="D9A441" borderRadius="6" alignItems="center" justifyContent="center">
+              <Text color="181D26" bold="true" fontSize="13">B</Text>
+            </VStack>
+            <VStack x="300" y="100" w="200" h="80" backgroundColor="0A2E0E" borderRadius="6" alignItems="center" justifyContent="center">
+              <Text color="FFFFFF" bold="true" fontSize="13">C</Text>
+            </VStack>
+          </Layer>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <!-- Base attributes page -->
+  <Use template="page" eyebrow="01 / Stack" kicker="Base attributes"
+       title="Base attributes — applicable to every node"
+       lede="Shared attributes every node accepts: sizing, padding, borders, backgrounds, classes, a11y flags. Nodes may add more on top.">
+    <Slot name="default">
+      <HStack gap="14" alignItems="start" w="100%">
+        <VStack gap="6" w="50%">
+          <Use template="h3" text="Sizing" />
+          <Foreach items='[
+            {"attr":"w / h","type":"length","desc":"number, &apos;50%&apos;, or &apos;max&apos;. Drives Yoga sizing."},
+            {"attr":"minW / maxW","type":"number","desc":"Lower / upper bound on width."},
+            {"attr":"minH / maxH","type":"number","desc":"Lower / upper bound on height."},
+            {"attr":"alignSelf","type":"enum","desc":"Overrides parent alignItems for this child."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="h3" text="Spacing" />
+          <Foreach items='[
+            {"attr":"padding","type":"length","desc":"Number or {t,r,b,l} via dot-notation."},
+            {"attr":"margin","type":"length","desc":"Same shape as padding; outer offset."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+        </VStack>
+        <VStack class="vrule" />
+        <VStack gap="6" w="50%">
+          <Use template="h3" text="Surfaces" />
+          <Foreach items='[
+            {"attr":"backgroundColor","type":"color","desc":"6-digit hex (with optional #)."},
+            {"attr":"backgroundImage","type":"object","desc":"{src, sizing: cover/contain} or dot-notation."},
+            {"attr":"border","type":"object","desc":"{color, width, dashType} or dot-notation."},
+            {"attr":"borderRadius","type":"number","desc":"Corner radius in pixels."},
+            {"attr":"opacity","type":"number","desc":"Background transparency, 0..1."},
+            {"attr":"shadow","type":"object","desc":"{type, blur, offset, color} drop shadow."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="h3" text="Position &amp; meta" />
+          <Foreach items='[
+            {"attr":"position","type":"string","desc":"relative · absolute (defaults to relative)."},
+            {"attr":"x / y / top / right / bottom / left","type":"number","desc":"Used inside Layer or with position=absolute."},
+            {"attr":"zIndex","type":"number","desc":"Stack order (higher draws on top)."},
+            {"attr":"class","type":"string","desc":"Space-separated names matching &lt;Style name=\"…\"/&gt;."},
+            {"attr":"isDecorative","type":"boolean","desc":"Sets altText=\"\" so screen readers skip the node."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+        </VStack>
+      </HStack>
+
+      <VStack class="hairline-soft" />
+
+      <HStack gap="14" alignItems="stretch" w="100%">
+        <VStack class="card-coral" w="50%" gap="6" padding="20">
+          <Text class="caption" color="F5E0D6">UNIVERSAL</Text>
+          <Text fontFamily="Inter Display" fontSize="22" bold="false" color="FFFFFF" lineHeight="1.2" w="100%">
+            Every node inherits this surface.
+          </Text>
+          <Text fontFamily="Inter Display" fontSize="13" bold="false" color="FFD9C8" lineHeight="1.4" w="100%">
+            Even Text and Icon accept padding, backgroundColor, and borderRadius — chips and pill buttons without an extra wrapper.
+          </Text>
+        </VStack>
+        <VStack class="card-soft" w="50%" gap="6" padding="20">
+          <Text class="caption" color="AA2D00">DEFAULT VALUES</Text>
+          <Foreach items='[
+            {"attr":"alignItems","desc":"stretch — cross-axis fills."},
+            {"attr":"justifyContent","desc":"start."},
+            {"attr":"flexWrap","desc":"nowrap."},
+            {"attr":"position","desc":"relative."},
+            {"attr":"opacity","desc":"1."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="default" desc="{r.desc}" />
+          </Foreach>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

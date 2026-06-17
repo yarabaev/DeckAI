@@ -1,0 +1,57 @@
+<Fragment>
+  <!-- ================================================================
+       Solution — three-pillar metric strip + product visual stand-in.
+       ================================================================ -->
+  <Use template="page"
+       eyebrow="02 / SOLUTION"
+       title="One sentence. Zero pipelines."
+       lede="Flowbase reads your repo, infers your release intent, and runs it. The product is a prompt and a single binary; the rest is automated.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="stretch" w="100%">
+        <Use template="metric-card" label="ONBOARDING" value="6 min" caption="from import to first production deploy." />
+        <Use template="metric-card" label="MAINTENANCE" value="0 LoC" caption="customer-owned pipeline code on day 180." />
+        <Use template="metric-card" label="RECOVERY" value="42 sec" caption="median MTTR — kill switch + auto-rollback." />
+      </HStack>
+
+      <HStack gap="24" alignItems="stretch" w="100%" padding.top="12">
+        <VStack class="bg-elev" borderRadius="14" w="58%"
+                padding.left="28" padding.right="28"
+                padding.top="24" padding.bottom="24" gap="14">
+          <Text class="eyebrow" color="2EE6CA">PRODUCT LOOP</Text>
+          <Text class="title">Intent → Plan → Apply.</Text>
+          <VStack gap="8">
+            <HStack gap="12" alignItems="center">
+              <VStack class="bg-accent" w="28" h="28" borderRadius="14"
+                      alignItems="center" justifyContent="center">
+                <Text fontFamily="Inter" fontSize="14" bold="true" color="F5F5FA" textAlign="center">1</Text>
+              </VStack>
+              <Text class="body"><Span class="kw-accent">Read</Span> the repo + recent merges to infer the release shape.</Text>
+            </HStack>
+            <HStack gap="12" alignItems="center">
+              <VStack class="bg-accent" w="28" h="28" borderRadius="14"
+                      alignItems="center" justifyContent="center">
+                <Text fontFamily="Inter" fontSize="14" bold="true" color="F5F5FA" textAlign="center">2</Text>
+              </VStack>
+              <Text class="body"><Span class="kw-accent">Plan</Span> a canary, write the rollback contract, surface every assumption.</Text>
+            </HStack>
+            <HStack gap="12" alignItems="center">
+              <VStack class="bg-accent" w="28" h="28" borderRadius="14"
+                      alignItems="center" justifyContent="center">
+                <Text fontFamily="Inter" fontSize="14" bold="true" color="F5F5FA" textAlign="center">3</Text>
+              </VStack>
+              <Text class="body"><Span class="kw-accent">Apply</Span> with policy gates, observable health, instant abort.</Text>
+            </HStack>
+          </VStack>
+        </VStack>
+
+        <VStack class="bg-card" borderRadius="14" w="max"
+                padding.left="24" padding.right="24"
+                padding.top="24" padding.bottom="24" gap="10">
+          <Text class="eyebrow">CUSTOMER QUOTE</Text>
+          <Text fontFamily="Inter" fontSize="20" italic="true" color="F5F5FA" lineHeight="1.35">"We deleted four internal services on the first day."</Text>
+          <Text class="body-soft">— Director of Platform, Series-B fintech</Text>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

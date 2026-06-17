@@ -1,0 +1,54 @@
+<Fragment>
+  <Use template="lesson"
+       step="04"
+       eyebrow="PART 4 · MASTERS &amp; BUILD"
+       title="Page chrome belongs to the master, not the slide."
+       lede="A master paints behind every slide that picks it. Running headers, footers, and slide-number elements live there so each individual slide stays focused on content.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="14" w="58%">
+          <Text class="title">Declare a master.</Text>
+          <Use template="code-block" caption="templates/master.xml">
+            <Slot name="default">
+              <Text class="code"><Span class="code-keyword">&lt;Master</Span> name=<Span class="code-string">"BODY"</Span> backgroundColor=<Span class="code-string">"FFFBF5"</Span><Span class="code-keyword">&gt;</Span></Text>
+              <Text class="code">  <Span class="code-keyword">&lt;MasterText</Span> x=<Span class="code-string">"40"</Span> y=<Span class="code-string">"36"</Span> w=<Span class="code-string">"500"</Span> h=<Span class="code-string">"14"</Span><Span class="code-keyword">&gt;</Span></Text>
+              <Text class="code">    Builder 101 · running head</Text>
+              <Text class="code">  <Span class="code-keyword">&lt;/MasterText&gt;</Span></Text>
+              <Text class="code">  <Span class="code-keyword">&lt;SlideNumber</Span> x=<Span class="code-string">"1170"</Span> y=<Span class="code-string">"690"</Span><Span class="code-keyword">/&gt;</Span></Text>
+              <Text class="code"><Span class="code-keyword">&lt;/Master&gt;</Span></Text>
+            </Slot>
+          </Use>
+
+          <Text class="title" margin.top="6">Wire it into a slide.</Text>
+          <Use template="code-block" caption="chapters/*.xml">
+            <Slot name="default">
+              <Text class="code"><Span class="code-keyword">&lt;Slide</Span> master=<Span class="code-string">"BODY"</Span><Span class="code-keyword">&gt;</Span></Text>
+              <Text class="code">  <Span class="code-keyword">&lt;VStack&gt;</Span> ... slide content ... <Span class="code-keyword">&lt;/VStack&gt;</Span></Text>
+              <Text class="code"><Span class="code-keyword">&lt;/Slide&gt;</Span></Text>
+            </Slot>
+          </Use>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="14" w="max">
+          <Text class="title">Build &amp; preview.</Text>
+          <Use template="code-block" caption="terminal">
+            <Slot name="default">
+              <Text class="code"><Span class="code-comment"># compile your deck.</Span></Text>
+              <Text class="code">$ pnpm exec tsx build.ts</Text>
+              <Text class="code"><Span class="code-comment"># open in the slideglance playground.</Span></Text>
+              <Text class="code">$ open output/deck.pptx</Text>
+            </Slot>
+          </Use>
+
+          <Use template="callout-note" label="DON'T FORGET"
+               body="The build script reads main.sgx and resolves &lt;Import&gt; recursively. If a chapter doesn't show, check that main.sgx imports it." />
+
+          <Use template="callout-info" label="WHEN TO MAKE A NEW MASTER"
+               body="Two layouts that disagree on chrome (e.g. a cover with no header) deserve two masters. Two layouts that disagree on content density share one master and differ in their page template." />
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

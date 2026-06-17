@@ -1,0 +1,74 @@
+<Fragment>
+  <!--
+    Spec components.
+
+      arch-node    — labeled rect for architecture diagrams (title + sublabel).
+      risk-pill    — semantic chip (ok / warn / block).
+      kv-row       — key + value row with hairline below.
+      bullet-row   — accent square + text.
+  -->
+  <Templates>
+    <Template name="arch-node">
+      <VStack id="{id}" class="bg-card" borderRadius="8"
+              padding.left="12" padding.right="12"
+              padding.top="10" padding.bottom="10" gap="4"
+              border.color="D1D5DB" border.width="1">
+        <Text fontFamily="Inter" fontSize="12" bold="true" color="111827">{name}</Text>
+        <Text fontFamily="Inter" fontSize="10" color="6B7280">{sublabel}</Text>
+      </VStack>
+    </Template>
+
+    <Template name="arch-node-accent">
+      <VStack id="{id}" class="bg-accent" borderRadius="8"
+              padding.left="12" padding.right="12"
+              padding.top="10" padding.bottom="10" gap="4">
+        <Text fontFamily="Inter" fontSize="12" bold="true" color="FFFFFF">{name}</Text>
+        <Text fontFamily="Inter" fontSize="10" color="DBEAFE">{sublabel}</Text>
+      </VStack>
+    </Template>
+
+    <Template name="risk-pill-ok">
+      <VStack class="bg-ok" borderRadius="10"
+              padding.left="10" padding.right="10"
+              padding.top="3" padding.bottom="3">
+        <Text fontFamily="Inter" fontSize="10" bold="true" color="166534">OK · {label}</Text>
+      </VStack>
+    </Template>
+
+    <Template name="risk-pill-warn">
+      <VStack class="bg-warn" borderRadius="10"
+              padding.left="10" padding.right="10"
+              padding.top="3" padding.bottom="3">
+        <Text fontFamily="Inter" fontSize="10" bold="true" color="92400E">WARN · {label}</Text>
+      </VStack>
+    </Template>
+
+    <Template name="risk-pill-block">
+      <VStack class="bg-block" borderRadius="10"
+              padding.left="10" padding.right="10"
+              padding.top="3" padding.bottom="3">
+        <Text fontFamily="Inter" fontSize="10" bold="true" color="991B1B">BLOCKER · {label}</Text>
+      </VStack>
+    </Template>
+
+    <Template name="kv-row">
+      <VStack gap="6" w="100%">
+        <!-- Row pair: tight line-heights + center vertical anchor so
+             the caption (10pt) glyphs sit at the same optical midline
+             as the body (13pt) glyphs inside the flex-equalized row. -->
+        <HStack gap="14" alignItems="baseline" w="100%">
+          <Text class="caption" w="180" lineHeight="1.0" textVAlign="middle">{k}</Text>
+          <Text class="body" w="max" lineHeight="1.0" textVAlign="middle">{v}</Text>
+        </HStack>
+        <VStack class="hairline" />
+      </VStack>
+    </Template>
+
+    <Template name="bullet-row">
+      <HStack gap="10" alignItems="start" w="100%">
+        <VStack class="bg-accent" w="8" h="8" borderRadius="2" margin.top="6" />
+        <Text class="body" w="max">{text}</Text>
+      </HStack>
+    </Template>
+  </Templates>
+</Fragment>

@@ -1,0 +1,136 @@
+<Fragment>
+  <!--
+    Layout primitives. Compose a body page from these without ever
+    writing your own HStack/VStack scaffolding for common splits.
+
+    Every primitive:
+      • takes Slots, not pixel dimensions, for content
+      • picks sensible defaults so callers don't need alignItems / gap /
+        padding overrides for the common case
+      • lets the child stretch / fill via the surrounding parent (h="max"
+        / class="fill" / class="grow") instead of hard-coded sizes
+  -->
+  <Templates>
+    <!-- ============================================================
+         Two-column splits. Editorial 60/40 (with a vertical hairline
+         between the columns) is by far the most-used layout shape on
+         body pages: attribute reference on the left, sample card(s) on
+         the right. The 50/50 variant is for dense reference rows.
+         ============================================================ -->
+
+    <!-- 60/40 with vrule. Zero parameters — drop content into the
+         `left` and `right` slots and the spread + alignment is taken
+         care of. Both columns inherit a generous vertical rhythm so
+         consecutive sections (h2 + body + rule + next h2) read as
+         distinct blocks rather than one dense run. -->
+    <Template name="col2-editorial">
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="16" w="60%">
+          <Slot name="left" />
+        </VStack>
+        <VStack class="vrule" />
+        <VStack gap="16" w="40%">
+          <Slot name="right" />
+        </VStack>
+      </HStack>
+    </Template>
+
+    <!-- 50/50 with vrule. -->
+    <Template name="col2-equal">
+      <HStack gap="14" alignItems="start" w="100%">
+        <VStack gap="16" w="50%">
+          <Slot name="left" />
+        </VStack>
+        <VStack class="vrule" />
+        <VStack gap="16" w="50%">
+          <Slot name="right" />
+        </VStack>
+      </HStack>
+    </Template>
+
+    <!-- 50/50 without vrule. Used when both columns are visual cards
+         that already carry their own surface (callouts, code/render
+         pairs, do/dont blocks). -->
+    <Template name="row2-cards">
+      <HStack gap="14" alignItems="stretch" w="100%">
+        <VStack w="50%">
+          <Slot name="left" />
+        </VStack>
+        <VStack w="50%">
+          <Slot name="right" />
+        </VStack>
+      </HStack>
+    </Template>
+
+    <!-- ============================================================
+         N-up equal-share rows. Children receive flexGrow=1 + flexBasis=0
+         automatically (Yoga handles this when no width is set), so callers
+         do NOT need w="33%" / w="25%". Just drop content into the slots.
+         ============================================================ -->
+
+    <Template name="row3">
+      <HStack gap="14" alignItems="stretch" w="100%">
+        <Slot name="default" />
+      </HStack>
+    </Template>
+
+    <Template name="row4">
+      <HStack gap="14" alignItems="stretch" w="100%">
+        <Slot name="default" />
+      </HStack>
+    </Template>
+
+    <!-- A row that does not stretch its children to equal heights —
+         useful when each column is independently sized (legend strips,
+         icon rows, swatch grids). -->
+    <Template name="row-tight">
+      <HStack gap="10" alignItems="start" w="100%">
+        <Slot name="default" />
+      </HStack>
+    </Template>
+
+    <!-- ============================================================
+         Vertical stacks with built-in rhythm. Use when a body slot
+         needs a scoped gap / padding without writing the VStack scaffold.
+         ============================================================ -->
+
+    <!-- Stretches to fill the leftover vertical space of its parent (the
+         page body slot already holds a `h="max"` VStack, so wrapping in
+         `block-fill` is rarely needed; keep for advanced layouts). -->
+    <Template name="block-fill">
+      <VStack class="fill" gap="14">
+        <Slot name="default" />
+      </VStack>
+    </Template>
+
+    <!-- A spacer that absorbs the leftover vertical space between two
+         siblings of a VStack. Drop `<Use template="spacer"/>` between two
+         elements to push them to the top / bottom of the parent. -->
+    <Template name="spacer">
+      <VStack class="fill-y" />
+    </Template>
+
+    <!-- ============================================================
+         Hairlines + deck rules. One-liners for the most common
+         visual separators so callers never reach for raw `h="1"` again.
+         ============================================================ -->
+
+    <Template name="rule">
+      <VStack class="hairline" />
+    </Template>
+
+    <Template name="rule-soft">
+      <VStack class="hairline-soft" />
+    </Template>
+
+    <!-- Magazine deck-rule: a thicker accent stub followed by a hairline
+         tail that runs to the edge of the parent. Used between a deck
+         strip and the body content. -->
+    <Template name="deck-close">
+      <HStack alignItems="center" gap="0" w="100%">
+        <VStack class="rule-thick" w="44" />
+        <VStack class="hairline fill-x" />
+      </HStack>
+    </Template>
+  </Templates>
+</Fragment>

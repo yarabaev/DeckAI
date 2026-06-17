@@ -1,0 +1,165 @@
+<Fragment>
+  <!--
+    Chapter cover. Magazine-style 2-column hero:
+
+      • Top meta strip — chapter number + kicker + slug
+      • Hero block (60/40):
+          - left: huge chapter number, display title, italic subtitle
+          - right: "INSIDE THIS CHAPTER" sidebar with 4 bullet lines
+      • Bottom strip — italic epigraph quote + meta captions
+
+    Convenience templates wrap each signature surface palette.
+  -->
+  <Templates>
+    <Template name="section-cover">
+      <Slide master="COVER">
+        <VStack class="page {surface}"
+                padding.left="48" padding.right="48"
+                padding.top="48" padding.bottom="48"
+                justifyContent="spaceBetween" gap="0">
+
+          <!-- Top meta strip. Chapter number + kicker + publication.
+               Every text in the strip is `noWrap="true"` so a long meta
+               (e.g. chapter 01's full attribute list) stays on a single
+               line: yoga reserves the natural width and lets the row
+               overflow horizontally rather than wrap any segment. -->
+          <HStack alignItems="center" justifyContent="spaceBetween">
+            <HStack gap="14" alignItems="center">
+              <VStack backgroundColor="{eyebrowColor}" w="3" h="22" />
+              <Text fontFamily="Inter Display" fontSize="11" bold="true"
+                    color="{eyebrowColor}" noWrap="true">CHAPTER {number}</Text>
+              <VStack backgroundColor="{eyebrowColor}" w="20" h="1" opacity="0.5" />
+              <Text fontFamily="Inter Display" fontSize="11" bold="true"
+                    color="{eyebrowColor}" noWrap="true">{kicker}</Text>
+            </HStack>
+            <Text fontFamily="Inter Display" fontSize="11" bold="true"
+                  color="{eyebrowColor}" noWrap="true">slideglance / builder · {meta}</Text>
+          </HStack>
+
+          <!-- Hero block — 2-column 60/40. Left: oversized chapter
+               number → title → italic subtitle. Right: INSIDE sidebar. -->
+          <HStack gap="20" alignItems="end" w="100%">
+            <VStack gap="20" w="60%">
+              <Text fontFamily="Inter Display" fontSize="220" bold="false"
+                    color="{titleColor}" lineHeight="1">{number}</Text>
+              <VStack gap="10">
+                <Text fontFamily="Inter Display" fontSize="48" bold="false"
+                      color="{titleColor}" lineHeight="1.05">{title}</Text>
+                <Text fontFamily="Inter Display" fontSize="17" italic="true" bold="false"
+                      color="{subtitleColor}" lineHeight="1.4" w="380">{subtitle}</Text>
+              </VStack>
+            </VStack>
+
+            <!-- INSIDE sidebar. Reverse-color rule + caption + 4 lines. -->
+            <VStack gap="10" w="40%" padding.bottom="20">
+              <HStack alignItems="center" gap="10">
+                <VStack backgroundColor="{eyebrowColor}" h="1" w="32" />
+                <Text fontFamily="Inter Display" fontSize="10" bold="true"
+                      color="{eyebrowColor}">INSIDE THIS CHAPTER</Text>
+              </HStack>
+              <VStack gap="6">
+                <Use template="inside-line" eyebrowColor="{eyebrowColor}" titleColor="{titleColor}" line="{inside1}" />
+                <Use template="inside-line" eyebrowColor="{eyebrowColor}" titleColor="{titleColor}" line="{inside2}" />
+                <Use template="inside-line" eyebrowColor="{eyebrowColor}" titleColor="{titleColor}" line="{inside3}" />
+                <Use template="inside-line" eyebrowColor="{eyebrowColor}" titleColor="{titleColor}" line="{inside4}" />
+              </VStack>
+            </VStack>
+          </HStack>
+
+          <!-- Epigraph + bottom meta strip. -->
+          <VStack gap="14">
+            <VStack backgroundColor="{eyebrowColor}" h="1" w="100%" opacity="0.3" />
+            <HStack alignItems="end" justifyContent="spaceBetween" gap="20">
+              <Text fontFamily="Inter Display" fontSize="13" italic="true" bold="false"
+                    color="{subtitleColor}" lineHeight="1.4" w="60%">"{epigraph}" — {epigraphAttrib}</Text>
+              <VStack gap="4" w="36%" alignItems="end">
+                <Text fontFamily="Inter Display" fontSize="10" bold="true"
+                      color="{eyebrowColor}" textAlign="right">{leftMeta}</Text>
+                <Text fontFamily="Inter Display" fontSize="10" bold="true"
+                      color="{eyebrowColor}" textAlign="right">{rightMeta}</Text>
+              </VStack>
+            </HStack>
+          </VStack>
+        </VStack>
+      </Slide>
+    </Template>
+
+    <!-- Helper template: one bullet line in the INSIDE sidebar.
+         The bullet is a fixed-width coral rectangle (geometric dash)
+         positioned in a 14-px lane so every bullet starts at the same
+         x regardless of glyph variation. The bullet's margin.top puts
+         its centerline on the body text's x-height for optical balance. -->
+    <Template name="inside-line">
+      <HStack gap="10" alignItems="start" w="100%">
+        <VStack w="14">
+          <VStack backgroundColor="{eyebrowColor}" w="10" h="2" margin.top="7" />
+        </VStack>
+        <Text fontFamily="Inter Display" fontSize="13" bold="false"
+              color="{titleColor}" lineHeight="1.3" w="max">{line}</Text>
+      </HStack>
+    </Template>
+
+    <Template name="section-coral">
+      <Use template="section-cover" surface="bg-coral"
+           eyebrowColor="F5E0D6" titleColor="FFFFFF" subtitleColor="FFD9C8"
+           number="{number}" title="{title}" subtitle="{subtitle}" kicker="{kicker}"
+           inside1="{inside1}" inside2="{inside2}" inside3="{inside3}" inside4="{inside4}"
+           epigraph="{epigraph}" epigraphAttrib="{epigraphAttrib}"
+           meta="{meta}" leftMeta="{leftMeta}" rightMeta="signature surface · coral · #AA2D00" />
+    </Template>
+
+    <Template name="section-forest">
+      <Use template="section-cover" surface="bg-forest"
+           eyebrowColor="DDEEDF" titleColor="FFFFFF" subtitleColor="C5DFC9"
+           number="{number}" title="{title}" subtitle="{subtitle}" kicker="{kicker}"
+           inside1="{inside1}" inside2="{inside2}" inside3="{inside3}" inside4="{inside4}"
+           epigraph="{epigraph}" epigraphAttrib="{epigraphAttrib}"
+           meta="{meta}" leftMeta="{leftMeta}" rightMeta="signature surface · forest · #0A2E0E" />
+    </Template>
+
+    <Template name="section-dark">
+      <Use template="section-cover" surface="bg-dark"
+           eyebrowColor="9297A0" titleColor="FFFFFF" subtitleColor="DDDDDD"
+           number="{number}" title="{title}" subtitle="{subtitle}" kicker="{kicker}"
+           inside1="{inside1}" inside2="{inside2}" inside3="{inside3}" inside4="{inside4}"
+           epigraph="{epigraph}" epigraphAttrib="{epigraphAttrib}"
+           meta="{meta}" leftMeta="{leftMeta}" rightMeta="signature surface · dark · #181D26" />
+    </Template>
+
+    <Template name="section-cream">
+      <Use template="section-cover" surface="bg-cream"
+           eyebrowColor="6B4A1A" titleColor="181D26" subtitleColor="333840"
+           number="{number}" title="{title}" subtitle="{subtitle}" kicker="{kicker}"
+           inside1="{inside1}" inside2="{inside2}" inside3="{inside3}" inside4="{inside4}"
+           epigraph="{epigraph}" epigraphAttrib="{epigraphAttrib}"
+           meta="{meta}" leftMeta="{leftMeta}" rightMeta="signature surface · cream · #F5E9D4" />
+    </Template>
+
+    <Template name="section-mustard">
+      <Use template="section-cover" surface="bg-mustard"
+           eyebrowColor="6B4A1A" titleColor="181D26" subtitleColor="333840"
+           number="{number}" title="{title}" subtitle="{subtitle}" kicker="{kicker}"
+           inside1="{inside1}" inside2="{inside2}" inside3="{inside3}" inside4="{inside4}"
+           epigraph="{epigraph}" epigraphAttrib="{epigraphAttrib}"
+           meta="{meta}" leftMeta="{leftMeta}" rightMeta="signature surface · mustard · #D9A441" />
+    </Template>
+
+    <Template name="section-peach">
+      <Use template="section-cover" surface="bg-peach"
+           eyebrowColor="6B2C0A" titleColor="181D26" subtitleColor="333840"
+           number="{number}" title="{title}" subtitle="{subtitle}" kicker="{kicker}"
+           inside1="{inside1}" inside2="{inside2}" inside3="{inside3}" inside4="{inside4}"
+           epigraph="{epigraph}" epigraphAttrib="{epigraphAttrib}"
+           meta="{meta}" leftMeta="{leftMeta}" rightMeta="signature surface · peach · #FCAB79" />
+    </Template>
+
+    <Template name="section-mint">
+      <Use template="section-cover" surface="bg-mint"
+           eyebrowColor="0A4F2D" titleColor="181D26" subtitleColor="333840"
+           number="{number}" title="{title}" subtitle="{subtitle}" kicker="{kicker}"
+           inside1="{inside1}" inside2="{inside2}" inside3="{inside3}" inside4="{inside4}"
+           epigraph="{epigraph}" epigraphAttrib="{epigraphAttrib}"
+           meta="{meta}" leftMeta="{leftMeta}" rightMeta="signature surface · mint · #A8D8C4" />
+    </Template>
+  </Templates>
+</Fragment>

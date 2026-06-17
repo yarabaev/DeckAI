@@ -1,0 +1,95 @@
+<Fragment>
+  <!--
+    Workshop components.
+
+      code-block    — dark code surface with monospace lines (3-line max).
+      callout-info  — teal info box with icon.
+      callout-note  — soft-yellow note box.
+      exercise-card — call to action with stopwatch / objective lines.
+      step-row      — numbered step + body.
+  -->
+  <Templates>
+    <Template name="code-block">
+      <!-- Tightened paddings + gap for workshop slides which often stack
+           multiple code blocks plus callouts inside one 16:9 row. -->
+      <VStack class="bg-code" w="100%" borderRadius="8"
+              padding.left="14" padding.right="14"
+              padding.top="10" padding.bottom="10" gap="2">
+        <Text class="code-soft">// {caption}</Text>
+        <Slot name="default" />
+      </VStack>
+    </Template>
+
+    <Template name="callout-info">
+      <HStack class="bg-teal" w="100%" gap="14" borderRadius="10"
+              padding.left="14" padding.right="14"
+              padding.top="10" padding.bottom="10" alignItems="start">
+        <VStack class="bg-teal-ink" w="28" h="28" borderRadius="14"
+                alignItems="center" justifyContent="center">
+          <Text fontFamily="Inter" fontSize="14" bold="true" color="C6EBE3" textAlign="center">i</Text>
+        </VStack>
+        <VStack gap="4" w="max">
+          <Text fontFamily="Inter" fontSize="12" bold="true" color="0F766E">INFO  ·  {label}</Text>
+          <Text fontFamily="Inter" fontSize="13" color="0F766E" lineHeight="1.4">{body}</Text>
+        </VStack>
+      </HStack>
+    </Template>
+
+    <Template name="callout-note">
+      <HStack class="bg-note" w="100%" gap="14" borderRadius="10"
+              padding.left="14" padding.right="14"
+              padding.top="10" padding.bottom="10" alignItems="start">
+        <VStack class="bg-note-ink" w="28" h="28" borderRadius="14"
+                alignItems="center" justifyContent="center">
+          <Text fontFamily="Inter" fontSize="14" bold="true" color="FEF6CE" textAlign="center">!</Text>
+        </VStack>
+        <VStack gap="4" w="max">
+          <Text fontFamily="Inter" fontSize="12" bold="true" color="854D0E">NOTE  ·  {label}</Text>
+          <Text fontFamily="Inter" fontSize="13" color="854D0E" lineHeight="1.4">{body}</Text>
+        </VStack>
+      </HStack>
+    </Template>
+
+    <Template name="exercise-card">
+      <!-- Star + clock are <Icon> elements rather than literal "★" /
+           "⏱" glyphs so they pick up their geometry from the Lucide
+           vector set (renders identically in PPTX, SVG, and the live
+           viewer regardless of which fallback emoji font the host has
+           installed). variant="circle-filled" replaces the bespoke
+           "bg-coral 28×28 circle wrapping a glyph" pattern in one tag.
+           Per icon.ts, variant inflates the outer box to size×1.75, so
+           size="16" reaches the same ~28 outer the original layout
+           reserved — keeping the card heights stable. -->
+      <VStack class="bg-card" w="100%" borderRadius="12"
+              padding.left="20" padding.right="20"
+              padding.top="14" padding.bottom="14" gap="8"
+              border.color="EF6C42" border.width="2">
+        <HStack gap="10" alignItems="center" justifyContent="spaceBetween" w="100%">
+          <HStack gap="10" alignItems="center">
+            <Icon name="star" size="16" variant="circle-filled"
+                  color="FFFBF5" backgroundColor="EF6C42" />
+            <Text fontFamily="Inter" fontSize="13" bold="true" color="EF6C42">EXERCISE · {n}</Text>
+          </HStack>
+          <Text class="caption" textAlign="right">⏱ {duration}</Text>
+        </HStack>
+        <Text class="title" fontSize="20">{title}</Text>
+        <Text class="body">{body}</Text>
+        <VStack class="hairline" />
+        <Text class="caption">DELIVERABLE  ·  {deliverable}</Text>
+      </VStack>
+    </Template>
+
+    <Template name="step-row">
+      <HStack gap="14" alignItems="start" w="100%">
+        <VStack class="bg-coral" w="32" h="32" borderRadius="16"
+                alignItems="center" justifyContent="center">
+          <Text fontFamily="Inter" fontSize="14" bold="true" color="FFFBF5" textAlign="center">{n}</Text>
+        </VStack>
+        <VStack gap="4" w="max">
+          <Text class="body" bold="true">{title}</Text>
+          <Text class="body-soft">{body}</Text>
+        </VStack>
+      </HStack>
+    </Template>
+  </Templates>
+</Fragment>

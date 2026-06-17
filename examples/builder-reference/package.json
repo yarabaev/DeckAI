@@ -1,0 +1,28 @@
+{
+  "name": "@slideglance/builder-reference-example",
+  "version": "0.1.3",
+  "private": true,
+  "license": "MIT",
+  "author": "Dmitry Yarabaev",
+  "description": "XML reference deck generated with @slideglance/builder.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlideGlance/slideglance.git",
+    "directory": "examples/builder-reference"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsx build.ts",
+    "typecheck": "tsc --noEmit",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@slideglance/builder": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "tsx": "4.21.0",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SlideGlance xmlns="urn:slideglance:builder:v1">
+  <Document size="16:9" defaultMaster="CORP" fontFamily="Pretendard" />
+
+  <Master name="CORP" backgroundColor="F8FAFC" margin="48" margin.top="80">
+    <MasterRect x="0" y="0" w="1280" h="48" fill.color="0F172A" />
+    <MasterText x="48" y="14" w="400" h="24" text="Platform team" color="FFFFFF" fontSize="14" />
+    <SlideNumber x="1180" y="690" w="60" h="20" fontSize="10" color="64748B" />
+  </Master>
+
+  <Styles>
+    <Style name="title" fontSize="36" bold="true" color="0F172A" lineHeight="1.1" />
+    <Style name="h2" fontSize="22" bold="true" color="0F172A" />
+    <Style name="body" fontSize="16" color="1F2937" lineHeight="1.5" />
+    <Style name="muted" fontSize="12" color="64748B" />
+    <Style name="card"
+           padding="20" gap="6"
+           backgroundColor="FFFFFF"
+           border.color="E2E8F0" border.width="1"
+           borderRadius="8" />
+  </Styles>
+
+  <Slide>
+    <HStack gap="32" h="max">
+      <!-- Left column: narrative -->
+      <VStack w="50%" gap="14" justifyContent="start">
+        <Text class="muted">PERFORMANCE</Text>
+        <Text class="title">Cold-start dropped 73% over the quarter.</Text>
+        <Text class="body">
+          We replaced the per-request worker pool with a long-lived
+          event loop. P95 cold-start at the edge fell from 1.4s to
+          380ms across the rollout window.
+        </Text>
+        <HStack gap="12" padding.top="12">
+          <Icon name="check-circle" w="20" color="16A34A" />
+          <Text class="body">No regression on hot-path latency.</Text>
+        </HStack>
+        <HStack gap="12">
+          <Icon name="check-circle" w="20" color="16A34A" />
+          <Text class="body">Memory ceiling held within 5% of baseline.</Text>
+        </HStack>
+      </VStack>
+
+      <!-- Right column: KPI tiles -->
+      <VStack w="50%" gap="16" justifyContent="center">
+        <VStack class="card">
+          <Text class="muted">P95 cold-start</Text>
+          <Text fontSize="36" bold="true" color="0F172A">380ms</Text>
+          <Text fontSize="13" color="16A34A">−73% QoQ</Text>
+        </VStack>
+        <VStack class="card">
+          <Text class="muted">Error rate</Text>
+          <Text fontSize="36" bold="true" color="0F172A">0.04%</Text>
+          <Text fontSize="13" color="16A34A">Within SLO</Text>
+        </VStack>
+        <VStack class="card">
+          <Text class="muted">Build minutes / PR</Text>
+          <Text fontSize="36" bold="true" color="0F172A">7</Text>
+          <Text fontSize="13" color="16A34A">−61% QoQ</Text>
+        </VStack>
+      </VStack>
+    </HStack>
+    <Notes>
+      Open with the 73% drop — that is the headline number for the
+      quarterly review. Walk left-to-right: the narrative panel explains
+      the change, the three KPI tiles ground it in measurement. Pause
+      after each tile to let the audience read the delta in context.
+    </Notes>
+  </Slide>
+</SlideGlance>

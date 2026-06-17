@@ -1,0 +1,29 @@
+[package]
+name = "slideglance-png"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "SVG -> PNG rasterization for slideglance (resvg-based, deterministic)."
+readme = "../../README.md"
+keywords = ["pptx", "svg", "png", "resvg", "rasterizer"]
+categories = ["graphics", "multimedia::images"]
+
+[lints]
+workspace = true
+
+[dependencies]
+resvg = { workspace = true }
+usvg = { workspace = true }
+tiny-skia = { workspace = true }
+thiserror = { workspace = true }
+# Used to read every `name` table family alias (id 1 / 4 / 16 / 21,
+# all platforms / languages) so fontdb gets one entry per alias and
+# matches PPTX's localized weight-suffixed family names like
+# "Freesentation 7 Bold" alongside the typographic family name.
+ttf-parser = { workspace = true }
+
+[dev-dependencies]
+image = { workspace = true }

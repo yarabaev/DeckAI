@@ -1,0 +1,306 @@
+<Fragment>
+  <!-- Chapter 16 — Control-flow tags (If / Choose / Foreach).
+       Inline-demo templates declared at the chapter root because <Templates>
+       blocks nested inside a slide body are silently ignored (the parser
+       emits TEMPLATES_NOT_AT_ROOT). -->
+  <Templates>
+    <Template name="status-row" params="status">
+      <VStack gap="4">
+        <If test="status == 'ok'">
+          <Text class="chip-mint">OK · all green</Text>
+        </If>
+        <If test="status == 'warn'">
+          <Text class="chip-mustard">WARN · investigate</Text>
+        </If>
+        <If test="status == 'fail'">
+          <Text class="chip-coral">FAIL · escalate</Text>
+        </If>
+      </VStack>
+    </Template>
+    <Template name="tone-badge" params="tone">
+      <Choose>
+        <When test="tone == 'coral'">
+          <Text class="chip-coral">CORAL</Text>
+        </When>
+        <When test="tone == 'forest'">
+          <Text class="chip-forest">FOREST</Text>
+        </When>
+        <When test="tone == 'mustard'">
+          <Text class="chip-mustard">MUSTARD</Text>
+        </When>
+        <Otherwise>
+          <Text class="chip-ink">UNKNOWN</Text>
+        </Otherwise>
+      </Choose>
+    </Template>
+  </Templates>
+
+  <Use template="section-peach"
+       number="16"
+       kicker="Conditional + iterative composition"
+       title="Control flow."
+       subtitle="MyBatis-style If, Choose, Foreach. Parse-time expansion."
+       inside1="If · include a branch when an expression is truthy"
+       inside2="Choose / When / Otherwise · first-match dispatch"
+       inside3="Foreach · iterate over JSON arrays with scalar bindings"
+       inside4="Same expression grammar everywhere: ==, &amp;&amp;, dotted paths, helpers"
+       epigraph="The XML stops being markup and starts being a tiny templating language."
+       epigraphAttrib="builder runtime notes"
+       meta="If · Choose · When · Otherwise · Foreach"
+       leftMeta="5 directives · parse-time expansion · no runtime cost" />
+
+  <!-- ================================================================
+       Page 1 — Conditionals: If, Choose / When / Otherwise.
+       ================================================================ -->
+  <Use template="page" eyebrow="16 / Control flow" kicker="If · Choose"
+       title="If / Choose — conditional inclusion + first-match dispatch"
+       lede="Both directives evaluate a small expression language and emit a body when the condition (or the first matching branch) is truthy. Falsy values: false, null, undefined, 0, the empty string, the empty array.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="If attributes" />
+          <Foreach items='[
+            {"attr":"test","type":"expr","desc":"Boolean expression. Body emitted when truthy.","req":true}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="h2" text="Choose / When / Otherwise" />
+          <Foreach items='[
+            {"attr":"&lt;Choose&gt;","type":"container","desc":"Holds one or more &lt;When&gt; branches and an optional &lt;Otherwise&gt; fallback."},
+            {"attr":"&lt;When test=…&gt;","type":"branch","desc":"Body emitted when this is the first &lt;When&gt; whose `test` evaluates truthy."},
+            {"attr":"&lt;Otherwise&gt;","type":"fallback","desc":"Body emitted when no preceding &lt;When&gt; matched. At most one per &lt;Choose&gt;."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="callout" cls="callout-info" kind="EXPRESSION GRAMMAR"
+               titleColor="254FAD" title="Same grammar in test= and items="
+               body="Identifiers + dotted paths (m.tone.shade), literals (numbers, strings, true/false/null), comparisons (==, !=, &lt;, &lt;=, &gt;, &gt;=), logical (&amp;&amp;, ||, !), helpers empty(), not(), length(). Intentionally absent: arithmetic, regex, indexing, ternary." />
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · If picks the matching status" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">status="ok" → only the success row renders</Text>
+            <Use template="status-row" status="ok" />
+          </VStack>
+
+          <Use template="h2" text="Sample · Choose dispatches by tone" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">first matching When wins; Otherwise is the fallback</Text>
+            <HStack gap="6" flexWrap="wrap">
+              <Use template="tone-badge" tone="coral" />
+              <Use template="tone-badge" tone="forest" />
+              <Use template="tone-badge" tone="mustard" />
+              <Use template="tone-badge" tone="indigo" />
+            </HStack>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-row" label="If + Choose · status + tone dispatch" rightLabel="rendered output above">
+        <Slot name="code">
+          <Text class="code-text">&lt;Template name="tone-badge" params="tone"&gt;</Text>
+          <Text class="code-text">  &lt;Choose&gt;</Text>
+          <Text class="code-text">    &lt;When test="tone == 'coral'"&gt;</Text>
+          <Text class="code-text">      &lt;Text class="chip-coral"&gt;CORAL&lt;/Text&gt;</Text>
+          <Text class="code-text">    &lt;/When&gt;</Text>
+          <Text class="code-text">    &lt;When test="tone == 'forest'"&gt;…&lt;/When&gt;</Text>
+          <Text class="code-text">    &lt;When test="tone == 'mustard'"&gt;…&lt;/When&gt;</Text>
+          <Text class="code-text">    &lt;Otherwise&gt;</Text>
+          <Text class="code-text">      &lt;Text class="chip-ink"&gt;UNKNOWN&lt;/Text&gt;</Text>
+          <Text class="code-text">    &lt;/Otherwise&gt;</Text>
+          <Text class="code-text">  &lt;/Choose&gt;</Text>
+          <Text class="code-text">&lt;/Template&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <VStack padding="8" gap="4">
+            <Text class="caption" color="AA2D00">unknown tone falls through to the Otherwise fallback</Text>
+            <HStack gap="6">
+              <Text class="chip-coral">CORAL</Text>
+              <Text class="chip-forest">FOREST</Text>
+              <Text class="chip-ink">UNKNOWN</Text>
+            </HStack>
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <!-- ================================================================
+       Page 2 — Iteration: Foreach with iteration variables.
+       ================================================================ -->
+  <Use template="page" eyebrow="16 / Control flow" kicker="Foreach"
+       title="Foreach — iterate over a JSON array"
+       lede="Repeats its body once per element of items. Each iteration produces an independent subtree (no leakage between rows). Optional indexAs / firstAs / lastAs vars let the body know where it sits in the sequence.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Foreach attributes" />
+          <Foreach items='[
+            {"attr":"items","type":"json","desc":"JSON array literal, or a {{ref}} that resolves to one after substitution.","req":true},
+            {"attr":"as","type":"name","desc":"Identifier bound to the current item inside the body.","req":true},
+            {"attr":"indexAs","type":"name","desc":"Optional. 0-based index of the current iteration."},
+            {"attr":"firstAs","type":"name","desc":"Optional. true on the first iteration, false otherwise."},
+            {"attr":"lastAs","type":"name","desc":"Optional. true on the last iteration, false otherwise."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="callout" cls="callout-warn" kind="ESCAPING"
+               titleColor="92400E" title="items='[…]' is one attribute"
+               body="Use &amp;apos; for apostrophes inside JSON strings (single-quoted attrs would close early). Wrap literal {ident} substrings in {{ident}} to keep them out of placeholder substitution. Standard XML escapes still apply: &amp;lt; &amp;gt; &amp;amp;." />
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · simple list" />
+          <VStack class="card-canvas" gap="4">
+            <Text class="caption" color="AA2D00">three rows from a string array, no template required</Text>
+            <Foreach items='["alpha","beta","gamma"]' as="t">
+              <Text class="body-ink">• {t}</Text>
+            </Foreach>
+          </VStack>
+
+          <Use template="h2" text="Sample · index + first/last flags" />
+          <VStack class="card-canvas" gap="4">
+            <Text class="caption" color="AA2D00">indexAs=&apos;i&apos; · lastAs=&apos;isLast&apos; · connector hides on last row</Text>
+            <Foreach items='[{"label":"Q1"},{"label":"Q2"},{"label":"Q3"}]'
+                     as="m" indexAs="i" lastAs="isLast">
+              <HStack gap="8" alignItems="center">
+                <Text class="kw-ink" w="20" textVAlign="middle" lineHeight="1.0">{i}</Text>
+                <Text class="body-ink" textVAlign="middle" lineHeight="1.0">{m.label}</Text>
+                <If test="!isLast">
+                  <Text class="caption" color="9297A0" textVAlign="middle" lineHeight="1.0">→</Text>
+                </If>
+              </HStack>
+            </Foreach>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-row" label="Foreach + If · index-aware connector" rightLabel="rendered output above">
+        <Slot name="code">
+          <Text class="code-text">&lt;Foreach items='[{"label":"Q1"},{"label":"Q2"},{"label":"Q3"}]'</Text>
+          <Text class="code-text">         as="m" indexAs="i" lastAs="isLast"&gt;</Text>
+          <Text class="code-text">  &lt;HStack gap="8" alignItems="center"&gt;</Text>
+          <Text class="code-text">    &lt;Text class="kw-ink" w="20"&gt;{i}&lt;/Text&gt;</Text>
+          <Text class="code-text">    &lt;Text class="body-ink"&gt;{m.label}&lt;/Text&gt;</Text>
+          <Text class="code-text">    &lt;If test="!isLast"&gt;</Text>
+          <Text class="code-text">      &lt;Text class="caption" color="9297A0"&gt;→&lt;/Text&gt;</Text>
+          <Text class="code-text">    &lt;/If&gt;</Text>
+          <Text class="code-text">  &lt;/HStack&gt;</Text>
+          <Text class="code-text">&lt;/Foreach&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <HStack gap="8" alignItems="center" padding="8">
+            <Text class="kw-ink" w="20" textVAlign="middle" lineHeight="1.0">0</Text>
+            <Text class="body-ink" textVAlign="middle" lineHeight="1.0">Q1</Text>
+            <Text class="caption" color="9297A0" textVAlign="middle" lineHeight="1.0">→</Text>
+            <Text class="kw-ink" w="20" textVAlign="middle" lineHeight="1.0">1</Text>
+            <Text class="body-ink" textVAlign="middle" lineHeight="1.0">Q2</Text>
+            <Text class="caption" color="9297A0" textVAlign="middle" lineHeight="1.0">→</Text>
+            <Text class="kw-ink" w="20" textVAlign="middle" lineHeight="1.0">2</Text>
+            <Text class="body-ink" textVAlign="middle" lineHeight="1.0">Q3</Text>
+          </HStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <!-- ================================================================
+       Page 3 — Recipes: data-driven roadmap + filtered roster.
+       ================================================================ -->
+  <Use template="page" eyebrow="16 / Control flow" kicker="Recipes"
+       title="Composing a data-driven page"
+       lede="Two complete recipes. The roadmap shows Foreach + Choose dispatching tone-by-tone. The roster shows Foreach + If filtering rows by a flag — both authored as a single JSON literal each.">
+    <Slot name="default">
+      <Use template="h2" text="Recipe · roadmap with per-tone status chip" />
+      <VStack class="card-canvas" gap="0" padding="20">
+        <Foreach as="m" lastAs="isLast" items='[
+          {"label":"Q1","tone":"coral","title":"Coral surface launches","status":"ok"},
+          {"label":"Q2","tone":"forest","title":"Forest signature joins","status":"ok"},
+          {"label":"Q3","tone":"mustard","title":"Mustard slated for archive","status":"warn"},
+          {"label":"Q4","tone":"dark","title":"Dark variant in research","status":"fail"}
+        ]'>
+          <HStack gap="14" alignItems="start" w="100%">
+            <VStack w="60" alignItems="center" gap="6">
+              <VStack class="bg-{m.tone}" w="36" h="36" borderRadius="999"
+                      alignItems="center" justifyContent="center">
+                <Choose>
+                  <When test="m.tone == 'mustard'">
+                    <Text color="181D26" fontFamily="Inter Display" fontSize="13" bold="true">{m.label}</Text>
+                  </When>
+                  <Otherwise>
+                    <Text color="FFFFFF" fontFamily="Inter Display" fontSize="13" bold="true">{m.label}</Text>
+                  </Otherwise>
+                </Choose>
+              </VStack>
+              <If test="!isLast">
+                <VStack class="bg-hairline" w="2" h="32" />
+              </If>
+            </VStack>
+            <VStack gap="2" w="max" padding.top="6">
+              <HStack gap="6" alignItems="center">
+                <Text class="title-sm" textVAlign="middle" lineHeight="1.0">{m.title}</Text>
+                <Choose>
+                  <When test="m.status == 'ok'">
+                    <Text class="chip-mint" textVAlign="middle" lineHeight="1.0">OK</Text>
+                  </When>
+                  <When test="m.status == 'warn'">
+                    <Text class="chip-mustard" textVAlign="middle" lineHeight="1.0">WARN</Text>
+                  </When>
+                  <Otherwise>
+                    <Text class="chip-coral" textVAlign="middle" lineHeight="1.0">FAIL</Text>
+                  </Otherwise>
+                </Choose>
+              </HStack>
+              <Text class="body-muted">tone={m.tone} · status={m.status}</Text>
+            </VStack>
+          </HStack>
+        </Foreach>
+      </VStack>
+
+      <Use template="h2" text="Recipe · filtered roster (only active members)" />
+      <VStack class="card-canvas" gap="6" padding="16">
+        <Text class="caption" color="AA2D00">If test="m.active" drops the inactive rows entirely · 4 input rows → 3 visible</Text>
+        <Foreach as="m" items='[
+          {"name":"Alex","role":"Design","active":true},
+          {"name":"Bao","role":"Engineering","active":true},
+          {"name":"Cleo","role":"Marketing","active":false},
+          {"name":"Devi","role":"Research","active":true}
+        ]'>
+          <If test="m.active">
+            <HStack gap="10" alignItems="center" w="100%">
+              <VStack class="bg-forest" w="22" h="22" borderRadius="11"
+                      alignItems="center" justifyContent="center">
+                <Text color="FFFFFF" fontFamily="Inter Display" fontSize="10" bold="true" textAlign="center">●</Text>
+              </VStack>
+              <Text class="body-ink" w="80">{m.name}</Text>
+              <Text class="body-muted">{m.role}</Text>
+            </HStack>
+          </If>
+        </Foreach>
+      </VStack>
+
+      <Use template="callout" cls="callout-info" kind="WHEN TO REACH FOR THESE"
+           titleColor="254FAD" title="Authoring data, not markup"
+           body="The ceiling is small but worth it: roadmap rows, comparison tables, badge rows, attribute reference tables. Once a list of items wants to be edited as data — not as 12 near-identical Use calls — Foreach + (optional) Choose pulls the data into one JSON literal that survives diffing and reordering cleanly." />
+    </Slot>
+  </Use>
+</Fragment>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>&lt;Choose&gt; · Builder XML Reference</title>
+<link rel="stylesheet" href="../styles.css" />
+<script>(()=>{const s=localStorage.getItem("sg-theme");if(s==="light"||s==="dark")document.documentElement.setAttribute("data-theme",s)})()</script>
+</head>
+<body class="ref-page">
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="ref-header">
+  <a class="brand" href="../">SlideGlance Reference</a>
+  <a class="ref-back" href="../../../build/">← Back to Build</a>
+</header>
+<div class="ref-shell">
+<nav class="ref-sidebar" aria-label="Builder elements">
+<h2>Visual nodes</h2>
+<ul><li><a href="../text/"><code>&lt;Text&gt;</code></a></li><li><a href="../ul/"><code>&lt;Ul&gt;</code></a></li><li><a href="../ol/"><code>&lt;Ol&gt;</code></a></li><li><a href="../image/"><code>&lt;Image&gt;</code></a></li><li><a href="../icon/"><code>&lt;Icon&gt;</code></a></li><li><a href="../svg/"><code>&lt;Svg&gt;</code></a></li><li><a href="../table/"><code>&lt;Table&gt;</code></a></li><li><a href="../shape/"><code>&lt;Shape&gt;</code></a></li><li><a href="../chart/"><code>&lt;Chart&gt;</code></a></li><li><a href="../line/"><code>&lt;Line&gt;</code></a></li><li><a href="../connector/"><code>&lt;Connector&gt;</code></a></li><li><a href="../vstack/"><code>&lt;VStack&gt;</code></a></li><li><a href="../hstack/"><code>&lt;HStack&gt;</code></a></li><li><a href="../layer/"><code>&lt;Layer&gt;</code></a></li><li><a href="../slideglance/"><code>&lt;SlideGlance&gt;</code></a></li><li><a href="../slide/"><code>&lt;Slide&gt;</code></a></li><li><a href="../fragment/"><code>&lt;Fragment&gt;</code></a></li></ul>
+<h2>Meta &amp; composition</h2>
+<ul><li><a href="../document/"><code>&lt;Document&gt;</code></a></li><li><a href="../templates/"><code>&lt;Templates&gt;</code></a></li><li><a href="../template/"><code>&lt;Template&gt;</code></a></li><li><a href="../use/"><code>&lt;Use&gt;</code></a></li><li><a href="../slot/"><code>&lt;Slot&gt;</code></a></li><li><a href="../import/"><code>&lt;Import&gt;</code></a></li><li><a href="../styles/"><code>&lt;Styles&gt;</code></a></li><li><a href="../style/"><code>&lt;Style&gt;</code></a></li><li><a href="../if/"><code>&lt;If&gt;</code></a></li><li><a href="../choose/" aria-current="page"><code>&lt;Choose&gt;</code></a></li><li><a href="../when/"><code>&lt;When&gt;</code></a></li><li><a href="../otherwise/"><code>&lt;Otherwise&gt;</code></a></li><li><a href="../foreach/"><code>&lt;Foreach&gt;</code></a></li></ul>
+</nav>
+<main id="main" class="ref-content">
+<h1><code>&lt;Choose&gt;</code></h1>
+<p class="ref-lede">First-match branch. Children must be one or more &lt;When test=...&gt; followed by an optional &lt;Otherwise&gt;. The body of the first matching &lt;When&gt; is emitted; if none match, the &lt;Otherwise&gt; body (if present) is emitted instead.</p>
+<h2>Attributes</h2>
+<table class="attr-table">
+<thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+<tbody>
+
+</tbody>
+</table>
+<h2>Allowed children</h2>
+<p class="ref-empty-children">This element accepts no child elements.</p>
+<h2>Used by</h2>
+<p class="ref-used-empty">Top-level — not nested under another element.</p>
+
+<h2>See also</h2>
+<ul class="see-also"><li><a href="https://github.com/SlideGlance/slideglance/blob/main/packages/builder/docs/en/composition.md">Composition</a></li></ul>
+<h2>Source</h2>
+<p><a href="https://github.com/SlideGlance/slideglance/blob/main/packages/builder/src/registry/compiled/index.ts#L674"><code>src/registry/compiled/index.ts</code> · line 674</a></p>
+</main>
+</div>
+<script src="../scripts/site.js" defer></script>
+</body>
+</html>

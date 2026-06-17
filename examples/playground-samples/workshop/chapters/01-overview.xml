@@ -1,0 +1,36 @@
+<Fragment>
+  <Use template="lesson"
+       step="01"
+       eyebrow="PART 1 · OVERVIEW"
+       title="The four primitives you'll use all day."
+       lede="Most of @slideglance/builder is composed from four ideas. Memorize these and the rest of the day is just practice.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="14" w="55%">
+          <Use template="step-row" n="1"
+               title="Containers stack content."
+               body="VStack stacks children vertically; HStack arranges them in a row. Both honour Flex-style gap, padding, alignItems." />
+          <Use template="step-row" n="2"
+               title="Styles centralize visual choices."
+               body="Every color, font, and rule lives in a Style. Body content references them by class= name, never by literal hex." />
+          <Use template="step-row" n="3"
+               title="Templates are macros."
+               body="Templates wrap a stack of nodes in a reusable shape. A &lt;Use&gt; substitutes attributes into placeholders like {title}." />
+          <Use template="step-row" n="4"
+               title="Masters are page chrome."
+               body="Each slide picks a Master; the master paints the running header, footer, and slide number behind the slide content." />
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="14" w="max">
+          <Text class="title">Your toolkit by the end of the day.</Text>
+          <Use template="callout-info" label="HEADS-UP"
+               body="We'll build one shared deck across the whole workshop. Each part adds one primitive — by Part 5 the deck has its own master, template family, and chapter files." />
+          <Use template="callout-note" label="HOUSEKEEPING"
+               body="Code blocks fit on three lines. If yours wraps, your style ramp is too small — increase the font and re-flow the content." />
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

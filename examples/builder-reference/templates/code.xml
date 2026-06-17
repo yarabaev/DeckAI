@@ -1,0 +1,108 @@
+<Fragment>
+  <!--
+    Code-block templates: a labelled box that pairs the raw XML source
+    with its rendered output. Two layouts are available:
+
+      code-row    Side-by-side. `code` slot left (50%), `render` slot
+                  right (50%). Use for compact samples.
+      code-stack  Code on top, render below. Use when the sample needs
+                  full editorial width (charts, diagrams, tables).
+      code-row-2  60/40 split (more code, less render).
+      code-row-1  40/60 split (render dominates).
+
+    Every variant carries a small caption above the row identifying the
+    sample. Code box uses a soft surface with a hairline border; render
+    box uses the canvas card so the sample stands forward.
+  -->
+  <Templates>
+    <!-- 50/50 -->
+    <Template name="code-row">
+      <VStack gap="6">
+        <HStack gap="8" alignItems="center" justifyContent="spaceBetween">
+          <Text class="caption" color="AA2D00">{label}</Text>
+          <Text class="caption" color="41454D">{rightLabel}</Text>
+        </HStack>
+        <HStack gap="12" alignItems="stretch">
+          <VStack w="50%" class="code-light" gap="2">
+            <Slot name="code" />
+          </VStack>
+          <VStack w="50%" class="card-canvas">
+            <Slot name="render" />
+          </VStack>
+        </HStack>
+      </VStack>
+    </Template>
+
+    <!-- 60% code · 40% render -->
+    <Template name="code-row-2">
+      <VStack gap="6">
+        <HStack gap="8" alignItems="center" justifyContent="spaceBetween">
+          <Text class="caption" color="AA2D00">{label}</Text>
+          <Text class="caption" color="41454D">{rightLabel}</Text>
+        </HStack>
+        <HStack gap="12" alignItems="stretch">
+          <VStack w="60%" class="code-light" gap="2">
+            <Slot name="code" />
+          </VStack>
+          <VStack w="40%" class="card-canvas">
+            <Slot name="render" />
+          </VStack>
+        </HStack>
+      </VStack>
+    </Template>
+
+    <!-- 40% code · 60% render -->
+    <Template name="code-row-1">
+      <VStack gap="6">
+        <HStack gap="8" alignItems="center" justifyContent="spaceBetween">
+          <Text class="caption" color="AA2D00">{label}</Text>
+          <Text class="caption" color="41454D">{rightLabel}</Text>
+        </HStack>
+        <HStack gap="12" alignItems="stretch">
+          <VStack w="40%" class="code-light" gap="2">
+            <Slot name="code" />
+          </VStack>
+          <VStack w="60%" class="card-canvas">
+            <Slot name="render" />
+          </VStack>
+        </HStack>
+      </VStack>
+    </Template>
+
+    <!-- Vertical (code over render). -->
+    <Template name="code-stack">
+      <VStack gap="6">
+        <HStack gap="8" alignItems="center" justifyContent="spaceBetween">
+          <Text class="caption" color="AA2D00">{label}</Text>
+          <Text class="caption" color="41454D">{rightLabel}</Text>
+        </HStack>
+        <VStack class="code-light" gap="2">
+          <Slot name="code" />
+        </VStack>
+        <VStack class="card-canvas">
+          <Slot name="render" />
+        </VStack>
+      </VStack>
+    </Template>
+
+    <!-- Code-only block (no rendered counterpart). -->
+    <Template name="code-only">
+      <VStack gap="6">
+        <Text class="caption" color="AA2D00">{label}</Text>
+        <VStack class="code-light" gap="2">
+          <Slot name="code" />
+        </VStack>
+      </VStack>
+    </Template>
+
+    <!-- Dark code block (used in cover/recipe pages for visual contrast). -->
+    <Template name="code-dark">
+      <VStack gap="6">
+        <Text class="caption-on-dark" color="FCAB79">{label}</Text>
+        <VStack class="code-dark" gap="2">
+          <Slot name="code" />
+        </VStack>
+      </VStack>
+    </Template>
+  </Templates>
+</Fragment>

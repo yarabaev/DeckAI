@@ -1,0 +1,75 @@
+<Fragment>
+  <!--
+    Reusable building blocks.
+
+      metric-card  — big number + label + optional caption.
+      pillar-card  — title + body inside an elevated card.
+      quote-block  — large quote + attribution + role row.
+      team-row     — avatar (initial badge) + name + role + bio.
+  -->
+  <Templates>
+    <Template name="metric-card">
+      <!-- h omitted intentionally — when these are stacked vertically
+           inside a w=max sibling of an HStack alignItems=stretch, every
+           card was claiming h=100% which multiplied the column height.
+           Intrinsic h here + stretch-alignment from the outer HStack
+           gives one visually-equal column of cards. -->
+      <VStack class="bg-elev" w="100%" borderRadius="14"
+              padding.left="20" padding.right="20"
+              padding.top="16" padding.bottom="16" gap="6">
+        <Text class="eyebrow" color="2EE6CA">{label}</Text>
+        <Text class="metric-num">{value}</Text>
+        <Text class="body-soft">{caption}</Text>
+      </VStack>
+    </Template>
+
+    <Template name="pillar-card">
+      <VStack class="bg-card" w="100%" h="100%" borderRadius="14"
+              padding.left="24" padding.right="24"
+              padding.top="24" padding.bottom="24" gap="10">
+        <HStack gap="10" alignItems="center">
+          <VStack class="bg-accent" w="22" h="22" borderRadius="6" />
+          <Text class="title" fontSize="20">{title}</Text>
+        </HStack>
+        <Text class="body">{body}</Text>
+      </VStack>
+    </Template>
+
+    <Template name="quote-block">
+      <VStack class="bg-deep" w="100%" borderRadius="14"
+              padding.left="28" padding.right="28"
+              padding.top="18" padding.bottom="18" gap="10">
+        <Text fontFamily="Inter" fontSize="22" bold="false" color="F5F5FA"
+              lineHeight="1.2" italic="true">{quote}</Text>
+        <HStack gap="12" alignItems="center">
+          <VStack class="bg-accent-2" w="22" h="22" borderRadius="11"
+                  alignItems="center" justifyContent="center">
+            <Text fontFamily="Inter" fontSize="11" bold="true" color="0B0B14" textAlign="center">{initial}</Text>
+          </VStack>
+          <Text class="body-soft" lineHeight="1.0" textVAlign="middle"><Span bold="true" color="F5F5FA">{author}</Span>  ·  {role}</Text>
+        </HStack>
+      </VStack>
+    </Template>
+
+    <Template name="team-row">
+      <HStack gap="20" alignItems="center" w="100%">
+        <VStack class="bg-accent" w="56" h="56" borderRadius="28"
+                alignItems="center" justifyContent="center">
+          <Text fontFamily="Inter" fontSize="22" bold="true" color="F5F5FA" textAlign="center">{initial}</Text>
+        </VStack>
+        <VStack gap="4" w="max">
+          <!-- Row label: tighten the title's line-height to 1.0 in this
+               single-line row context (typography.xml sets it to 1.15
+               by default) so the row's measured height matches the
+               glyph extent, then center both glyphs inside the
+               equalized box. -->
+          <HStack gap="10" alignItems="baseline">
+            <Text class="title" fontSize="20" lineHeight="1.0" textVAlign="middle">{name}</Text>
+            <Text class="body-soft" lineHeight="1.0" textVAlign="middle">· {role}</Text>
+          </HStack>
+          <Text class="body">{bio}</Text>
+        </VStack>
+      </HStack>
+    </Template>
+  </Templates>
+</Fragment>

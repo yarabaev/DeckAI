@@ -1,0 +1,66 @@
+<Fragment>
+  <!--
+    Type ramp mapped 1:1 onto the Airtable typography tokens. Inter Display
+    stands in for Haas Groot Disp / Haas Grotesk per the design's font-substitute
+    note. The default lineHeight on every running-text style is set explicitly so
+    pptxgenjs cannot insert its own loose leading.
+
+    Token map (Airtable token → class name):
+      display-xl  → display-xl   (48 / 500)   — section covers
+      display-lg  → display-lg   (40 / 400)   — page hero h1
+      display-md  → display-md   (32 / 400)   — signature card h2
+      title-lg    → title-lg     (24 / 500)   — page section heads
+      title-md    → title-md     (20 / 500)   — sub-section heads
+      title-sm    → title-sm     (18 / 500)   — card titles
+      label-md    → label        (15 / 500)   — captions on cards
+      button      → button       (15 / 500)
+      body-md     → body         (13 / 400)
+      caption     → caption      (11 / 500)   — meta + tracking-feel
+      legal       → legal        (10 / 600)   — system surfaces
+  -->
+  <Styles>
+    <!-- Display ramp (h1 / h2). Tight lineHeight (1.0) for editorial
+         display sizes — magazines never set display heads at body
+         leading; the tighter setting also keeps cap-bar measurements
+         honest (frame collapses to fontSize). -->
+    <Style name="display-xl" fontFamily="Inter Display" fontSize="48" bold="true"  color="181D26" lineHeight="1.0" />
+    <Style name="display-lg" fontFamily="Inter Display" fontSize="40" bold="false" color="181D26" lineHeight="1.0" />
+    <Style name="display-md" fontFamily="Inter Display" fontSize="32" bold="false" color="181D26" lineHeight="1.0"  />
+
+    <!-- Title ramp (page sections, sub-sections). lineHeight=1.0 keeps
+         wrapped section heads visually anchored — without it, two-line
+         titles separate by a body-leading gap that reads loose. -->
+    <Style name="title-lg"   fontFamily="Inter Display" fontSize="24" bold="true"  color="181D26" lineHeight="1.0" />
+    <Style name="title-md"   fontFamily="Inter Display" fontSize="20" bold="true"  color="181D26" lineHeight="1.0" />
+    <Style name="title-sm"   fontFamily="Inter Display" fontSize="18" bold="true"  color="181D26" lineHeight="1.0" />
+
+    <!-- Label / button -->
+    <Style name="label"      fontFamily="Inter Display" fontSize="15" bold="true"  color="181D26" />
+    <Style name="button"     fontFamily="Inter Display" fontSize="15" bold="true"  color="181D26" />
+
+    <!-- Body / caption -->
+    <Style name="body"       fontFamily="Inter Display" fontSize="13" bold="false" color="333840" />
+    <Style name="body-ink"   fontFamily="Inter Display" fontSize="13" bold="false" color="181D26" />
+    <Style name="body-muted" fontFamily="Inter Display" fontSize="13" bold="false" color="41454D" />
+    <Style name="caption"    fontFamily="Inter Display" fontSize="11" bold="true"  color="41454D" />
+    <Style name="caption-on-dark" fontFamily="Inter Display" fontSize="11" bold="true" color="DDDDDD"/>
+    <Style name="legal"      fontFamily="Inter Display" fontSize="10" bold="true"  color="41454D"  />
+
+    <!-- Inline emphasis used inside <Span> -->
+    <Style name="kw"         fontFamily="JetBrains Mono" fontSize="12" bold="true" color="AA2D00" />
+    <Style name="kw-ink"     fontFamily="JetBrains Mono" fontSize="12" bold="true" color="181D26" />
+    <Style name="link"       color="1B61C9" />
+
+    <!-- Code-block run (apply on each <Text> line inside `code`). -->
+    <Style name="code-text"  fontFamily="JetBrains Mono" fontSize="11" color="181D26" lineHeight="1.0" />
+    <Style name="code-text-on-dark" fontFamily="JetBrains Mono" fontSize="11" color="F5E9D4" lineHeight="1.0" />
+
+    <!-- Hero-only super-display (cover slide) -->
+    <Style name="hero" fontFamily="Inter Display" fontSize="64" bold="false" color="181D26" lineHeight="1.0" />
+
+    <!-- Pricing sub-system (used by pricing recipe pages) -->
+    <Style name="pricing-display" fontFamily="Inter Display" fontSize="44" bold="true"  color="1D1F25" lineHeight="1.0" />
+    <Style name="pricing-section" fontFamily="Inter Display" fontSize="28" bold="true"  color="1D1F25" lineHeight="1.0"  />
+    <Style name="pricing-card-title" fontFamily="Inter Display" fontSize="20" bold="true" color="1D1F25" lineHeight="1.0" />
+  </Styles>
+</Fragment>

@@ -1,0 +1,34 @@
+<Fragment>
+  <!--
+    Corporate / technical-spec palette. Neutral grays with a single
+    cool-blue accent and a muted-green "ok" + amber "warn" + red
+    "blocker" semantic triplet for risk tables.
+  -->
+  <Styles>
+    <!-- Surfaces -->
+    <Style name="bg-paper"  backgroundColor="F4F5F7" />
+    <Style name="bg-card"   backgroundColor="FFFFFF" />
+    <Style name="bg-rail"   backgroundColor="E5E7EB" />
+    <Style name="bg-rule"   backgroundColor="D1D5DB" />
+    <Style name="bg-ink"    backgroundColor="1F2937" />
+    <Style name="bg-accent" backgroundColor="2563EB" />
+
+    <!-- Risk / status semantics -->
+    <Style name="bg-ok"      backgroundColor="DCFCE7" />
+    <Style name="bg-ok-ink"  backgroundColor="166534" />
+    <Style name="bg-warn"    backgroundColor="FEF3C7" />
+    <Style name="bg-warn-ink" backgroundColor="92400E" />
+    <Style name="bg-block"   backgroundColor="FEE2E2" />
+    <Style name="bg-block-ink" backgroundColor="991B1B" />
+
+    <!-- Type colors -->
+    <Style name="t-ink"     color="111827" />
+    <Style name="t-body"    color="374151" />
+    <Style name="t-muted"   color="6B7280" />
+    <Style name="t-soft"    color="9CA3AF" />
+    <Style name="t-accent"  color="2563EB" />
+    <Style name="t-ok"      color="166534" />
+    <Style name="t-warn"    color="92400E" />
+    <Style name="t-block"   color="991B1B" />
+  </Styles>
+</Fragment>

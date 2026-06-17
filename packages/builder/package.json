@@ -1,0 +1,106 @@
+{
+  "name": "@slideglance/builder",
+  "version": "0.1.3",
+  "description": "Declarative slide builder: XML DSL with a Flexbox layout engine, compiled to PPTX.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "builder.xsd",
+    "builder.schema.json",
+    "reference.md",
+    "reference-html",
+    ".codegen-hash.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "homepage": "https://github.com/SlideGlance/slideglance#readme",
+  "bugs": {
+    "url": "https://github.com/SlideGlance/slideglance/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlideGlance/slideglance.git",
+    "directory": "packages/builder"
+  },
+  "license": "MIT",
+  "keywords": [
+    "powerpoint",
+    "pptx",
+    "presentation",
+    "slides",
+    "typescript",
+    "declarative",
+    "flexbox",
+    "layout",
+    "office",
+    "xml",
+    "dsl",
+    "slideglance"
+  ],
+  "author": "Dmitry Yarabaev",
+  "contributors": [
+    "Hiroki Sakabe (original @slideglance/builder author)"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "codegen": "tsx scripts/codegen.ts",
+    "codegen:check": "tsx scripts/codegen.ts --check",
+    "prepublishOnly": "pnpm run codegen:check && pnpm run build && pnpm run lint && pnpm run fmt:check && pnpm run typecheck && pnpm run test:run",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
+    "knip": "knip --no-exit-code",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit -p tsconfig.check.json",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "vrt": "tsx vrt/decks/runVrt.ts",
+    "vrt:update": "tsx vrt/decks/runVrt.ts --update",
+    "vrt:docker": "docker compose -f docker/docker-compose.yml build vrt && docker compose -f docker/docker-compose.yml run --rm vrt",
+    "vrt:docker:update": "docker compose -f docker/docker-compose.yml build vrt-update && docker compose -f docker/docker-compose.yml run --rm vrt-update",
+    "preview": "tsx vrt/preview/runPreview.ts",
+    "preview:docker": "docker compose -f docker/docker-compose.yml build preview && docker compose -f docker/docker-compose.yml run --rm preview",
+    "tools:convert-font": "tsx scripts/convertFontToBase64.ts",
+    "size": "size-limit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@size-limit/file": "^12.1.0",
+    "@types/node": "^25.6.2",
+    "@types/pngjs": "6.0.5",
+    "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/ui": "^4.1.0",
+    "lucide-static": "^1.14.0",
+    "pixelmatch": "7.2.0",
+    "pngjs": "7.0.0",
+    "size-limit": "^12.1.0",
+    "tsx": "4.21.0",
+    "typescript": "catalog:",
+    "typescript-eslint": "^8.59.2",
+    "vitest": "catalog:"
+  },
+  "dependencies": {
+    "@resvg/resvg-wasm": "^2.6.2",
+    "@slideglance/measure": "workspace:*",
+    "fast-xml-parser": "^5.7.3",
+    "image-size": "2.0.2",
+    "jszip": "^3.10.1",
+    "pptxgenjs": "4.0.1",
+    "yoga-layout": "3.2.1",
+    "zod": "^4.4.3"
+  }
+}

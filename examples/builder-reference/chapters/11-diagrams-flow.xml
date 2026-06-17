@@ -1,0 +1,83 @@
+<Fragment>
+  <!-- Chapter 11 — Flow diagrams (decision, swimlane, pipeline). -->
+  <Use template="section-cream"
+       number="11"
+       kicker="Conditions + branches"
+       title="Diagrams · flow."
+       subtitle="Decision branches, swimlanes, vertical pipelines."
+       inside1="Decision flow · diamond + yes / no outcome boxes"
+       inside2="Swimlane · three lanes for cross-team work"
+       inside3="Connectors · arrowed Lines on a Layer overlay"
+       inside4="Cards remain editable downstream as native shapes"
+       epigraph="Every flow lives or dies by its arrows; every arrow needs a single direction to read."
+       epigraphAttrib="builder design notes"
+       meta="Composed from VStack · HStack · Layer · Shape · Line"
+       leftMeta="3 flow patterns · primitives only" />
+
+  <Use template="page" eyebrow="11 / Diagrams" kicker="Decision flow"
+       title="Decision flow — yes / no branches"
+       lede="A diamond decision routes traffic to two outcome boxes. Diamond is rendered with Shape shapeType=diamond; arrows live on the same Layer.">
+    <Slot name="default">
+      <VStack class="card-canvas" gap="0" padding="20">
+        <Layer w="100%" h="280">
+          <!-- Start -->
+          <VStack x="240" y="0" w="160" h="44" backgroundColor="181D26" borderRadius="22" alignItems="center" justifyContent="center">
+            <Text fontFamily="Inter Display" fontSize="13" bold="true" color="FFFFFF">Receive event</Text>
+          </VStack>
+          <Line x1="320" y1="44" x2="320" y2="76" color="181D26" lineWidth="1.5" endArrow.type="triangle" />
+          <!-- Diamond -->
+          <Shape x="240" y="76" w="160" h="86" shapeType="diamond"
+                 fill.color="F5E9D4" line.color="D9A441" line.width="1"
+                 text="Surface available?"
+                 fontFamily="Inter Display" fontSize="12" bold="true" color="181D26"
+                 textAlign="center" textVAlign="middle" />
+          <!-- Branches -->
+          <Foreach items='[
+            {"lineX1":"240","lineX2":"156","labelX":"170","labelText":"YES","accent":"0A2E0E","boxX":"0","boxBg":"0A2E0E","kicker":"PROCEED","kickerColor":"DDEEDF","name":"Render signature"},
+            {"lineX1":"400","lineX2":"460","labelX":"430","labelText":"NO","accent":"AA2D00","boxX":"460","boxBg":"AA2D00","kicker":"FALLBACK","kickerColor":"F5E0D6","name":"Use white canvas"}
+          ]' as="b">
+            <Line x1="{b.lineX1}" y1="118" x2="{b.lineX2}" y2="118" color="{b.accent}" lineWidth="1.5" endArrow.type="triangle" />
+            <Text x="{b.labelX}" y="100" w="40" fontFamily="Inter Display" fontSize="11" bold="true" color="{b.accent}">{b.labelText}</Text>
+            <VStack x="{b.boxX}" y="178" w="180" h="80" backgroundColor="{b.boxBg}" borderRadius="10" alignItems="center" justifyContent="center" gap="4" padding="10">
+              <Text fontFamily="Inter Display" fontSize="11" bold="true" color="{b.kickerColor}" textAlign="center" w="120">{b.kicker}</Text>
+              <Text fontFamily="Inter Display" fontSize="12" bold="true" color="FFFFFF" textAlign="center" w="160">{b.name}</Text>
+            </VStack>
+          </Foreach>
+        </Layer>
+      </VStack>
+
+      <Use template="h2" text="Swimlane — design / engineering / marketing" />
+      <!-- Three lanes share the same column contract via `compare-row`;
+           a single row holds three VStacks of phase items so the lane
+           tints sit edge-to-edge without their borders doubling. -->
+      <VStack class="card-canvas" gap="0">
+        <Use template="compare-row" bg1="F5E9D4" bg2="FFFFFF" bg3="F8FAFC">
+          <Slot name="c1">
+            <VStack gap="6">
+              <Text class="caption" color="6B4A1A">DESIGN</Text>
+              <Foreach items='["Sketch surface","Pick palette","Approve layout"]' as="t">
+                <Text class="body-ink">{t}</Text>
+              </Foreach>
+            </VStack>
+          </Slot>
+          <Slot name="c2">
+            <VStack gap="6">
+              <Text class="caption" color="0A2E0E">ENGINEERING</Text>
+              <Foreach items='["Implement node","Wire codegen","Add VRT baseline"]' as="t">
+                <Text class="body-ink">{t}</Text>
+              </Foreach>
+            </VStack>
+          </Slot>
+          <Slot name="c3">
+            <VStack gap="6">
+              <Text class="caption" color="AA2D00">MARKETING</Text>
+              <Foreach items='["Pair with hero copy","Stage on staging","Ship to production"]' as="t">
+                <Text class="body-ink">{t}</Text>
+              </Foreach>
+            </VStack>
+          </Slot>
+        </Use>
+      </VStack>
+    </Slot>
+  </Use>
+</Fragment>

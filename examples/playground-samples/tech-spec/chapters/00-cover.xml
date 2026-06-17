@@ -1,0 +1,36 @@
+<Fragment>
+  <Use template="cover-page">
+    <Slot name="default">
+      <HStack gap="10" alignItems="center">
+        <VStack class="bg-accent" w="14" h="3" />
+        <Text class="eyebrow">TECHNICAL DESIGN DOCUMENT</Text>
+      </HStack>
+
+      <Text class="display-lg" fontSize="48">Atlas Gateway · v0.4 (draft).</Text>
+
+      <Text class="subtitle" w="780">A unified ingress, auth, and routing layer to replace the five regional load balancers currently in production. Targets a single deployment per region, an identical contract for North/South and East/West traffic, and removal of three side-band auth services.</Text>
+
+      <HStack gap="24" alignItems="center" padding.top="24">
+        <VStack gap="2">
+          <Text class="caption">AUTHOR</Text>
+          <Text class="body">Yuki Tanaka · Distinguished Eng.</Text>
+        </VStack>
+        <VStack class="vrule" h="36" />
+        <VStack gap="2">
+          <Text class="caption">REVIEWERS</Text>
+          <Text class="body">Platform leads · SRE · Sec</Text>
+        </VStack>
+        <VStack class="vrule" h="36" />
+        <VStack gap="2">
+          <Text class="caption">STATUS</Text>
+          <Text class="body" color="92400E">DRAFT · pending technical review</Text>
+        </VStack>
+        <VStack class="vrule" h="36" />
+        <VStack gap="2">
+          <Text class="caption">VERSION</Text>
+          <Text class="body">0.4 · 2026-05-10</Text>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

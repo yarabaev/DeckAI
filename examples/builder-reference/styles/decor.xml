@@ -1,0 +1,126 @@
+<Fragment>
+  <!--
+    Decoration utilities used by recipes / diagrams:
+      * chip-*    inline coloured pill (signature surfaces, no contrast loss)
+      * dot-*     10x10 swatch dot used in legends
+      * shape-lbl shared text styling for every Shape that carries a label
+      * callout-* tinted body callouts (info / success / warn / danger)
+      * metric    KPI surface used by recipe pages
+  -->
+  <Styles>
+    <!-- Inline chips. Background is the signature surface; foreground sits
+         in the matching deep tone (or ink) so contrast holds at 11px. -->
+    <Style name="chip-coral"
+      backgroundColor="F5E0D6" color="AA2D00" borderRadius="12"
+      padding.left="8" padding.right="8" padding.top="2" padding.bottom="2"
+      fontFamily="Inter Display" fontSize="10" bold="true" />
+    <Style name="chip-forest"
+      backgroundColor="DDEEDF" color="0A2E0E" borderRadius="12"
+      padding.left="8" padding.right="8" padding.top="2" padding.bottom="2"
+      fontFamily="Inter Display" fontSize="10" bold="true" />
+    <Style name="chip-cream"
+      backgroundColor="F5E9D4" color="6B4A1A" borderRadius="12"
+      padding.left="8" padding.right="8" padding.top="2" padding.bottom="2"
+      fontFamily="Inter Display" fontSize="10" bold="true" />
+    <Style name="chip-peach"
+      backgroundColor="FFE0CC" color="8A3A0E" borderRadius="12"
+      padding.left="8" padding.right="8" padding.top="2" padding.bottom="2"
+      fontFamily="Inter Display" fontSize="10" bold="true" />
+    <Style name="chip-mint"
+      backgroundColor="DDF1E8" color="0A4F2D" borderRadius="12"
+      padding.left="8" padding.right="8" padding.top="2" padding.bottom="2"
+      fontFamily="Inter Display" fontSize="10" bold="true" />
+    <Style name="chip-yellow"
+      backgroundColor="FBEBA8" color="6B4A0F" borderRadius="12"
+      padding.left="8" padding.right="8" padding.top="2" padding.bottom="2"
+      fontFamily="Inter Display" fontSize="10" bold="true" />
+    <Style name="chip-mustard"
+      backgroundColor="EFD9A8" color="6B4A0F" borderRadius="12"
+      padding.left="8" padding.right="8" padding.top="2" padding.bottom="2"
+      fontFamily="Inter Display" fontSize="10" bold="true" />
+    <Style name="chip-link"
+      backgroundColor="E2ECF8" color="1B61C9" borderRadius="12"
+      padding.left="8" padding.right="8" padding.top="2" padding.bottom="2"
+      fontFamily="Inter Display" fontSize="10" bold="true" />
+    <Style name="chip-ink"
+      backgroundColor="181D26" color="FFFFFF" borderRadius="12"
+      padding.left="8" padding.right="8" padding.top="2" padding.bottom="2"
+      fontFamily="Inter Display" fontSize="10" bold="true" />
+
+    <!-- Keyboard / token-like inline label. -->
+    <Style name="kbd"
+      backgroundColor="F8FAFC" border.color="DDDDDD" border.width="1"
+      borderRadius="4" padding.left="6" padding.right="6"
+      padding.top="1" padding.bottom="1"
+      fontFamily="JetBrains Mono" fontSize="10" color="181D26" />
+
+    <!-- Legend dots. Apply on a 10x10 VStack. -->
+    <Style name="dot-coral"   backgroundColor="AA2D00" borderRadius="6" w="10" h="10" />
+    <Style name="dot-forest"  backgroundColor="0A2E0E" borderRadius="6" w="10" h="10" />
+    <Style name="dot-peach"   backgroundColor="FCAB79" borderRadius="6" w="10" h="10" />
+    <Style name="dot-mint"    backgroundColor="A8D8C4" borderRadius="6" w="10" h="10" />
+    <Style name="dot-yellow"  backgroundColor="F4D35E" borderRadius="6" w="10" h="10" />
+    <Style name="dot-mustard" backgroundColor="D9A441" borderRadius="6" w="10" h="10" />
+    <Style name="dot-ink"     backgroundColor="181D26" borderRadius="6" w="10" h="10" />
+    <Style name="dot-link"    backgroundColor="1B61C9" borderRadius="6" w="10" h="10" />
+
+    <!-- Shape label baseline. Most shapes carry centred white text. -->
+    <Style name="shape-lbl-on-dark"
+      color="FFFFFF" textAlign="center" textVAlign="middle"
+      fontFamily="Inter Display" fontSize="12" bold="true" />
+    <Style name="shape-lbl-on-light"
+      color="181D26" textAlign="center" textVAlign="middle"
+      fontFamily="Inter Display" fontSize="12" bold="true" />
+
+    <!-- Callout surfaces. -->
+    <Style name="callout-info"
+      backgroundColor="EFF3FB" border.color="C8D6EF" border.width="1"
+      borderRadius="8" padding="12" />
+    <Style name="callout-success"
+      backgroundColor="EAF4EA" border.color="9DC9A1" border.width="1"
+      borderRadius="8" padding="12" />
+    <Style name="callout-warn"
+      backgroundColor="F5E9D4" border.color="D9A441" border.width="1"
+      borderRadius="8" padding="12" />
+    <Style name="callout-danger"
+      backgroundColor="F5E0D6" border.color="AA2D00" border.width="1"
+      borderRadius="8" padding="12" />
+
+    <!-- KPI / metric card. -->
+    <Style name="metric"
+      backgroundColor="FFFFFF" border.color="DDDDDD" border.width="1"
+      borderRadius="10" padding="14" w="max" />
+    <Style name="metric-num"
+      fontFamily="Inter Display" fontSize="28" bold="true" color="181D26"
+      lineHeight="1.1" />
+    <Style name="metric-num-on-dark"
+      fontFamily="Inter Display" fontSize="28" bold="true" color="FFFFFF"
+      lineHeight="1.1" />
+    <Style name="metric-lbl"
+      fontFamily="Inter Display" fontSize="11" bold="true" color="41454D"
+      lineHeight="1.25" />
+    <Style name="metric-lbl-on-dark"
+      fontFamily="Inter Display" fontSize="11" bold="true" color="DDDDDD"
+      lineHeight="1.25" />
+    <Style name="metric-trend-up"
+      fontFamily="Inter Display" color="006400" fontSize="11" bold="true" />
+    <Style name="metric-trend-down"
+      fontFamily="Inter Display" color="AA2D00" fontSize="11" bold="true" />
+
+    <!-- Numbered step disc (used by step template). -->
+    <Style name="step-disc"
+      backgroundColor="181D26" borderRadius="999"
+      w="24" h="24" alignItems="center" justifyContent="center" />
+    <Style name="step-disc-num"
+      color="FFFFFF" fontFamily="Inter Display" fontSize="12" bold="true"
+      textAlign="center" />
+
+    <!-- Avatar disc (used by testimonial recipe). -->
+    <Style name="avatar"
+      backgroundColor="DDDDDD" borderRadius="999" w="36" h="36"
+      alignItems="center" justifyContent="center" />
+    <Style name="avatar-lbl"
+      color="181D26" fontFamily="Inter Display" fontSize="13" bold="true"
+      textAlign="center" />
+  </Styles>
+</Fragment>

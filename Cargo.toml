@@ -1,0 +1,155 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/slideglance-utils",
+    "crates/slideglance-color",
+    "crates/slideglance-model",
+    "crates/slideglance-parser",
+    "crates/slideglance-emf",
+    "crates/slideglance-font",
+    "crates/slideglance-renderer",
+    "crates/slideglance-png",
+    "crates/slideglance",
+    "crates/slideglance-wasm",
+    "crates/slideglance-measure-wasm",
+    "apps/desktop-viewer/src-tauri",
+]
+# `testing/vrt/snapshot` is a standalone package — kept out of the main
+# workspace so `cargo test --workspace` doesn't materialize the entire
+# snapshot tree on every run. Invoke explicitly:
+#   cargo test --manifest-path testing/vrt/snapshot/Cargo.toml
+exclude = [
+    "testing/vrt/snapshot",
+]
+
+[workspace.package]
+version = "0.1.3"
+edition = "2021"
+# Highest MSRV required by direct dependencies as of this writing:
+#   zip 8.6.0 → 1.88, image 0.25.10 → 1.88, resvg 0.47.0 → 1.87,
+#   tauri 2.11 → 1.77. Pinning to 1.88 keeps the declaration honest.
+rust-version = "1.88"
+license = "MIT"
+repository = "https://github.com/SlideGlance/slideglance"
+# Copyright holder: SimpleCORE Inc.  Lead developer: Dmitry Yarabaev.
+# The `authors` field is conventionally used for individual attribution
+# in Rust crates; the corporate copyright assignment lives in the
+# LICENSE files at the workspace root and the publishable crates.
+authors = ["Dmitry Yarabaev"]
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+# `missing_docs` is enforced *per crate* via `#![deny(missing_docs)]`
+# at the top of each library `lib.rs` — every published crate already
+# carries it. The workspace-level lint also fires on integration test
+# files (which have no public API to document), so we keep it off the
+# workspace surface to avoid drowning real failures.
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+# OOXML coordinate values fit comfortably in f64 mantissa (max ~10^8 EMU);
+# precision-loss casts in unit conversions are intentional.
+cast_precision_loss = "allow"
+cast_possible_truncation = "allow"
+cast_sign_loss = "allow"
+# Tests assert exact f64 equalities for IEEE-754-deterministic conversions;
+# we use epsilon comparisons where rounding is involved.
+float_cmp = "allow"
+# Pedantic doc-style + similar-name lints fire heavily on a domain
+# port from TypeScript: many module docs use prose lists that
+# rust-1.95's `doc_lazy_continuation` flags, and OOXML structures
+# legitimately bind several near-identical names (`run`, `runs`,
+# `run_props`). Allowed because the warning's noise far exceeds its
+# signal in this codebase.
+doc_lazy_continuation = "allow"
+doc_markdown = "allow"
+similar_names = "allow"
+match_same_arms = "allow"
+missing_fields_in_debug = "allow"
+items_after_statements = "allow"
+manual_let_else = "allow"
+needless_range_loop = "allow"
+
+[workspace.dependencies]
+# Internal crates. The `version = "X.Y.Z"` pins below are literal: Cargo
+# does not allow `version.workspace = true` inside a
+# `[workspace.dependencies]` entry, so they are NOT kept in sync by Cargo
+# inheritance. Instead `scripts/sync-versions.mjs` rewrites them from the
+# single source of truth — the root `package.json` `version` — on every
+# `pnpm prebuild`, and `pnpm version:check` (release CI) fails on drift.
+# Path declared alongside so a fresh checkout doesn't try to fetch from
+# crates.io before the very first publish.
+slideglance-utils = { path = "crates/slideglance-utils", version = "0.1.3" }
+slideglance-color = { path = "crates/slideglance-color", version = "0.1.3" }
+slideglance-model = { path = "crates/slideglance-model", version = "0.1.3" }
+slideglance-parser = { path = "crates/slideglance-parser", version = "0.1.3" }
+slideglance-emf = { path = "crates/slideglance-emf", version = "0.1.3" }
+slideglance-font = { path = "crates/slideglance-font", version = "0.1.3" }
+slideglance-renderer = { path = "crates/slideglance-renderer", version = "0.1.3" }
+slideglance-png = { path = "crates/slideglance-png", version = "0.1.3" }
+slideglance = { path = "crates/slideglance", version = "0.1.3" }
+
+# ZIP / XML
+zip = { version = "8", default-features = false, features = ["deflate"] }
+quick-xml = { version = "0.37", features = ["serialize"] }
+regex = { version = "1", default-features = false, features = ["std", "unicode-perl"] }
+base64 = { version = "0.22", default-features = false, features = ["std"] }
+
+# Imaging — `image` for EMF / WMF DIB → PNG, resvg for SVG-to-raster.
+image = { version = "0.25", default-features = false, features = ["bmp", "png", "jpeg", "gif"] }
+# resvg pulls in usvg + tiny-skia; we explicitly disable system-fonts /
+# memmap-fonts so font lookup is deterministic across native and WASM.
+resvg = { version = "0.47", default-features = false, features = ["text", "raster-images"] }
+usvg = { version = "0.47", default-features = false, features = ["text"] }
+tiny-skia = "0.12"
+
+# Font parsing / shaping
+ttf-parser = { version = "0.25", default-features = false, features = ["std", "opentype-layout", "apple-layout", "variable-fonts"] }
+fontdb = { version = "0.23", default-features = false, features = ["fs"] }
+font-kit = { version = "0.14", default-features = false, features = ["source"] }
+unicode-normalization = "0.1"
+
+# Font subsetting + WOFF2 compression (replaces subsetter + ttf2woff2)
+# fontcull = HarfBuzz-lineage klippa subsetter; default features include woff2 via woofwoof.
+fontcull = { version = "2.0", default-features = false, features = [] }
+# Same dep with woff2 feature for optional WOFF2 output.
+# xxHash3-based deduplication cache for identical font blobs.
+xxhash-rust = { version = "0.8", features = ["xxh3"] }
+
+# WASM
+wasm-bindgen = "0.2"
+serde-wasm-bindgen = "0.6"
+js-sys = "0.3"
+web-sys = { version = "0.3", default-features = false, features = ["console"] }
+console_error_panic_hook = "0.1"
+serde_bytes = "0.11"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }
+thiserror = { version = "2" }
+
+# Tauri (desktop viewer only)
+tauri = { version = "2", default-features = true, features = ["devtools"] }
+tauri-build = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tokio = { version = "1", features = ["sync"] }
+parking_lot = "0.12"
+
+# Test utilities
+tempfile = "3"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
+
+[profile.release.package."*"]
+opt-level = "z"

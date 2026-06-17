@@ -1,0 +1,35 @@
+<Fragment>
+  <!--
+    Workshop / tutorial palette. Friendly, warm. Coral accent for
+    step numbering and inline emphasis; teal for "info" callouts;
+    soft yellow for "note" callouts.
+  -->
+  <Styles>
+    <!-- Surfaces -->
+    <Style name="bg-paper"  backgroundColor="FFFBF5" />
+    <Style name="bg-card"   backgroundColor="FFFFFF" />
+    <Style name="bg-rail"   backgroundColor="F2E8DA" />
+    <Style name="bg-rule"   backgroundColor="E8D8C0" />
+    <Style name="bg-ink"    backgroundColor="2A2118" />
+
+    <!-- Accent surfaces -->
+    <Style name="bg-coral"    backgroundColor="EF6C42" />
+    <Style name="bg-teal"     backgroundColor="C6EBE3" />
+    <Style name="bg-teal-ink" backgroundColor="0F766E" />
+    <Style name="bg-note"     backgroundColor="FEF6CE" />
+    <Style name="bg-note-ink" backgroundColor="854D0E" />
+
+    <!-- Code surface -->
+    <Style name="bg-code"      backgroundColor="2A2118" />
+    <Style name="bg-code-line" backgroundColor="3A2E22" />
+
+    <!-- Type colors -->
+    <Style name="t-ink"     color="2A2118" />
+    <Style name="t-body"    color="463729" />
+    <Style name="t-muted"   color="6E5A45" />
+    <Style name="t-soft"    color="A18B72" />
+    <Style name="t-coral"   color="EF6C42" />
+    <Style name="t-teal"    color="0F766E" />
+    <Style name="t-note"    color="854D0E" />
+  </Styles>
+</Fragment>

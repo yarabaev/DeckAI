@@ -1,0 +1,33 @@
+<Fragment>
+  <!-- Cover slide. Content sits on the cream master canvas to the right
+       of the orange brand stripe (which is painted by the INTRO master).
+       Text colors come from the default workshop styles (dark on cream)
+       — earlier revisions overrode them to cream-on-cream which rendered
+       invisible. -->
+  <Use template="cover">
+    <Slot name="default">
+      <Text class="eyebrow">SLIDEGLANCE · WORKSHOP</Text>
+      <Text class="display-lg" fontSize="60">Builder 101.</Text>
+      <Text class="display-md">From XML to a deck in one morning.</Text>
+
+      <Text class="body-lead" w="640" margin.top="14">A hands-on tutorial in five parts. By the end of this session you will have authored, styled, and built a four-slide deck using the same primitives this very deck was made of.</Text>
+
+      <HStack gap="24" alignItems="center" padding.top="28">
+        <VStack gap="2">
+          <Text class="caption">DURATION</Text>
+          <Text class="body">3 hours · 5 parts</Text>
+        </VStack>
+        <VStack class="bg-rule" w="1" h="36" />
+        <VStack gap="2">
+          <Text class="caption">PREREQS</Text>
+          <Text class="body">A text editor. Node 22.</Text>
+        </VStack>
+        <VStack class="bg-rule" w="1" h="36" />
+        <VStack gap="2">
+          <Text class="caption">FORMAT</Text>
+          <Text class="body">Lecture · live code · exercise</Text>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

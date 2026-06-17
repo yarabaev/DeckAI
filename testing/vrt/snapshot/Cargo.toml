@@ -1,0 +1,34 @@
+[package]
+name = "slideglance-vrt"
+version = "0.0.0"
+edition = "2021"
+rust-version = "1.88"
+license = "MIT"
+authors = ["Dmitry Yarabaev"]
+publish = false
+description = "Visual regression test harness for slideglance (SVG byte-equivalence per fixture × slide)."
+
+# Standalone — keep VRT artifacts (snapshots, fixtures) out of the
+# main `cargo test --workspace` matrix. Run explicitly with
+# `cargo test --manifest-path testing/vrt/snapshot/Cargo.toml`.
+[workspace]
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+slideglance-font = { path = "../../../crates/slideglance-font" }
+slideglance = { path = "../../../crates/slideglance" }
+
+[[bin]]
+name = "render"
+path = "bin/render.rs"
+
+[dev-dependencies]
+image = "0.25"
+
+[features]
+default = []
+# Set UPDATE_SNAPSHOTS=1 at runtime instead — features kept for
+# explicit "renderer-changed" CI lanes that prefer a build flag.
+update-snapshots = []

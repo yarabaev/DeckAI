@@ -1,0 +1,69 @@
+<Fragment>
+  <!-- Chapter 10 — Hierarchy diagrams (tree / org / pyramid). -->
+  <Use template="section-forest"
+       number="10"
+       kicker="Parent-child structure"
+       title="Diagrams · hierarchies."
+       subtitle="Tree views, org charts, layered pyramids."
+       inside1="Tree · root with three branches + sub-branches"
+       inside2="3-tier pyramid · stacked emphasis layers"
+       inside3="Connectors · short Line elements on a Layer overlay"
+       inside4="Hierarchies always read top-down on portrait pages"
+       epigraph="Hierarchy is the editor's gravity — pick the order, then put weight where it belongs."
+       epigraphAttrib="builder design notes"
+       meta="Composed from VStack · HStack · Layer · Line"
+       leftMeta="3 hierarchy patterns · primitives only" />
+
+  <Use template="page" eyebrow="10 / Diagrams" kicker="Tree"
+       title="Tree — root with three branches"
+       lede="A typical tree view: parent at the top, children below, connectors drawn from a Layer overlay so positions stay pixel-precise.">
+    <Slot name="default">
+      <VStack class="card-canvas" gap="0" padding="20">
+        <Layer w="100%" h="280">
+          <!-- Root -->
+          <VStack x="280" y="0" w="160" h="56" class="bg-dark"
+                  borderRadius="10" alignItems="center" justifyContent="center">
+            <Text fontFamily="Inter Display" fontSize="13" bold="true" color="FFFFFF">@slideglance/builder</Text>
+          </VStack>
+          <!-- Connectors from root down to the three branches. -->
+          <Line x1="360" y1="56" x2="360" y2="100" color="9297A0" lineWidth="1" />
+          <Line x1="120" y1="100" x2="600" y2="100" color="9297A0" lineWidth="1" />
+          <Line x1="120" y1="100" x2="120" y2="140" color="9297A0" lineWidth="1" />
+          <Line x1="360" y1="100" x2="360" y2="140" color="9297A0" lineWidth="1" />
+          <Line x1="600" y1="100" x2="600" y2="140" color="9297A0" lineWidth="1" />
+          <!-- Three branches use the tree-node template. -->
+          <Foreach items='[
+            {"x":"20","surface":"bg-coral","eyebrow":"CONTAINERS","eyebrowColor":"F5E0D6","title":"VStack · HStack","titleColor":"FFFFFF"},
+            {"x":"260","surface":"bg-forest","eyebrow":"CONTENT","eyebrowColor":"DDEEDF","title":"Text · Ul · Image","titleColor":"FFFFFF"},
+            {"x":"500","surface":"bg-mustard","eyebrow":"GRAPHICS","eyebrowColor":"6B4A1A","title":"Shape · Line · Icon","titleColor":"181D26"}
+          ]' as="n">
+            <Use template="tree-node" x="{n.x}" y="140" surface="{n.surface}"
+                 eyebrow="{n.eyebrow}" eyebrowColor="{n.eyebrowColor}"
+                 title="{n.title}" titleColor="{n.titleColor}" />
+          </Foreach>
+          <!-- Sub-branches under containers. -->
+          <Line x1="120" y1="200" x2="120" y2="220" color="DDDDDD" lineWidth="1" />
+          <Line x1="80" y1="220" x2="160" y2="220" color="DDDDDD" lineWidth="1" />
+          <Line x1="80" y1="220" x2="80" y2="240" color="DDDDDD" lineWidth="1" />
+          <Line x1="160" y1="220" x2="160" y2="240" color="DDDDDD" lineWidth="1" />
+          <Text x="40"  y="244" w="60" fontFamily="Inter Display" fontSize="11" bold="true" color="41454D">VStack</Text>
+          <Text x="120" y="244" w="60" fontFamily="Inter Display" fontSize="11" bold="true" color="41454D">HStack</Text>
+        </Layer>
+      </VStack>
+
+      <Use template="h2" text="3-tier pyramid" />
+      <VStack class="card-canvas" gap="6" padding="20" alignItems="center">
+        <VStack alignItems="center" gap="4">
+          <Foreach items='[
+            {"surface":"bg-coral","w":"160","label":"Brand voltage","labelColor":"FFFFFF"},
+            {"surface":"bg-mustard","w":"280","label":"Editorial type","labelColor":"181D26"},
+            {"surface":"bg-forest","w":"400","label":"White canvas + whitespace","labelColor":"FFFFFF"}
+          ]' as="t">
+            <Use template="pyramid-tier" surface="{t.surface}" w="{t.w}"
+                 label="{t.label}" labelColor="{t.labelColor}" />
+          </Foreach>
+        </VStack>
+      </VStack>
+    </Slot>
+  </Use>
+</Fragment>

@@ -1,0 +1,133 @@
+<Fragment>
+  <!--
+    Layout primitives. These pair surface + border + radius + padding so a page
+    applies one class instead of repeating the triple. The whole page is laid
+    out at A4 portrait (793 x 1122) without an outer margin so dense grids can
+    bleed to the edges; chrome (top nav, footer) and content frames hold their
+    own internal padding.
+  -->
+  <Styles>
+    <!-- Page frame: full-bleed canvas. Internal chrome adds padding. -->
+    <Style
+      name="page"
+      w="793"
+      h="1122"
+      backgroundColor="FFFFFF"
+    />
+
+    <!-- Editorial content gutter (used inside `page`). -->
+    <Style
+      name="gutter"
+      padding.left="40"
+      padding.right="40"
+      padding.top="20"
+      padding.bottom="20"
+    />
+
+    <!-- Top nav bar -->
+    <Style
+      name="nav-bar"
+      backgroundColor="FFFFFF"
+      padding.left="40"
+      padding.right="40"
+      padding.top="14"
+      padding.bottom="14"
+      border.color="DDDDDD"
+      border.width="1"
+    />
+
+    <!-- Footer rail -->
+    <Style
+      name="footer-bar"
+      backgroundColor="FFFFFF"
+      padding.left="40"
+      padding.right="40"
+      padding.top="12"
+      padding.bottom="12"
+      border.color="DDDDDD"
+      border.width="1"
+    />
+
+    <!-- Card surfaces -->
+    <Style name="card-canvas"
+      backgroundColor="FFFFFF" border.color="DDDDDD" border.width="1"
+      borderRadius="5" padding="16" />
+    <Style name="card-soft"
+      backgroundColor="F8FAFC" border.color="DDDDDD" border.width="1"
+      borderRadius="5" padding="16" />
+    <Style name="card-coral"
+      backgroundColor="AA2D00" borderRadius="5" padding="24" />
+    <Style name="card-forest"
+      backgroundColor="0A2E0E" borderRadius="5" padding="24" />
+    <Style name="card-dark"
+      backgroundColor="181D26" borderRadius="5" padding="24" />
+    <Style name="card-cream"
+      backgroundColor="F5E9D4" borderRadius="5" padding="20" />
+    <Style name="card-peach"
+      backgroundColor="FCAB79" borderRadius="5" padding="16" />
+    <Style name="card-mint"
+      backgroundColor="A8D8C4" borderRadius="5" padding="16" />
+    <Style name="card-yellow"
+      backgroundColor="F4D35E" borderRadius="5" padding="16" />
+    <Style name="card-mustard"
+      backgroundColor="D9A441" borderRadius="5" padding="16" />
+
+    <!-- Inline panel (no border, soft surface). -->
+    <Style name="panel"
+      backgroundColor="F8FAFC" borderRadius="6" padding="12" />
+
+    <!-- Code-block surfaces (apply on the wrapper VStack). -->
+    <Style name="code-light"
+      backgroundColor="F8FAFC" border.color="DDDDDD" border.width="1"
+      borderRadius="8" padding="14" />
+    <Style name="code-dark"
+      backgroundColor="181D26" borderRadius="8" padding="14" />
+
+    <!-- Divider hairlines -->
+    <Style name="hairline" backgroundColor="DDDDDD" h="1" w="100%" />
+    <Style name="hairline-soft" backgroundColor="EAEBED" h="1" w="100%" />
+    <Style name="hairline-on-dark" backgroundColor="333840" h="1" w="100%" />
+    <Style name="vrule" backgroundColor="DDDDDD" w="1" h="100%" />
+
+    <!-- Inline pill — used as a static caption marker on the top nav and
+         signature-card meta strips. NOT a button: there is no
+         interactive intent here, just a tinted caption surface. -->
+    <Style name="pill"
+      backgroundColor="F8FAFC" border.color="DDDDDD" border.width="1"
+      borderRadius="20" padding.top="2" padding.bottom="2"
+      padding.left="10" padding.right="10"
+      fontFamily="Inter Display" fontSize="11" bold="true" color="181D26" />
+
+    <Style name="pill-on-dark"
+      backgroundColor="181D26" borderRadius="20"
+      padding.top="2" padding.bottom="2"
+      padding.left="10" padding.right="10"
+      fontFamily="Inter Display" fontSize="11" bold="true" color="FFFFFF" />
+
+    <!-- Print edition: no button styles. The reference deck never carries
+         interactive elements; buttons / pricing-pills / link-CTAs were
+         removed at edition 2026.05 to align with print-only output. -->
+
+
+    <!-- Reusable height markers used by diagram pages so every sample fits in
+         the same vertical envelope. -->
+    <Style name="frame-sm" h="180" />
+    <Style name="frame-md" h="240" />
+    <Style name="frame-lg" h="320" />
+
+    <!-- Thick deck close-rule that sits under page decks. -->
+    <Style name="rule-thick" backgroundColor="181D26" h="2" />
+
+    <!-- "Fill remaining space" idioms. Use these on any child that should
+         absorb the leftover main-axis space inside its parent — no need to
+         compute pixel heights / widths. Always reach for one of these
+         instead of a hard-coded `h` / `w` when the goal is "expand". -->
+    <Style name="fill"   h="max" w="100%" />
+    <Style name="fill-y" h="max" />
+    <Style name="fill-x" w="max" />
+
+    <!-- Reading-comfort upper bound. `class="prose"` on a Text caps the
+         line length and lets the column otherwise flex to its parent. -->
+    <Style name="prose" maxW="660" w="max" />
+  </Styles>
+</Fragment>

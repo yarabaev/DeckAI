@@ -1,0 +1,27 @@
+[package]
+name = "slideglance-renderer"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "PPTX model -> SVG renderer for slideglance (text-mode and path-mode, deterministic)"
+readme = "../../README.md"
+keywords = ["pptx", "powerpoint", "svg", "renderer", "ooxml"]
+categories = ["graphics", "rendering"]
+
+[lints]
+workspace = true
+
+[dependencies]
+slideglance-utils.workspace = true
+slideglance-color.workspace = true
+slideglance-model.workspace = true
+slideglance-emf.workspace = true
+slideglance-font.workspace = true
+base64.workspace = true
+
+[features]
+default = []
+serde = ["slideglance-model/serde", "slideglance-utils/serde", "slideglance-color/serde"]

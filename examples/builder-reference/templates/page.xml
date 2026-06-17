@@ -1,0 +1,73 @@
+<Fragment>
+  <!--
+    Body-page wrapper. Magazine-style editorial proportions:
+
+      • running head (master) at y 14–32
+      • per-page deck strip:
+          - eyebrow + chapter dingbat + kicker
+          - display title (display-md)
+          - standfirst (italic body-muted)
+          - thicker hairline below to close the deck
+      • body content fills the rest
+      • running foot (master) at y 1080+
+
+    Geometry: 793 x 1122 page. Master reserves 0..40 (top) and 1080..
+    1122 (bottom). Body content uses padding.left/right=32 and starts
+    at padding.top=56 (so the deck has breathing room below the top
+    hairline).
+  -->
+  <Templates>
+    <Template name="page">
+      <Slide master="BODY">
+        <VStack class="page"
+          padding.left="32" padding.right="32"
+          padding.top="56"  padding.bottom="56"
+          gap="14"
+        >
+          <!-- Per-page deck strip. Eyebrow + bullet hug the left margin;
+               kicker is right-aligned across the column. -->
+          <VStack gap="6">
+            <HStack alignItems="center" justifyContent="spaceBetween" w="100%">
+              <HStack gap="8" alignItems="center">
+                <VStack class="bg-coral" w="6" h="6" borderRadius="3"
+                        margin.top="2" />
+                <Text class="caption" color="AA2D00">{eyebrow}</Text>
+              </HStack>
+              <Text class="caption" color="41454D" textAlign="right">{kicker}</Text>
+            </HStack>
+            <Text class="display-md">{title}</Text>
+            <Text class="prose" fontFamily="Inter Display" fontSize="14"
+                  italic="true" color="41454D" lineHeight="1.4">{lede}</Text>
+          </VStack>
+
+          <!-- Thicker close-rule under the deck signals "body begins
+               here" the way a magazine deck-rule works. -->
+          <Use template="deck-close" />
+
+          <!-- Body fills the remainder of the page. Larger gap separates
+               major page sections (col2 blocks, code rows, summary bands)
+               so each one reads as its own block, not a dense stack. -->
+          <VStack class="fill" gap="20">
+            <Slot name="default" />
+          </VStack>
+        </VStack>
+      </Slide>
+    </Template>
+
+    <!-- Compact page (used when the page is mostly visual / Layer-based
+         and the deck is unnecessary). -->
+    <Template name="page-bare">
+      <Slide master="BODY">
+        <VStack class="page"
+          padding.left="32" padding.right="32"
+          padding.top="56"  padding.bottom="56"
+          gap="14"
+        >
+          <VStack class="fill" gap="20">
+            <Slot name="default" />
+          </VStack>
+        </VStack>
+      </Slide>
+    </Template>
+  </Templates>
+</Fragment>

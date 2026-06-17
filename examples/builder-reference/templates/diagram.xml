@@ -1,0 +1,296 @@
+<Fragment>
+  <!--
+    Reusable diagram / recipe templates. Every template is parameterised so
+    surface colour and content stay in the page, not the template body.
+
+      <Use template="frame" h="320">         one consistent card wrapper.
+      <Use template="metric" num="98%" lbl="Uptime" trend="+0.4 pp" />
+      <Use template="metric-dark" num="…" lbl="…" />
+      <Use template="callout" cls="callout-info" title="Note" body="…" />
+      <Use template="chip"    cls="chip-coral" text="beta" />
+      <Use template="swatch"  color="AA2D00" name="signature-coral" />
+      <Use template="swatch-row" />
+      <Use template="legend"  cls="dot-coral" text="Series A" />
+      <Use template="step"    n="1" title="Plan" desc="Write the spec." />
+      <Use template="kv-card" k="…" v="…" />
+      <Use template="signature-card" surface="bg-coral" eyebrowColor="…" titleColor="…" bodyColor="…" eyebrow="…" title="…" body="…" meta="…" />
+      <Use template="summary-band" title="…" body="…" meta="…" />
+      <Use template="pricing-card" plan="…" price="…" tagline="…" footer="…" />
+      <Use template="pricing-card-featured" plan="…" price="…" tagline="…" footer="…" />
+      <Use template="testimonial" quote="…" initials="…" author="…" role="…" />
+  -->
+  <Templates>
+
+    <!-- Generic frame card. The {h} parameter lets the host page request
+         a specific frame height so every diagram on the page lines up. -->
+    <Template name="frame">
+      <VStack class="card-canvas" h="{h}" gap="0">
+        <Slot name="default" />
+      </VStack>
+    </Template>
+
+    <!-- Soft frame (used for sub-samples that should not look elevated). -->
+    <Template name="frame-soft">
+      <VStack class="card-soft" h="{h}" gap="0">
+        <Slot name="default" />
+      </VStack>
+    </Template>
+
+    <!-- KPI / metric card (light). -->
+    <Template name="metric">
+      <VStack class="metric" gap="2">
+        <Text class="metric-lbl">{lbl}</Text>
+        <Text class="metric-num">{num}</Text>
+        <Text class="metric-trend-up">{trend}</Text>
+      </VStack>
+    </Template>
+
+    <!-- KPI on a tinted surface. {cls} = card-coral / card-forest / card-dark / card-cream / card-mustard / etc. -->
+    <Template name="metric-card">
+      <VStack class="{cls}" gap="2" w="max">
+        <Text fontFamily="Inter Display" fontSize="11" bold="true" color="{lblColor}">{lbl}</Text>
+        <Text fontFamily="Inter Display" fontSize="32" bold="true" color="{numColor}" lineHeight="1.05">{num}</Text>
+        <Text fontFamily="Inter Display" fontSize="11" bold="true" color="{trendColor}">{trend}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Coloured callout surface. {cls} = callout-info / -success / -warn / -danger.
+         Use the `callout-eq` variant when multiple callouts share an
+         HStack and you want the body baselines aligned. -->
+    <Template name="callout">
+      <VStack class="{cls}" gap="4">
+        <HStack gap="8" alignItems="center">
+          <Text class="caption" color="{titleColor}" w="74" textVAlign="middle" lineHeight="1.0">{kind}</Text>
+          <Text class="title-sm" w="max" textVAlign="middle" lineHeight="1.0">{title}</Text>
+        </HStack>
+        <Text class="body">{body}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Equalize-aware callout. Same as `callout` but reserves an
+         explicit body height. Pass `bodyH="auto"` when grouped in an
+         HStack so the build preprocessor matches the worst-case body
+         across siblings. -->
+    <Template name="callout-eq">
+      <VStack class="{cls}" gap="4">
+        <HStack gap="8" alignItems="center">
+          <Text class="caption" color="{titleColor}" w="74" textVAlign="middle" lineHeight="1.0">{kind}</Text>
+          <Text class="title-sm" w="max" textVAlign="middle" lineHeight="1.0">{title}</Text>
+        </HStack>
+        <Text class="body" h="{bodyH}">{body}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Inline chip / tag. {cls} = chip-coral, chip-forest, chip-mint, … -->
+    <Template name="chip">
+      <Text class="{cls}">{text}</Text>
+    </Template>
+
+    <!-- Color swatch (full-bleed signature surface block + name + hex). -->
+    <Template name="swatch">
+      <VStack gap="6" w="160">
+        <VStack backgroundColor="{color}" borderRadius="8" h="80"
+                border.color="DDDDDD" border.width="1" />
+        <VStack gap="2">
+          <Text class="label">{name}</Text>
+          <Text class="kbd">#{color}</Text>
+        </VStack>
+      </VStack>
+    </Template>
+
+    <!-- Single-row legend item: dot + label. -->
+    <Template name="legend">
+      <HStack gap="8" alignItems="center">
+        <VStack class="{cls}" />
+        <Text class="body">{text}</Text>
+      </HStack>
+    </Template>
+
+    <!-- Numbered step card (1 / 2 / 3 layout). -->
+    <Template name="step">
+      <VStack class="card-canvas" gap="8" w="max">
+        <HStack gap="10" alignItems="center">
+          <VStack class="step-disc">
+            <Text class="step-disc-num">{n}</Text>
+          </VStack>
+          <Text class="title-sm">{title}</Text>
+        </HStack>
+        <Text class="body-muted">{desc}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Equalize-aware step. Pass `descH="auto"` when grouped in an
+         HStack so the desc baselines align across sibling steps. -->
+    <Template name="step-eq">
+      <VStack class="card-canvas" gap="6" w="max" padding="12">
+        <HStack gap="8" alignItems="center" h="30">
+          <VStack class="step-disc">
+            <Text class="step-disc-num">{n}</Text>
+          </VStack>
+          <Text fontFamily="Inter Display" fontSize="12" bold="true" color="181D26"
+                lineHeight="1.2" w="max" h="30" textVAlign="middle">{title}</Text>
+        </HStack>
+        <Text class="body-muted" h="{descH}">{desc}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Key-value reference card (used inside attribute reference grids). -->
+    <Template name="kv-card">
+      <VStack class="card-canvas" gap="4" w="max">
+        <Text class="caption" color="AA2D00">{k}</Text>
+        <Text class="body-ink">{v}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Signature surface card (the brand's voltage moment).
+         Print-only: no CTA. Use the {meta} parameter to surface a final
+         caption (chapter reference, deck slug) in lieu of a button. -->
+    <Template name="signature-card">
+      <VStack class="{surface}" gap="14" w="100%" padding="28">
+        <Text fontFamily="Inter Display" fontSize="11" bold="true"
+              color="{eyebrowColor}">{eyebrow}</Text>
+        <Text fontFamily="Inter Display" fontSize="28" bold="false"
+              color="{titleColor}" lineHeight="1.15">{title}</Text>
+        <Text fontFamily="Inter Display" fontSize="13" bold="false"
+              color="{bodyColor}" lineHeight="1.4">{body}</Text>
+        <Text fontFamily="Inter Display" fontSize="11" bold="true"
+              color="{eyebrowColor}">{meta}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Summary band (footer-adjacent, light grey). Print-only — no
+         button. The right-hand slot carries a static caption (deck slug,
+         chapter index, edition) in place of a CTA. -->
+    <Template name="summary-band">
+      <HStack class="bg-strong" borderRadius="12" padding="24"
+              alignItems="center" justifyContent="spaceBetween">
+        <VStack gap="4" w="60%">
+          <Text fontFamily="Inter Display" fontSize="22" bold="false"
+                color="181D26" lineHeight="1.2">{title}</Text>
+          <Text class="body-muted">{body}</Text>
+        </VStack>
+        <Text class="caption" color="41454D" textAlign="right" w="34%">{meta}</Text>
+      </HStack>
+    </Template>
+
+    <!-- Pricing tier card (standard). Print-only — no CTA. The
+         tier-status caption sits in place of the action button so the
+         card still closes with a strong visual anchor.
+         Pass `taglineH="auto"` to align the tagline-to-features
+         transition across sibling pricing cards. -->
+    <Template name="pricing-card">
+      <VStack class="card-canvas" w="max" gap="14">
+        <Text fontFamily="Inter Display" fontSize="20" bold="true" color="1D1F25">{plan}</Text>
+        <Text fontFamily="Inter Display" fontSize="44" bold="true" color="1D1F25" lineHeight="1.05" h="48">{price}</Text>
+        <Text class="body-muted" w="max" h="{taglineH}">{tagline}</Text>
+        <VStack class="hairline" />
+        <VStack gap="6">
+          <Slot name="features" />
+        </VStack>
+        <Text class="caption" color="41454D" h="14">{footer}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Pricing tier card (featured surface tone). Print-only — no CTA. -->
+    <Template name="pricing-card-featured">
+      <VStack class="card-soft" w="max" gap="14">
+        <HStack gap="8" alignItems="center" justifyContent="spaceBetween">
+          <Text fontFamily="Inter Display" fontSize="20" bold="true" color="1D1F25"
+                textVAlign="middle" lineHeight="1.0">{plan}</Text>
+          <Text class="chip-ink" textVAlign="middle" lineHeight="1.0">FEATURED</Text>
+        </HStack>
+        <Text fontFamily="Inter Display" fontSize="44" bold="true" color="1D1F25" lineHeight="1.05" h="48">{price}</Text>
+        <Text class="body-muted" w="max" h="{taglineH}">{tagline}</Text>
+        <VStack class="hairline" />
+        <VStack gap="6">
+          <Slot name="features" />
+        </VStack>
+        <Text class="caption" color="AA2D00" h="14">{footer}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Pricing feature checklist row. -->
+    <Template name="pricing-feature">
+      <HStack gap="8" alignItems="center" w="100%">
+        <Text fontFamily="Inter Display" fontSize="12" bold="true" color="006400">✓</Text>
+        <Text class="body" w="max">{text}</Text>
+      </HStack>
+    </Template>
+
+    <!-- ============================================================
+         Stack-based diagram primitives. Use these instead of writing a
+         Layer with x/y children whenever the diagram is fundamentally a
+         grid / stack of boxes. The chapter then composes by stacking
+         <Use> calls — no pixel positions to compute.
+         ============================================================ -->
+
+    <!-- Single quadrant of a 2x2 matrix. Drop four of these inside two
+         consecutive `<HStack>`s and you have a complete impact-vs-effort
+         (or BCG-style) matrix. The card stretches to the cell width
+         supplied by its parent HStack — no `w="280"` literals.
+         Surface palette controls eyebrow/title/body colours via
+         `eyebrowColor` / `titleColor` / `bodyColor`. -->
+    <Template name="quadrant-card">
+      <VStack class="{surface}" gap="4" padding="14" h="max" w="100%">
+        <Text class="caption" color="{eyebrowColor}">{eyebrow}</Text>
+        <Text fontFamily="Inter Display" fontSize="14" bold="true"
+              color="{titleColor}" lineHeight="1.3">{title}</Text>
+        <Text fontFamily="Inter Display" fontSize="13"
+              color="{bodyColor}" lineHeight="1.4">{body}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Single tier of a centered pyramid. Width grows per tier; the
+         parent VStack should set `alignItems="center"` so each row
+         stays centred regardless of width. -->
+    <Template name="pyramid-tier">
+      <VStack class="{surface}" w="{w}" borderRadius="6"
+              alignItems="center" justifyContent="center" padding="10">
+        <Text fontFamily="Inter Display" fontSize="13" bold="true"
+              color="{labelColor}" textAlign="center">{label}</Text>
+      </VStack>
+    </Template>
+
+    <!-- A single tree-node box. Stays inside a Layer so the tree can
+         keep its absolute connector geometry, but the cell visuals are
+         template-driven so the colour / eyebrow / body never repeat
+         in the chapter source. -->
+    <Template name="tree-node">
+      <VStack x="{x}" y="{y}" w="200" h="68" class="{surface}"
+              borderRadius="10" padding="10" gap="3"
+              alignItems="center" justifyContent="center">
+        <Text fontFamily="Inter Display" fontSize="11" bold="true"
+              color="{eyebrowColor}" textAlign="center" w="180">{eyebrow}</Text>
+        <Text fontFamily="Inter Display" fontSize="13" bold="true"
+              color="{titleColor}" textAlign="center" w="180">{title}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Single colour-swatch tile (square colour block + name + hex). -->
+    <Template name="palette-swatch">
+      <VStack gap="6" w="80">
+        <VStack backgroundColor="{color}" borderRadius="8" h="56"
+                border.color="DDDDDD" border.width="1" />
+        <Text class="caption" color="181D26">{name}</Text>
+        <Text class="kbd" textAlign="center" padding.top="5" padding.bottom="5">#{color}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Quote / testimonial block. -->
+    <Template name="testimonial">
+      <VStack class="card-canvas" gap="14" w="max">
+        <Text fontFamily="Inter Display" fontSize="22" bold="false"
+              color="181D26" lineHeight="1.3">"{quote}"</Text>
+        <HStack gap="10" alignItems="center">
+          <VStack class="avatar">
+            <Text class="avatar-lbl">{initials}</Text>
+          </VStack>
+          <VStack gap="2">
+            <Text class="label">{author}</Text>
+            <Text class="caption" color="41454D">{role}</Text>
+          </VStack>
+        </HStack>
+      </VStack>
+    </Template>
+  </Templates>
+</Fragment>

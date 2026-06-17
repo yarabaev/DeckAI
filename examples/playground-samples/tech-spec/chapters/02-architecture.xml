@@ -1,0 +1,130 @@
+<Fragment>
+  <!-- ================================================================
+       Architecture — block diagram + interface table.
+       ================================================================ -->
+  <Use template="section"
+       eyebrow="02 · ARCHITECTURE"
+       title="One control plane. Three data-plane shards. Identical contracts."
+       lede="Atlas's control plane owns configuration distribution and identity-token resolution. Each region runs three independent data-plane shards behind a regional Atlas director.">
+    <Slot name="default">
+      <!-- Block diagram (Layer-based absolute positioning).
+           Tightened vertical spacing so the bottom HStack (interfaces
+           table + scale) still has room below in the fill VStack.
+           Nodes carry stable ids so <Connector> can bind the lines to
+           the rect midpoints — PowerPoint reroutes the segments
+           automatically when an editor nudges a box. -->
+      <Layer w="100%" h="180">
+        <!-- Control plane (top center) -->
+        <VStack x="500" y="0" w="220" h="48">
+          <Use template="arch-node-accent" id="control" name="atlas-control" sublabel="config + identity · global" />
+        </VStack>
+
+        <!-- Director per region -->
+        <VStack x="120" y="68" w="160" h="48">
+          <Use template="arch-node" id="dir-us-east" name="director · us-east" sublabel="control client + admission" />
+        </VStack>
+        <VStack x="320" y="68" w="160" h="48">
+          <Use template="arch-node" id="dir-eu-central" name="director · eu-central" sublabel="control client + admission" />
+        </VStack>
+        <VStack x="540" y="68" w="160" h="48">
+          <Use template="arch-node" id="dir-ap-south" name="director · ap-south" sublabel="control client + admission" />
+        </VStack>
+        <VStack x="760" y="68" w="160" h="48">
+          <Use template="arch-node" id="dir-ap-ne" name="director · ap-ne" sublabel="control client + admission" />
+        </VStack>
+        <VStack x="980" y="68" w="160" h="48">
+          <Use template="arch-node" id="dir-us-west" name="director · us-west" sublabel="control client + admission" />
+        </VStack>
+
+        <!-- Edge data planes (per region, abbreviated) -->
+        <VStack x="120" y="136" w="160" h="44">
+          <Use template="arch-node" id="edge-us-east" name="edge · 3 shards" sublabel="ingress + auth + routing" />
+        </VStack>
+        <VStack x="320" y="136" w="160" h="44">
+          <Use template="arch-node" id="edge-eu-central" name="edge · 3 shards" sublabel="ingress + auth + routing" />
+        </VStack>
+        <VStack x="540" y="136" w="160" h="44">
+          <Use template="arch-node" id="edge-ap-south" name="edge · 3 shards" sublabel="ingress + auth + routing" />
+        </VStack>
+        <VStack x="760" y="136" w="160" h="44">
+          <Use template="arch-node" id="edge-ap-ne" name="edge · 3 shards" sublabel="ingress + auth + routing" />
+        </VStack>
+        <VStack x="980" y="136" w="160" h="44">
+          <Use template="arch-node" id="edge-us-west" name="edge · 3 shards" sublabel="ingress + auth + routing" />
+        </VStack>
+
+        <!-- Control plane fans out to every regional director. The straight
+             kind keeps the original diagonal look; explicit fromSide /
+             toSide pins the anchors to the bottom / top midpoints so the
+             auto-side heuristic does not pick the dominant horizontal
+             axis for the far-left / far-right directors. -->
+        <Connector from="control" to="dir-us-east"    kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+        <Connector from="control" to="dir-eu-central" kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+        <Connector from="control" to="dir-ap-south"   kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+        <Connector from="control" to="dir-ap-ne"      kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+        <Connector from="control" to="dir-us-west"    kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+
+        <!-- Each director drops to its regional edge plane (vertical run). -->
+        <Connector from="dir-us-east"    to="edge-us-east"    kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+        <Connector from="dir-eu-central" to="edge-eu-central" kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+        <Connector from="dir-ap-south"   to="edge-ap-south"   kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+        <Connector from="dir-ap-ne"      to="edge-ap-ne"      kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+        <Connector from="dir-us-west"    to="edge-us-west"    kind="straight" fromSide="bottom" toSide="top" color="9CA3AF" lineWidth="1" />
+      </Layer>
+
+      <VStack class="hairline" />
+
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="6" w="58%">
+          <Text class="title">Interfaces.</Text>
+          <Table w="100%" cellBorder.color="D1D5DB" cellBorder.width="0.5" cellMargin="4" defaultRowHeight="20">
+            <Col w="22%" />
+            <Col w="22%" />
+            <Col w="22%" />
+            <Col w="34%" />
+            <Tr>
+              <Td text="Interface"  backgroundColor="E5E7EB" fontSize="10" bold="true" color="111827" />
+              <Td text="From → To"  backgroundColor="E5E7EB" fontSize="10" bold="true" color="111827" />
+              <Td text="Protocol"   backgroundColor="E5E7EB" fontSize="10" bold="true" color="111827" />
+              <Td text="Notes"      backgroundColor="E5E7EB" fontSize="10" bold="true" color="111827" />
+            </Tr>
+            <Tr>
+              <Td text="config-stream" fontSize="10" />
+              <Td text="control → director" fontSize="10" />
+              <Td text="gRPC server-stream" fontSize="10" />
+              <Td text="snapshots + deltas, mTLS, &lt; 200ms p99" fontSize="10" />
+            </Tr>
+            <Tr>
+              <Td text="identity-resolve" fontSize="10" />
+              <Td text="director → control" fontSize="10" />
+              <Td text="gRPC unary" fontSize="10" />
+              <Td text="cached per-region, &lt; 5ms p50" fontSize="10" />
+            </Tr>
+            <Tr>
+              <Td text="admission-push" fontSize="10" />
+              <Td text="director → edge" fontSize="10" />
+              <Td text="HTTP/2 push" fontSize="10" />
+              <Td text="batched, eventually-consistent, &lt; 1s p99" fontSize="10" />
+            </Tr>
+            <Tr>
+              <Td text="customer-ingress" fontSize="10" />
+              <Td text="user → edge" fontSize="10" />
+              <Td text="HTTPS / HTTP/3" fontSize="10" />
+              <Td text="public surface, terminating auth here" fontSize="10" />
+            </Tr>
+          </Table>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="8" w="max">
+          <Text class="title">Data plane scale.</Text>
+          <Use template="kv-row" k="EDGE INSTANCES" v="15 (3 × 5 regions), each 4 vCPU / 16 GB" />
+          <Use template="kv-row" k="DIRECTOR INSTANCES" v="10 (2 × 5 regions, active/standby)" />
+          <Use template="kv-row" k="CONTROL PLANE" v="3 globally, leader-followers via Raft" />
+          <Use template="kv-row" k="EXPECTED PEAK QPS" v="240k (vs. 90k today across 5 LBs)" />
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

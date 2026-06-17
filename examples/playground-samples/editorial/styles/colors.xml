@@ -1,0 +1,24 @@
+<Fragment>
+  <!--
+    Editorial palette. Cream paper, warm ink, deep red accent for
+    section markers and pull-quote rules. Restrained.
+  -->
+  <Styles>
+    <!-- Surfaces -->
+    <Style name="bg-paper"   backgroundColor="FAF6EE" />
+    <Style name="bg-card"    backgroundColor="F0EADC" />
+    <Style name="bg-figure"  backgroundColor="E4DCC6" />
+    <Style name="bg-rule"    backgroundColor="C7B998" />
+    <Style name="bg-ink"     backgroundColor="1F1B16" />
+    <Style name="bg-accent"  backgroundColor="9A2A1F" />
+    <Style name="bg-mustard" backgroundColor="C28A1C" />
+
+    <!-- Type colors -->
+    <Style name="t-ink"     color="1F1B16" />
+    <Style name="t-body"    color="3A332B" />
+    <Style name="t-muted"   color="6B604F" />
+    <Style name="t-soft"    color="8B7E69" />
+    <Style name="t-accent"  color="9A2A1F" />
+    <Style name="t-mustard" color="C28A1C" />
+  </Styles>
+</Fragment>

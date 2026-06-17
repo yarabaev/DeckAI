@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Builder XML Reference</title>
+<link rel="stylesheet" href="./styles.css" />
+<script>(()=>{const s=localStorage.getItem("sg-theme");if(s==="light"||s==="dark")document.documentElement.setAttribute("data-theme",s)})()</script>
+</head>
+<body class="ref-page ref-index">
+<header class="ref-header">
+  <a class="brand" href="../">SlideGlance Reference</a>
+  <a class="ref-back" href="../../../build/">← Back to Build</a>
+</header>
+<main class="ref-content">
+  <h1>Builder XML Reference</h1>
+  <p class="ref-lede">
+    <code>urn:slideglance:builder:v1</code> ·
+    17 nodes · 13 meta ·
+    v0.1.3
+  </p>
+  <label class="ref-filter">
+    <input id="ref-q" type="search"
+      placeholder="Filter — name, attribute, description..."
+      autocomplete="off" spellcheck="false" />
+    <kbd aria-hidden="true">/</kbd>
+  </label>
+  <p class="ref-filter-count" data-count>30 of 30 elements</p>
+
+  <h2>Visual nodes</h2>
+  <div class="ref-grid"><a class="ref-card" href="./text/" data-tag="Text" data-haystack="text renders a single piece of styled text. supports inline styled runs via &lt;b&gt;, &lt;i&gt;, &lt;u&gt;, &lt;s&gt;, &lt;mark&gt;, &lt;a&gt;, and &lt;span&gt;. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group text fontsize color textalign bold italic underline strike highlight fontfamily lineheight letterspacing nowrap textvalign">
+  <h3><code>&lt;Text&gt;</code></h3>
+  <p class="ref-card-desc">Renders a single piece of styled text. Supports inline styled runs via &lt;B&gt;, &lt;I&gt;, &lt;U&gt;, &lt;S&gt;, &lt;Mark&gt;, &lt;A&gt;, and &lt;Span&gt;.</p>
+  <p class="ref-card-meta">47 attrs · no children</p>
+</a><a class="ref-card" href="./ul/" data-tag="Ul" data-haystack="ul bulleted list. items can be supplied via the json `items` attribute or via &lt;li&gt; child elements. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group items fontsize color textalign bold italic underline strike highlight fontfamily lineheight letterspacing nowrap textvalign bulletindent">
+  <h3><code>&lt;Ul&gt;</code></h3>
+  <p class="ref-card-desc">Bulleted list. Items can be supplied via the JSON `items` attribute or via &lt;Li&gt; child elements.</p>
+  <p class="ref-card-meta">48 attrs · 1 child types</p>
+</a><a class="ref-card" href="./ol/" data-tag="Ol" data-haystack="ol numbered list. items via json `items` attribute or &lt;li&gt; children. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group items fontsize color textalign bold italic underline strike highlight fontfamily lineheight letterspacing nowrap textvalign numbertype numberstartat bulletindent">
+  <h3><code>&lt;Ol&gt;</code></h3>
+  <p class="ref-card-desc">Numbered list. Items via JSON `items` attribute or &lt;Li&gt; children.</p>
+  <p class="ref-card-meta">50 attrs · 1 child types</p>
+</a><a class="ref-card" href="./image/" data-tag="Image" data-haystack="image embeds an image. `src` accepts http(s):// url, data uri, or relative file path. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group src sizing alttext rotate">
+  <h3><code>&lt;Image&gt;</code></h3>
+  <p class="ref-card-desc">Embeds an image. `src` accepts http(s):// URL, data URI, or relative file path.</p>
+  <p class="ref-card-meta">37 attrs · no children</p>
+</a><a class="ref-card" href="./icon/" data-tag="Icon" data-haystack="icon renders a built-in icon by name. see docs for the icon catalog. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group name size color variant alttext">
+  <h3><code>&lt;Icon&gt;</code></h3>
+  <p class="ref-card-desc">Renders a built-in icon by name. See docs for the icon catalog.</p>
+  <p class="ref-card-meta">38 attrs · no children</p>
+</a><a class="ref-card" href="./svg/" data-tag="Svg" data-haystack="svg embeds inline svg. supply the svg via a &lt;svg&gt; child element. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group color alttext">
+  <h3><code>&lt;Svg&gt;</code></h3>
+  <p class="ref-card-desc">Embeds inline SVG. Supply the SVG via a &lt;svg&gt; child element.</p>
+  <p class="ref-card-meta">35 attrs · 1 child types</p>
+</a><a class="ref-card" href="./table/" data-tag="Table" data-haystack="table tabular data. use &lt;col&gt;/&lt;tr&gt;/&lt;td&gt; child elements or the `columns`/`rows` json attributes. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group columns rows defaultrowheight cellborder cellmargin">
+  <h3><code>&lt;Table&gt;</code></h3>
+  <p class="ref-card-desc">Tabular data. Use &lt;Col&gt;/&lt;Tr&gt;/&lt;Td&gt; child elements or the `columns`/`rows` JSON attributes.</p>
+  <p class="ref-card-meta">38 attrs · 2 child types</p>
+</a><a class="ref-card" href="./shape/" data-tag="Shape" data-haystack="shape renders a built-in powerpoint shape (rect, ellipse, arrows, callouts, etc.). w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group shapetype text fill line fontsize color textalign bold italic underline strike highlight fontfamily lineheight letterspacing nowrap textvalign rotate">
+  <h3><code>&lt;Shape&gt;</code></h3>
+  <p class="ref-card-desc">Renders a built-in PowerPoint shape (rect, ellipse, arrows, callouts, etc.).</p>
+  <p class="ref-card-meta">51 attrs · no children</p>
+</a><a class="ref-card" href="./chart/" data-tag="Chart" data-haystack="chart renders a native powerpoint chart (bar/line/pie/area/doughnut/radar). w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group charttype data showlegend showtitle title chartcolors radarstyle legendpos legendfontsize cataxislabelfontsize valaxislabelfontsize bargapwidthpct linedatasymbolsize alttext showvalue bargrouping valaxisminval valaxismaxval">
+  <h3><code>&lt;Chart&gt;</code></h3>
+  <p class="ref-card-desc">Renders a native PowerPoint chart (bar/line/pie/area/doughnut/radar).</p>
+  <p class="ref-card-meta">51 attrs · 1 child types</p>
+</a><a class="ref-card" href="./line/" data-tag="Line" data-haystack="line straight line connector with optional arrows on either end. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group x1 y1 x2 y2 color linewidth dashtype beginarrow endarrow">
+  <h3><code>&lt;Line&gt;</code></h3>
+  <p class="ref-card-desc">Straight line connector with optional arrows on either end.</p>
+  <p class="ref-card-meta">42 attrs · no children</p>
+</a><a class="ref-card" href="./connector/" data-tag="Connector" data-haystack="connector smart line that binds to two shapes by their `id`. emits a real pptx &lt;p:cxnsp&gt; with stcxn/endcxn so powerpoint reroutes the line automatically when shapes move. the line never participates in flexbox layout — its endpoints are derived from the from/to shapes&#39; positioned boxes. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group from to kind fromside toside color linewidth dashtype beginarrow endarrow">
+  <h3><code>&lt;Connector&gt;</code></h3>
+  <p class="ref-card-desc">Smart line that binds to two shapes by their `id`. Emits a real PPTX &lt;p:cxnSp&gt; with stCxn/endCxn so PowerPoint reroutes the line automatically when shapes move. The line never participates in flexbox layout — its endpoints are derived from the from/to shapes&#39; positioned boxes.</p>
+  <p class="ref-card-meta">43 attrs · no children</p>
+</a><a class="ref-card" href="./vstack/" data-tag="VStack" data-haystack="vstack flex column container — children stack vertically. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group gap alignitems justifycontent flexwrap">
+  <h3><code>&lt;VStack&gt;</code></h3>
+  <p class="ref-card-desc">Flex column container — children stack vertically.</p>
+  <p class="ref-card-meta">37 attrs · no children</p>
+</a><a class="ref-card" href="./hstack/" data-tag="HStack" data-haystack="hstack flex row container — children stack horizontally. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group gap alignitems justifycontent flexwrap">
+  <h3><code>&lt;HStack&gt;</code></h3>
+  <p class="ref-card-desc">Flex row container — children stack horizontally.</p>
+  <p class="ref-card-meta">37 attrs · no children</p>
+</a><a class="ref-card" href="./layer/" data-tag="Layer" data-haystack="layer absolute-positioned container. direct children must declare `x` and `y`. w h x y minw maxw minh maxh padding margin backgroundcolor backgroundimage border bordertop borderright borderbottom borderleft borderradius opacity zindex position top right bottom left alignself shadow isdecorative flexgrow flexshrink flexbasis id group">
+  <h3><code>&lt;Layer&gt;</code></h3>
+  <p class="ref-card-desc">Absolute-positioned container. Direct children must declare `x` and `y`.</p>
+  <p class="ref-card-meta">33 attrs · no children</p>
+</a><a class="ref-card" href="./slideglance/" data-tag="SlideGlance" data-haystack="slideglance document root — contains &lt;document&gt;, &lt;slide&gt;, &lt;templates&gt;, &lt;styles&gt;, &lt;import&gt;. carries the `urn:slideglance:builder:v1` namespace; document-level settings (size, defaultmaster, defaulttextstyle) sit on a &lt;document&gt; child rather than on the root.">
+  <h3><code>&lt;SlideGlance&gt;</code></h3>
+  <p class="ref-card-desc">Document root — contains &lt;Document&gt;, &lt;Slide&gt;, &lt;Templates&gt;, &lt;Styles&gt;, &lt;Import&gt;. Carries the `urn:slideglance:builder:v1` namespace; document-level settings (size, defaultMaster, defaultTextStyle) sit on a &lt;Document&gt; child rather than on the root.</p>
+  <p class="ref-card-meta">0 attrs · no children</p>
+</a><a class="ref-card" href="./slide/" data-tag="Slide" data-haystack="slide single slide. body is one buildernode tree (typically a stack or layer).">
+  <h3><code>&lt;Slide&gt;</code></h3>
+  <p class="ref-card-desc">Single slide. Body is one BuilderNode tree (typically a stack or layer).</p>
+  <p class="ref-card-meta">0 attrs · no children</p>
+</a><a class="ref-card" href="./fragment/" data-tag="Fragment" data-haystack="fragment wrapper element used as the root of imported partials. behaves as a transparent container.">
+  <h3><code>&lt;Fragment&gt;</code></h3>
+  <p class="ref-card-desc">Wrapper element used as the root of imported partials. Behaves as a transparent container.</p>
+  <p class="ref-card-meta">0 attrs · no children</p>
+</a></div>
+
+  <h2>Meta &amp; composition</h2>
+  <div class="ref-grid"><a class="ref-card" href="./document/" data-tag="Document" data-haystack="document document settings — slide size, default master, default text style. one &lt;document&gt; per &lt;slideglance&gt;. size width height w h defaultmaster fontfamily fontsize color bold italic underline strike highlight lineheight">
+  <h3><code>&lt;Document&gt;</code></h3>
+  <p class="ref-card-desc">Document settings — slide size, default master, default text style. One &lt;Document&gt; per &lt;SlideGlance&gt;.</p>
+  <p class="ref-card-meta">15 attrs · no children</p>
+</a><a class="ref-card" href="./templates/" data-tag="Templates" data-haystack="templates container for &lt;template&gt; definitions. must appear at the root of &lt;slideglance&gt; or &lt;fragment&gt;.">
+  <h3><code>&lt;Templates&gt;</code></h3>
+  <p class="ref-card-desc">Container for &lt;Template&gt; definitions. Must appear at the root of &lt;SlideGlance&gt; or &lt;Fragment&gt;.</p>
+  <p class="ref-card-meta">0 attrs · no children</p>
+</a><a class="ref-card" href="./template/" data-tag="Template" data-haystack="template defines a reusable xml template invoked by &lt;use template=&quot;...&quot;&gt;. body may include {placeholder} substitutions and &lt;slot&gt; insertion points. name">
+  <h3><code>&lt;Template&gt;</code></h3>
+  <p class="ref-card-desc">Defines a reusable XML template invoked by &lt;Use template=&quot;...&quot;&gt;. Body may include {placeholder} substitutions and &lt;Slot&gt; insertion points.</p>
+  <p class="ref-card-meta">1 attrs · no children</p>
+</a><a class="ref-card" href="./use/" data-tag="Use" data-haystack="use invokes a previously defined &lt;template&gt;. other attributes are passed as parameters. template">
+  <h3><code>&lt;Use&gt;</code></h3>
+  <p class="ref-card-desc">Invokes a previously defined &lt;Template&gt;. Other attributes are passed as parameters.</p>
+  <p class="ref-card-meta">1 attrs · no children</p>
+</a><a class="ref-card" href="./slot/" data-tag="Slot" data-haystack="slot slot insertion point inside a &lt;template&gt; body, or named slot content inside &lt;use&gt;. name">
+  <h3><code>&lt;Slot&gt;</code></h3>
+  <p class="ref-card-desc">Slot insertion point inside a &lt;Template&gt; body, or named slot content inside &lt;Use&gt;.</p>
+  <p class="ref-card-meta">1 attrs · no children</p>
+</a><a class="ref-card" href="./import/" data-tag="Import" data-haystack="import inlines an external xml fragment at parse time. the target file must have a &lt;fragment&gt; root. src">
+  <h3><code>&lt;Import&gt;</code></h3>
+  <p class="ref-card-desc">Inlines an external XML fragment at parse time. The target file must have a &lt;Fragment&gt; root.</p>
+  <p class="ref-card-meta">1 attrs · no children</p>
+</a><a class="ref-card" href="./styles/" data-tag="Styles" data-haystack="styles container for named style sets. must appear at the root of &lt;slideglance&gt;.">
+  <h3><code>&lt;Styles&gt;</code></h3>
+  <p class="ref-card-desc">Container for named style sets. Must appear at the root of &lt;SlideGlance&gt;.</p>
+  <p class="ref-card-meta">0 attrs · no children</p>
+</a><a class="ref-card" href="./style/" data-tag="Style" data-haystack="style named style set. other elements opt-in via class=&quot;name&quot;. name">
+  <h3><code>&lt;Style&gt;</code></h3>
+  <p class="ref-card-desc">Named style set. Other elements opt-in via class=&quot;name&quot;.</p>
+  <p class="ref-card-meta">1 attrs · no children</p>
+</a><a class="ref-card" href="./if/" data-tag="If" data-haystack="if conditional include. body is emitted when `test` evaluates truthy. expression supports identifiers, dotted paths (e.g. `m.tone`), comparisons (==, !=, &lt;, &lt;=, &gt;, &gt;=), logical operators (&amp;&amp;, ||, !), and the helpers empty(), not(), length(). test">
+  <h3><code>&lt;If&gt;</code></h3>
+  <p class="ref-card-desc">Conditional include. Body is emitted when `test` evaluates truthy. Expression supports identifiers, dotted paths (e.g. `m.tone`), comparisons (==, !=, &lt;, &lt;=, &gt;, &gt;=), logical operators (&amp;&amp;, ||, !), and the helpers empty(), not(), length().</p>
+  <p class="ref-card-meta">1 attrs · no children</p>
+</a><a class="ref-card" href="./choose/" data-tag="Choose" data-haystack="choose first-match branch. children must be one or more &lt;when test=...&gt; followed by an optional &lt;otherwise&gt;. the body of the first matching &lt;when&gt; is emitted; if none match, the &lt;otherwise&gt; body (if present) is emitted instead.">
+  <h3><code>&lt;Choose&gt;</code></h3>
+  <p class="ref-card-desc">First-match branch. Children must be one or more &lt;When test=...&gt; followed by an optional &lt;Otherwise&gt;. The body of the first matching &lt;When&gt; is emitted; if none match, the &lt;Otherwise&gt; body (if present) is emitted instead.</p>
+  <p class="ref-card-meta">0 attrs · no children</p>
+</a><a class="ref-card" href="./when/" data-tag="When" data-haystack="when &lt;choose&gt; branch. body is emitted when this is the first &lt;when&gt; whose `test` evaluates truthy. same expression grammar as &lt;if&gt;. test">
+  <h3><code>&lt;When&gt;</code></h3>
+  <p class="ref-card-desc">&lt;Choose&gt; branch. Body is emitted when this is the first &lt;When&gt; whose `test` evaluates truthy. Same expression grammar as &lt;If&gt;.</p>
+  <p class="ref-card-meta">1 attrs · no children</p>
+</a><a class="ref-card" href="./otherwise/" data-tag="Otherwise" data-haystack="otherwise &lt;choose&gt; fallback. body is emitted when no preceding &lt;when&gt; matched. at most one is allowed per &lt;choose&gt;.">
+  <h3><code>&lt;Otherwise&gt;</code></h3>
+  <p class="ref-card-desc">&lt;Choose&gt; fallback. Body is emitted when no preceding &lt;When&gt; matched. At most one is allowed per &lt;Choose&gt;.</p>
+  <p class="ref-card-meta">0 attrs · no children</p>
+</a><a class="ref-card" href="./foreach/" data-tag="Foreach" data-haystack="foreach repeats its body once per element of `items`. `items` is parsed as a json array after placeholder substitution, so both inline literals (items=&#39;[{...}]&#39;) and references to a parent attribute (items=&quot;{milestones}&quot;) are accepted. each iteration binds `as`, plus optional indexas/firstas/lastas vars, into the scope. items as indexas firstas lastas">
+  <h3><code>&lt;Foreach&gt;</code></h3>
+  <p class="ref-card-desc">Repeats its body once per element of `items`. `items` is parsed as a JSON array after placeholder substitution, so both inline literals (items=&#39;[{...}]&#39;) and references to a parent attribute (items=&quot;{milestones}&quot;) are accepted. Each iteration binds `as`, plus optional indexAs/firstAs/lastAs vars, into the scope.</p>
+  <p class="ref-card-meta">5 attrs · no children</p>
+</a></div>
+
+  <p class="ref-empty" hidden aria-live="polite">
+    No elements match <code data-empty-q></code>.
+  </p>
+</main>
+<script src="./scripts/site.js" defer></script>
+</body>
+</html>

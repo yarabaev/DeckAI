@@ -1,0 +1,80 @@
+<Fragment>
+  <!-- Chapter 09 — Sequence diagrams (timeline / pipeline). -->
+  <Use template="section-mustard"
+       number="09"
+       kicker="Time + ordered phases"
+       title="Diagrams · sequences."
+       subtitle="Pipelines, milestone strips, vertical timelines."
+       inside1="Horizontal pipeline · five phase tiles + arrows"
+       inside2="Vertical timeline · numbered milestones with notes"
+       inside3="Composed from VStack · HStack · Layer · Shape · Line"
+       inside4="No bespoke diagram nodes — every sample is primitives only"
+       epigraph="A sequence is a story you can read with one finger. Show one phase per glance."
+       epigraphAttrib="builder design notes"
+       meta="Composed from VStack · HStack · Layer · Shape · Line"
+       leftMeta="3 sample diagrams · primitives only · no composite nodes" />
+
+  <Use template="page" eyebrow="09 / Diagrams" kicker="Pipeline"
+       title="Horizontal pipeline — five sequential phases"
+       lede="Five stages with arrowed connectors. Each tile uses VStack on a tinted surface; the connectors live on a Layer that overlays the row.">
+    <Slot name="default">
+      <VStack class="card-canvas" gap="14">
+        <Text class="caption" color="AA2D00">phase shapes + arrows · primitives only</Text>
+        <Layer w="100%" h="120">
+          <!-- Connectors (drawn first, sit beneath the tiles). Pre-computed
+               x1/x2 because the expression language has no arithmetic. -->
+          <Foreach items='[
+            {"x1":"116","x2":"146"},
+            {"x1":"262","x2":"292"},
+            {"x1":"408","x2":"438"},
+            {"x1":"554","x2":"584"}
+          ]' as="c">
+            <Line x1="{c.x1}" y1="60" x2="{c.x2}" y2="60" color="181D26" lineWidth="2" endArrow.type="triangle" />
+          </Foreach>
+          <!-- Phase tiles · 116px wide, 30px gap = 730px total fits within ~700px column -->
+          <Foreach items='[
+            {"x":"0","bg":"AA2D00","eyebrow":"PHASE 1","eyebrowColor":"F5E0D6","name":"Plan","nameColor":"FFFFFF"},
+            {"x":"146","bg":"0A2E0E","eyebrow":"PHASE 2","eyebrowColor":"DDEEDF","name":"Build","nameColor":"FFFFFF"},
+            {"x":"292","bg":"D9A441","eyebrow":"PHASE 3","eyebrowColor":"6B4A1A","name":"Test","nameColor":"181D26"},
+            {"x":"438","bg":"A8D8C4","eyebrow":"PHASE 4","eyebrowColor":"0A4F2D","name":"Ship","nameColor":"181D26"},
+            {"x":"584","bg":"181D26","eyebrow":"PHASE 5","eyebrowColor":"9297A0","name":"Iterate","nameColor":"FFFFFF"}
+          ]' as="p">
+            <VStack x="{p.x}" y="20" w="116" h="80" backgroundColor="{p.bg}" borderRadius="10" alignItems="center" justifyContent="center" gap="2">
+              <Text fontFamily="Inter Display" fontSize="11" bold="true" color="{p.eyebrowColor}">{p.eyebrow}</Text>
+              <Text fontFamily="Inter Display" fontSize="14" bold="true" color="{p.nameColor}">{p.name}</Text>
+            </VStack>
+          </Foreach>
+        </Layer>
+      </VStack>
+
+      <Use template="h2" text="Vertical timeline — milestones with notes" />
+      <!-- Three milestones authored as data + a single body. <Foreach> binds
+           each milestone as `m`, `lastAs="isLast"` lets the connector line
+           drop on the final row. Adding a fourth milestone is one JSON entry
+           away. -->
+      <VStack class="card-canvas" gap="0" padding="20">
+        <Foreach as="m" lastAs="isLast" items='[
+          {"label":"Q1","tone":"coral","labelColor":"FFFFFF","captionColor":"AA2D00","date":"JANUARY 2026","title":"Coral surface launches in production.","body":"First full-bleed signature card replaces the legacy hero accent."},
+          {"label":"Q2","tone":"forest","labelColor":"FFFFFF","captionColor":"0A2E0E","date":"APRIL 2026","title":"Forest variant joins the demo grid.","body":"Forest sits next to coral on the homepage signature pair."},
+          {"label":"Q3","tone":"mustard","labelColor":"181D26","captionColor":"6B4A1A","date":"JULY 2026","title":"Mustard signature ships for archived campaigns.","body":"Mustard rounds out the editorial system for time-bounded surfaces."}
+        ]'>
+          <HStack gap="14" alignItems="start" w="100%">
+            <VStack w="60" alignItems="center" gap="6">
+              <VStack class="bg-{m.tone}" w="36" h="36" borderRadius="999" alignItems="center" justifyContent="center">
+                <Text color="{m.labelColor}" fontFamily="Inter Display" fontSize="13" bold="true" textAlign="center">{m.label}</Text>
+              </VStack>
+              <If test="!isLast">
+                <VStack class="bg-hairline" w="2" h="48" />
+              </If>
+            </VStack>
+            <VStack gap="2" w="max">
+              <Text class="caption" color="{m.captionColor}">{m.date}</Text>
+              <Text class="title-sm">{m.title}</Text>
+              <Text class="body-muted">{m.body}</Text>
+            </VStack>
+          </HStack>
+        </Foreach>
+      </VStack>
+    </Slot>
+  </Use>
+</Fragment>

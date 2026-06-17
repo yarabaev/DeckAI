@@ -1,0 +1,62 @@
+<Fragment>
+  <!-- ================================================================
+       Closing — colophon-style with credits and contact.
+       ================================================================ -->
+  <Use template="feature"
+       eyebrow="COLOPHON · ISSUE 14"
+       title="On production, on people, on the next number."
+       lede="Quarterly is set in Georgia (display) and Inter (meta) — a deliberately old-fashioned pairing. Paper grain on the cover is mid-process; the layout is set by hand. Errata, contributors, and the next call for letters follow.">
+    <Slot name="default">
+      <HStack gap="32" alignItems="start" w="100%">
+        <VStack gap="14" w="50%">
+          <Text class="title">Contributors</Text>
+          <VStack gap="10">
+            <Foreach items='[
+              {"name":"Mara Olsen","role":"Lead writer","note":"Reports for Quarterly since 2024."},
+              {"name":"Devon Park","role":"Data + figures","note":"Built the incident-ledger survey."},
+              {"name":"Hyo-Jin Lee","role":"Designer","note":"Set the masthead. Maintains the type system."},
+              {"name":"R. P. Iyer","role":"Editor",  "note":"Closing this issue and starting the next."}
+            ]' as="c">
+              <VStack gap="2">
+                <!-- Row label: override the body-lead style's
+                     paragraph-friendly lineHeight=1.5 with a tight 1.0
+                     so the row's measured box height equals the glyph
+                     extent, then center both glyphs vertically inside
+                     the equalized box. Without this override, lnSpc=150%
+                     on the larger sibling adds half a line of leading
+                     that visually misaligns with the caption sibling. -->
+                <HStack gap="10" alignItems="baseline">
+                  <Text class="body-lead" bold="true" lineHeight="1.0" textVAlign="middle">{c.name}</Text>
+                  <Text class="caption" lineHeight="1.0" textVAlign="middle">{c.role}</Text>
+                </HStack>
+                <Text class="body-muted">{c.note}</Text>
+              </VStack>
+            </Foreach>
+          </VStack>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="14" w="max">
+          <Text class="title">Errata · Issue 13</Text>
+          <VStack gap="8">
+            <Use template="footnote" n="1"
+                 body="The opening essay misattributed the on-call rotation diagram on page 12. Correct credit: Devon Park (data), Hyo-Jin Lee (composition). Apologies." />
+            <Use template="footnote" n="2"
+                 body="A stat in the closing graph cited 14.2% as the median; the correct figure is 13.4%. Source data unchanged." />
+          </VStack>
+
+          <VStack padding.top="14" gap="6">
+            <Text class="title">Next issue · 15 · Spring 2026</Text>
+            <Text class="body"><Span class="kw-accent">A reading week on observability.</Span> Submissions open through April 6. Letters: <Span class="kw-mustard">letters@quarterly.press</Span>.</Text>
+          </VStack>
+
+          <VStack padding.top="20" gap="4">
+            <Text class="eyebrow">END OF FEATURE</Text>
+            <VStack class="hairline-thick" />
+          </VStack>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

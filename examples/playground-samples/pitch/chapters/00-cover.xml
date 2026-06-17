@@ -1,0 +1,35 @@
+<Fragment>
+  <!-- ================================================================
+       Cover — full-bleed dark, gradient halo, oversize wordmark.
+       ================================================================ -->
+  <Use template="cover-frame">
+    <Slot name="default">
+      <HStack gap="10" alignItems="center">
+        <VStack class="bg-accent-2" w="14" h="3" />
+        <Text class="eyebrow">PITCH · SERIES A · 2026</Text>
+      </HStack>
+
+      <Text class="hero">Flow that</Text>
+      <Text class="hero" color="2EE6CA">ships itself.</Text>
+
+      <Text class="body" w="640" fontSize="18">Flowbase turns shipping intent into deployed software. We've taken the 12-step CI/CD pipeline to a one-step prompt — and 240 teams have already deployed 18,000+ builds through it.</Text>
+
+      <HStack gap="32" alignItems="center" padding.top="24">
+        <VStack gap="2">
+          <Text class="metric-num" fontSize="28">$4.2M</Text>
+          <Text class="metric-label">ARR · 4× YoY</Text>
+        </VStack>
+        <VStack class="bg-rule" w="1" h="44" />
+        <VStack gap="2">
+          <Text class="metric-num" fontSize="28">240</Text>
+          <Text class="metric-label">paying teams</Text>
+        </VStack>
+        <VStack class="bg-rule" w="1" h="44" />
+        <VStack gap="2">
+          <Text class="metric-num" fontSize="28">18k+</Text>
+          <Text class="metric-label">deploys / wk</Text>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

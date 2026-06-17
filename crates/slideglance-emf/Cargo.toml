@@ -1,0 +1,25 @@
+[package]
+name = "slideglance-emf"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "EMF / WMF raster-embed extraction for slideglance (DIB → PNG conversion of bitmap-wrap metafiles)"
+readme = "../../README.md"
+keywords = ["pptx", "emf", "wmf", "metafile", "ooxml"]
+categories = ["graphics", "encoding"]
+
+[lints]
+workspace = true
+
+[dependencies]
+# `bmp` decoder + `png` encoder — pure-Rust, ~50 KB compressed in the
+# wasm bundle. Using `image` for the decode / encode round-trip
+# rather than hand-rolling PNG (DEFLATE + CRC + chunk framing) keeps
+# the binary smaller and inherits `image`'s exhaustive test coverage.
+image = { workspace = true }
+
+[features]
+default = []

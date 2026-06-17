@@ -1,0 +1,51 @@
+<Fragment>
+  <!--
+    Editorial masters. A4 portrait (793 × 1122).
+
+      COVER — minimal: paper background, brand stamp top-left, no
+              folio. The chapter title carries the page on its own.
+      BODY  — magazine masthead at top, two-bar footer with folio
+              + section name + edition meta.
+  -->
+  <Master name="COVER" backgroundColor="FAF6EE">
+    <!-- Brand stamp + edition meta only. Hero composition fills
+         the rest of the page from the chapter file. -->
+    <MasterRect x="48" y="48" w="2" h="36" fill.color="9A2A1F" />
+    <MasterText x="60" y="48" w="280" h="18"
+                fontFamily="Inter" fontSize="10" bold="true" color="1F1B16">
+      QUARTERLY · ARCHIVE
+    </MasterText>
+    <MasterText x="60" y="66" w="280" h="18"
+                fontFamily="Inter" fontSize="9" color="6B604F">
+      Issue 14  ·  Winter 2026
+    </MasterText>
+  </Master>
+
+  <Master name="BODY" backgroundColor="FAF6EE">
+    <!-- Masthead — section, edition, hairline. -->
+    <MasterText x="48" y="38" w="300" h="14"
+                fontFamily="Inter" fontSize="9" bold="true" color="6B604F">
+      QUARTERLY  ·  ISSUE 14  ·  WINTER 2026
+    </MasterText>
+    <MasterText x="445" y="38" w="300" h="14"
+                fontFamily="Inter" fontSize="9" bold="true" color="9A2A1F"
+                textAlign="right">
+      THE LONG TAIL OF SHIPPING
+    </MasterText>
+    <MasterRect x="48" y="58" w="697" h="1" fill.color="C7B998" />
+
+    <!-- Footer — folio + meta strip. -->
+    <MasterRect x="48" y="1064" w="697" h="1" fill.color="C7B998" />
+    <MasterText x="48" y="1078" w="300" h="14"
+                fontFamily="Inter" fontSize="9" italic="true" color="6B604F">
+      quarterly.press  ·  letters@quarterly.press
+    </MasterText>
+    <MasterText x="372" y="1078" w="180" h="14"
+                fontFamily="Inter" fontSize="9" bold="true" color="6B604F"
+                textAlign="center">
+      FEATURE
+    </MasterText>
+    <SlideNumber x="700" y="1076" w="44" h="18"
+                 fontFamily="Inter" fontSize="11" color="1F1B16" />
+  </Master>
+</Fragment>

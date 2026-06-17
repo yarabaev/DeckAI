@@ -1,0 +1,38 @@
+<Fragment>
+  <!-- ================================================================
+       Traction — chart + headline KPIs + customer quote.
+       ================================================================ -->
+  <Use template="page"
+       eyebrow="03 / TRACTION"
+       title="Twelve months. Four-x ARR."
+       lede="Every quarter has compounded since GA. Net dollar retention sits at 142%, driven entirely by expansion within existing accounts.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="stretch" w="100%">
+        <VStack class="bg-elev" w="58%" borderRadius="14"
+                padding.left="24" padding.right="24"
+                padding.top="20" padding.bottom="20" gap="10">
+          <HStack alignItems="baseline" justifyContent="spaceBetween">
+            <Text class="eyebrow" color="2EE6CA">ARR · QUARTERLY ($M)</Text>
+            <Text class="caption">2024 Q3 — 2026 Q1</Text>
+          </HStack>
+          <Chart chartType="bar" w="100%" h="190"
+                 chartColors='["2EE6CA"]'
+                 data='[{"name":"ARR","labels":["24Q3","24Q4","25Q1","25Q2","25Q3","25Q4","26Q1"],"values":[0.6,1.0,1.6,2.2,2.9,3.6,4.2]}]'
+                 catAxisLabelFontSize="10" valAxisLabelFontSize="10"
+                 showValue="false" />
+        </VStack>
+
+        <VStack gap="14" w="max">
+          <Use template="metric-card" label="NET RETENTION" value="142%" caption="LTM, weighted by ARR." />
+          <Use template="metric-card" label="GROSS MARGIN" value="84%" caption="post-COGS, post-hosting." />
+          <Use template="metric-card" label="PAYBACK" value="9 mo" caption="net new ACV / blended CAC." />
+        </VStack>
+      </HStack>
+
+      <Use template="quote-block"
+           quote="The pitch was 'replace the platform team'. We assumed marketing. Two quarters in, we did."
+           initial="N" author="Nadia Okonkwo"
+           role="VP Engineering · Maple Health (5,200 employees)" />
+    </Slot>
+  </Use>
+</Fragment>

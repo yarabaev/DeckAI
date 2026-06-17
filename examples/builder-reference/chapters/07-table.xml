@@ -1,0 +1,107 @@
+<Fragment>
+  <!-- Chapter 07 — Table. -->
+  <Use template="section-dark"
+       number="07"
+       kicker="Tabular data, native PPTX"
+       title="Table."
+       subtitle="Quarterly numbers without leaving the canvas."
+       inside1="Col · per-column width definitions"
+       inside2="Tr / Td · row + cell content with rich styling"
+       inside3="cellBorder + cellMargin · table-wide chrome"
+       inside4="colspan / rowspan · cell merging when needed"
+       epigraph="A native table edits in PowerPoint downstream. An image of a table does not."
+       epigraphAttrib="builder design notes"
+       meta="Table · Col · Tr · Td · cellBorder"
+       leftMeta="1 multi-child node · 3 child elements · header / total / span cells" />
+
+  <Use template="page" eyebrow="07 / Table" kicker="Cells"
+       title="Table — columns and rows"
+       lede="A native PowerPoint table. Use Col elements to set per-column widths, Tr/Td for cell content, and the cellBorder + cellMargin attributes for table-wide styling.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="6" w="46%">
+          <Use template="h2" text="Table attributes" />
+          <Foreach items='[
+            {"attr":"columns / rows","type":"json","desc":"Alternative to &lt;Col&gt;/&lt;Tr&gt; element notation."},
+            {"attr":"defaultRowHeight","type":"number","desc":"Default row height (px)."},
+            {"attr":"cellBorder","type":"object","desc":"{color, width, dashType} per cell."},
+            {"attr":"cellMargin","type":"length","desc":"Inner cell padding (number or per-side object)."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="h2" text="Child elements" />
+          <Foreach items='[
+            {"attr":"&lt;Col w=…&gt;","type":"length","desc":"Column widths in document order."},
+            {"attr":"&lt;Tr h=…&gt;","type":"length","desc":"Optional per-row height override."},
+            {"attr":"&lt;Td&gt;","type":"cell","desc":"Cell content. Carries text-style + colspan + rowspan + verticalAlign + backgroundColor."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+        </VStack>
+        <VStack class="vrule" />
+        <VStack gap="8" w="54%">
+          <Use template="h2" text="Sample · revenue table" />
+          <Table cellBorder.color="DDDDDD" cellBorder.width="1" cellMargin="6" defaultRowHeight="30">
+            <Col w="auto:quarter" />
+            <Col w="auto:revenue" />
+            <Col w="auto:delta" />
+            <Col w="auto:note" />
+            <Tr>
+              <Td backgroundColor="181D26" color="FFFFFF" fontFamily="Inter Display" fontSize="10" bold="true">QUARTER</Td>
+              <Td backgroundColor="181D26" color="FFFFFF" fontFamily="Inter Display" fontSize="10" bold="true" textAlign="right">REVENUE</Td>
+              <Td backgroundColor="181D26" color="FFFFFF" fontFamily="Inter Display" fontSize="10" bold="true" textAlign="right">Δ PLAN</Td>
+              <Td backgroundColor="181D26" color="FFFFFF" fontFamily="Inter Display" fontSize="10" bold="true">NOTE</Td>
+            </Tr>
+            <Tr>
+              <Td fontSize="11">Q1 2026</Td>
+              <Td fontSize="11" textAlign="right">$1,200K</Td>
+              <Td fontSize="11" textAlign="right" color="006400" bold="true">+4%</Td>
+              <Td fontSize="11" color="006400">Above plan</Td>
+            </Tr>
+            <Tr>
+              <Td fontSize="11">Q2 2026</Td>
+              <Td fontSize="11" textAlign="right">$1,450K</Td>
+              <Td fontSize="11" textAlign="right" color="006400" bold="true">+11%</Td>
+              <Td fontSize="11" color="006400">Above plan</Td>
+            </Tr>
+            <Tr>
+              <Td fontSize="11">Q3 2026</Td>
+              <Td fontSize="11" textAlign="right">$1,180K</Td>
+              <Td fontSize="11" textAlign="right" color="92400E" bold="true">−2%</Td>
+              <Td fontSize="11" color="92400E">In tolerance</Td>
+            </Tr>
+            <Tr>
+              <Td backgroundColor="F8FAFC" fontSize="11" bold="true">Total</Td>
+              <Td backgroundColor="F8FAFC" fontSize="11" bold="true" textAlign="right">$3,830K</Td>
+              <Td backgroundColor="F8FAFC" fontSize="11" textAlign="right" bold="true" color="006400">+5%</Td>
+              <Td backgroundColor="F8FAFC" fontSize="11" color="41454D">2026 to date</Td>
+            </Tr>
+          </Table>
+        </VStack>
+      </HStack>
+
+      <Use template="code-stack" label="Table · header + 3 rows + total" rightLabel="rendered output above">
+        <Slot name="code">
+          <Text class="code-text">&lt;Table cellBorder.color="DDDDDD" cellMargin="8" defaultRowHeight="32"&gt;</Text>
+          <Text class="code-text">  &lt;Col w="120"/&gt; &lt;Col w="120"/&gt; &lt;Col w="100"/&gt; &lt;Col w="120"/&gt;</Text>
+          <Text class="code-text">  &lt;Tr h="38"&gt;</Text>
+          <Text class="code-text">    &lt;Td backgroundColor="181D26" color="FFFFFF" bold="true"&gt;QUARTER&lt;/Td&gt; …</Text>
+          <Text class="code-text">  &lt;/Tr&gt;</Text>
+          <Text class="code-text">  &lt;Tr&gt;&lt;Td&gt;Q1 2026&lt;/Td&gt;&lt;Td textAlign="right"&gt;$1,200K&lt;/Td&gt; …&lt;/Tr&gt;</Text>
+          <Text class="code-text">  &lt;Tr h="36"&gt;</Text>
+          <Text class="code-text">    &lt;Td backgroundColor="F8FAFC" bold="true"&gt;Total&lt;/Td&gt;</Text>
+          <Text class="code-text">    &lt;Td backgroundColor="F8FAFC" colspan="2" /&gt;</Text>
+          <Text class="code-text">  &lt;/Tr&gt;</Text>
+          <Text class="code-text">&lt;/Table&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <VStack padding="8">
+            <Text class="caption" color="AA2D00">see the rendered table in the right column above.</Text>
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+</Fragment>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SlideGlance
+    xmlns="urn:slideglance:builder:v1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:slideglance:builder:v1 https://unpkg.com/@slideglance/builder@^0.1/builder.xsd">
+  <Document size="16:9" defaultMaster="LESSON" />
+
+  <Import src="styles/colors.xml" />
+  <Import src="styles/typography.xml" />
+  <Import src="styles/layout.xml" />
+
+  <Import src="templates/master.xml" />
+  <Import src="templates/page.xml" />
+  <Import src="templates/components.xml" />
+
+  <Import src="chapters/00-cover.xml" />
+  <Import src="chapters/01-overview.xml" />
+  <Import src="chapters/02-styles.xml" />
+  <Import src="chapters/03-templates.xml" />
+  <Import src="chapters/04-masters-and-build.xml" />
+  <Import src="chapters/05-exercise.xml" />
+</SlideGlance>

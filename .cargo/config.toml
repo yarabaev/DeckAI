@@ -1,0 +1,16 @@
+# Wasm linker stack size.
+#
+# Default wasm linker stack is 1 MiB. Serde-derived deserializers for the
+# OOXML raw structs (e.g. `RawTxStyles → RawListStyle → RawParagraphLevel
+# → RawDefRPr → RawColorChoice → …`) generate deep `Visitor::visit_map`
+# call chains. Release builds inline aggressively and squeeze the chain
+# into the 1 MiB budget, but dev builds keep every frame distinct and
+# overflow the stack — surfacing as a `RuntimeError: memory access out
+# of bounds` panic when wasm hits the guard page just past 1 MiB.
+#
+# 4 MiB is generous for the deepest current chain (~1.4 MiB measured)
+# and leaves headroom for future additions to the OOXML raw schema.
+# Applied at link time so it affects every binary the workspace links
+# for `wasm32-unknown-unknown`, including the wasm-pack output.
+[target.wasm32-unknown-unknown]
+rustflags = ["-C", "link-arg=-zstack-size=4194304"]

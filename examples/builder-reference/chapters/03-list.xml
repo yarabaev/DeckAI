@@ -1,0 +1,96 @@
+<Fragment>
+  <!-- Chapter 03 — Lists. -->
+  <Use template="section-cream"
+       number="03"
+       kicker="Bulleted + numbered lists"
+       title="Lists."
+       subtitle="Bullets without the markup overhead."
+       inside1="Ul · bullet list, JSON or Li children"
+       inside2="Ol · numbered list with start + style controls"
+       inside3="Li · per-item overrides for weight + colour"
+       inside4="bulletIndent · hanging-indent for wrapped lines"
+       epigraph="The bullet's job is rhythm. The body's job is meaning."
+       epigraphAttrib="builder design notes"
+       meta="Ul · Ol · Li"
+       leftMeta="2 list nodes · 1 item element · marker controls" />
+
+  <Use template="page" eyebrow="03 / Lists" kicker="Ul · Ol"
+       title="Ul / Ol — bullet and number lists"
+       lede="Two list nodes that share the same Li children. Items can also be supplied via the JSON `items` attribute when authors prefer data-style input.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Ul attributes" />
+          <Foreach items='[
+            {"attr":"items","type":"json","desc":"Array of strings [\"…\", \"…\"] (alternative to &lt;Li&gt; children)."},
+            {"attr":"bulletIndent","type":"number","desc":"Hanging-indent in pixels for wrapped lines."},
+            {"attr":"fontSize","type":"number","desc":"Default size for every Li that does not override."},
+            {"attr":"color","type":"color","desc":"Default text colour for every Li."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <Use template="rule-soft" />
+          <Use template="h2" text="Ol attributes" />
+          <Foreach items='[
+            {"attr":"numberStartAt","type":"number","desc":"First numeral (1 by default)."},
+            {"attr":"numberType","type":"enum","desc":"arabicPlain · alphaLcParenR · romanUcPeriod · etc."},
+            {"attr":"bulletIndent","type":"number","desc":"Hanging-indent for wrapped lines."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <Use template="rule-soft" />
+          <Use template="h2" text="Li" />
+          <Foreach items='[
+            {"attr":"fontSize · bold · color · italic","type":"run","desc":"Per-item overrides."},
+            {"attr":"(body)","type":"run","desc":"The Li body is the item text; supports inline runs."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · Ul with mixed weights" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">three items, second item bold via Li attributes</Text>
+            <Ul fontSize="13" color="333840">
+              <Li>White canvas, dark ink type, modest weights.</Li>
+              <Li bold="true">Brand voltage lives in full-bleed signature cards.</Li>
+              <Li>Section rhythm: white → coral → white → cream → dark.</Li>
+            </Ul>
+          </VStack>
+
+          <Use template="h2" text="Sample · Ol with starting number" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">numberStartAt=4 · numbered items pick up from 4</Text>
+            <Ol fontSize="13" color="333840" numberStartAt="4">
+              <Li>Reserve the primary CTA for one viewport-level action.</Li>
+              <Li>Pair it with a hairline-outlined secondary CTA.</Li>
+              <Li>Anchor every editorial band with 96px section padding.</Li>
+            </Ol>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-row" label="Ol · numberStartAt + Li overrides" rightLabel="rendered output">
+        <Slot name="code">
+          <Text class="code-text">&lt;Ol fontSize="13"</Text>
+          <Text class="code-text">    color="333840"</Text>
+          <Text class="code-text">    numberStartAt="4"&gt;</Text>
+          <Text class="code-text">  &lt;Li&gt;Reserve the primary CTA…&lt;/Li&gt;</Text>
+          <Text class="code-text">  &lt;Li&gt;Pair it with a secondary CTA.&lt;/Li&gt;</Text>
+          <Text class="code-text">  &lt;Li bold="true"&gt;Anchor every band</Text>
+          <Text class="code-text">      with 96px padding.&lt;/Li&gt;</Text>
+          <Text class="code-text">&lt;/Ol&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <Ol fontSize="13" color="333840" numberStartAt="4">
+            <Li>Reserve the primary CTA for one viewport-level action.</Li>
+            <Li>Pair it with a hairline-outlined secondary CTA.</Li>
+            <Li bold="true">Anchor every band with 96px padding.</Li>
+          </Ol>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+</Fragment>

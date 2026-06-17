@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SlideGlance
+    xmlns="urn:slideglance:builder:v1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:slideglance:builder:v1 https://unpkg.com/@slideglance/builder@^0.1/builder.xsd">
+  <!-- Document-level settings live in their own element, not on the root. -->
+  <Document size="A4" />
+  <!--
+    @slideglance/builder — XML Reference deck (Airtable edition).
+
+    A4 portrait (793 × 1122). Every page is composed from masters,
+    style sheets, and templates imported below. Brand voltage comes
+    from full-bleed signature cards in coral, forest, dark, cream,
+    and mustard punctuating editorial body pages on the white canvas.
+
+    To regenerate the bundled PPTX:
+      pnpm exec tsx examples/builder-reference/build.ts
+  -->
+
+  <!-- Style sheets: palette, type ramp, layout primitives, decor utilities. -->
+  <Import src="styles/colors.xml" />
+  <Import src="styles/typography.xml" />
+  <Import src="styles/layout.xml" />
+  <Import src="styles/decor.xml" />
+
+  <!-- Slide masters (BODY chrome + COVER blank). -->
+  <Import src="templates/master.xml" />
+
+  <!-- Page templates: layout primitives, page chrome, chapter cover, code rows, attr rows, recipes. -->
+  <Import src="templates/layout.xml" />
+  <Import src="templates/page.xml" />
+  <Import src="templates/section.xml" />
+  <Import src="templates/code.xml" />
+  <Import src="templates/feature.xml" />
+  <Import src="templates/diagram.xml" />
+
+  <!-- Chapters. -->
+  <Import src="chapters/00-cover.xml" />
+  <Import src="chapters/01-stack.xml" />
+  <Import src="chapters/02-text.xml" />
+  <Import src="chapters/03-list.xml" />
+  <Import src="chapters/04-image.xml" />
+  <Import src="chapters/05-icon-svg.xml" />
+  <Import src="chapters/06-shape-line.xml" />
+  <Import src="chapters/07-table.xml" />
+  <Import src="chapters/08-chart.xml" />
+  <Import src="chapters/09-diagrams-sequence.xml" />
+  <Import src="chapters/10-diagrams-hierarchy.xml" />
+  <Import src="chapters/11-diagrams-flow.xml" />
+  <Import src="chapters/12-diagrams-matrix.xml" />
+  <Import src="chapters/13-recipes.xml" />
+  <Import src="chapters/14-templates-styles.xml" />
+  <Import src="chapters/15-master-notes.xml" />
+  <Import src="chapters/16-control-flow.xml" />
+</SlideGlance>

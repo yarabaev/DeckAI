@@ -1,0 +1,141 @@
+<Fragment>
+  <!-- Chapter 02 — Text (display + inline runs). -->
+  <Use template="section-forest"
+       number="02"
+       kicker="Editorial typography"
+       title="Text."
+       subtitle="Editorial type. Inline runs without an outer wrapper."
+       inside1="Text · the universal styled-run leaf node"
+       inside2="B / I / U / S · classical emphasis runs"
+       inside3="Mark / Span · highlight + arbitrary inline styling"
+       inside4="A · hyperlink with explicit href"
+       epigraph="Display weights stay at 400. The system trusts size and contrast, not boldness."
+       epigraphAttrib="Airtable type principles"
+       meta="Text · B · I · U · S · Mark · Span · A"
+       leftMeta="1 leaf node · 7 inline run elements · full type ramp" />
+
+  <!-- Text basics page -->
+  <Use template="page" eyebrow="02 / Text" kicker="Display + body"
+       title="Text — single styled run"
+       lede="A leaf node that renders one block of styled text. Carries its own typography attributes plus the universal surface set, so a Text alone can be a heading, a chip, or a button surface.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Typography attributes" />
+          <Foreach items='[
+            {"attr":"fontFamily","type":"string","desc":"CSS-style font stack. Falls back to Inter Display."},
+            {"attr":"fontSize","type":"number","desc":"Pixel size. Display: 32–48; body: 13–14."},
+            {"attr":"bold","type":"boolean","desc":"Switches to the family&apos;s bold face."},
+            {"attr":"italic","type":"boolean","desc":"Italic face."},
+            {"attr":"underline","type":"boolean | object","desc":"true or {style:\"sng\",color:\"…\"}."},
+            {"attr":"strike","type":"boolean","desc":"Strikethrough."},
+            {"attr":"color","type":"color","desc":"Foreground hex."},
+            {"attr":"highlight","type":"color","desc":"Background highlight hex (kept as a non-block fill)."},
+            {"attr":"lineHeight","type":"number","desc":"Multiplier (1.0 = single)."},
+            {"attr":"textAlign","type":"enum","desc":"left · center · right."},
+            {"attr":"text","type":"string","desc":"Either an attribute or the element body."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Display ramp" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">size · weight</Text>
+            <Text fontFamily="Inter Display" fontSize="26" bold="true" color="181D26" lineHeight="1.05">Display 32 / 700</Text>
+            <Text fontFamily="Inter Display" fontSize="20" bold="true" color="181D26" lineHeight="1.1">Title 24 / 500</Text>
+            <Text fontFamily="Inter Display" fontSize="16" bold="true" color="181D26" lineHeight="1.2">Title-sm 18 / 500</Text>
+            <Text fontFamily="Inter Display" fontSize="13" color="333840" lineHeight="1.35">Body 13 / 400 — running text.</Text>
+            <Text fontFamily="Inter Display" fontSize="11" bold="true" color="41454D" lineHeight="1.25">CAPTION 11 / 500</Text>
+          </VStack>
+
+          <Use template="h2" text="Surface attributes carry too" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">a Text node owning its own background + padding</Text>
+            <HStack gap="6" alignSelf="start" flexWrap="wrap">
+              <Text class="chip-coral">PRIMARY</Text>
+              <Text class="chip-forest">FOREST</Text>
+              <Text class="chip-mustard">DRAFT</Text>
+              <Text class="chip-link">LINK</Text>
+            </HStack>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-row-1" label="Text · display headline" rightLabel="rendered output">
+        <Slot name="code">
+          <Text class="code-text">&lt;Text fontFamily="Inter Display"</Text>
+          <Text class="code-text">      fontSize="32" bold="true"</Text>
+          <Text class="code-text">      color="181D26" lineHeight="1.1"&gt;</Text>
+          <Text class="code-text">  Production apps in</Text>
+          <Text class="code-text">  prototype speed.</Text>
+          <Text class="code-text">&lt;/Text&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <VStack padding="10" gap="0">
+            <Text fontFamily="Inter Display" fontSize="22" bold="true" color="181D26" lineHeight="1.1">Production apps in prototype speed.</Text>
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <!-- Inline runs page -->
+  <Use template="page" eyebrow="02 / Text" kicker="Inline runs"
+       title="B · I · U · S · Mark · Span · A — styled inline runs"
+       lede="Inline elements that switch styling mid-paragraph without breaking the text run. They live inside a single Text and behave like CSS spans — no extra layout cost.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Inline elements" />
+          <Foreach items='[
+            {"attr":"&lt;B&gt;","desc":"Bold body run inside a paragraph."},
+            {"attr":"&lt;I&gt;","desc":"Italic emphasis run."},
+            {"attr":"&lt;U&gt;","desc":"Underline run (defers to text-decoration)."},
+            {"attr":"&lt;S&gt;","desc":"Strikethrough run (deletion)."},
+            {"attr":"&lt;Mark&gt;","desc":"Highlight run with a background fill."},
+            {"attr":"&lt;Span&gt;","desc":"Carries arbitrary text styling (color, fontFamily, bold)."},
+            {"attr":"&lt;A href=…&gt;","desc":"Hyperlink run; href is required and renders as link colour."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="run" desc="{r.desc}" />
+          </Foreach>
+
+          <Use template="rule-soft" />
+          <Use template="callout" cls="callout-info" kind="HEADS-UP"
+               titleColor="254FAD" title="Inline runs share the parent's font"
+               body="Inherited fontFamily, fontSize, lineHeight, and color come from the wrapping Text. Override per-run via the run's own attributes — useful when you want a single bold word inside a 14px body line." />
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · mixed runs in one paragraph" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">a single Text containing every inline run type</Text>
+            <Text class="body" lineHeight="1.5">
+              The <B>signature surface</B> palette resets the rhythm — <Span class="kw" color="AA2D00">coral</Span>, <Span class="kw" color="0A2E0E">forest</Span>, and <Span class="kw" color="181D26">surface-dark</Span> punctuate the deck. <I>Italic asides</I> stay short, <U>underlined</U> tokens link out, <Mark>highlighted</Mark> phrases call attention, and <S>struck-through</S> options mark deprecations. Visit the <A href="https://example.com" color="1B61C9">reference index</A> for the full list.
+            </Text>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-stack" label="Text · inline run mix" rightLabel="rendered output">
+        <Slot name="code">
+          <Text class="code-text">&lt;Text class="body" lineHeight="1.5"&gt;</Text>
+          <Text class="code-text">  The &lt;B&gt;signature surface&lt;/B&gt; palette resets the rhythm —</Text>
+          <Text class="code-text">  &lt;Span class="kw" color="AA2D00"&gt;coral&lt;/Span&gt;,</Text>
+          <Text class="code-text">  &lt;Span class="kw" color="0A2E0E"&gt;forest&lt;/Span&gt;, and</Text>
+          <Text class="code-text">  &lt;Span class="kw" color="181D26"&gt;surface-dark&lt;/Span&gt;.</Text>
+          <Text class="code-text">  &lt;I&gt;Italic asides&lt;/I&gt; stay short,</Text>
+          <Text class="code-text">  &lt;U&gt;underlined&lt;/U&gt; tokens link out,</Text>
+          <Text class="code-text">  &lt;Mark&gt;highlighted&lt;/Mark&gt; phrases call attention,</Text>
+          <Text class="code-text">  &lt;S&gt;struck-through&lt;/S&gt; options mark deprecations.</Text>
+          <Text class="code-text">  Visit the &lt;A href="…"&gt;reference index&lt;/A&gt;.</Text>
+          <Text class="code-text">&lt;/Text&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <Text class="body" lineHeight="1.5">
+            The <B>signature surface</B> palette resets the rhythm — <Span class="kw" color="AA2D00">coral</Span>, <Span class="kw" color="0A2E0E">forest</Span>, and <Span class="kw" color="181D26">surface-dark</Span> punctuate the deck. <I>Italic asides</I> stay short, <U>underlined</U> tokens link out, <Mark>highlighted</Mark> phrases call attention, and <S>struck-through</S> options mark deprecations. Visit the <A href="https://example.com" color="1B61C9">reference index</A> for the full list.
+          </Text>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+</Fragment>

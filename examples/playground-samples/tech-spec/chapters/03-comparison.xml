@@ -1,0 +1,62 @@
+<Fragment>
+  <!-- ================================================================
+       Comparison — atlas vs. each candidate (build / buy / extend).
+       ================================================================ -->
+  <Use template="section"
+       eyebrow="03 · COMPARISON"
+       title="Build, buy, or extend?"
+       lede="Three options were investigated in the design phase. Each is summarised against the four criteria that the platform-leads forum agreed at the kickoff: operations, customer impact, cost, and migration risk.">
+    <Slot name="default">
+      <Table w="100%" cellBorder.color="D1D5DB" cellBorder.width="0.5"
+             cellMargin="10" defaultRowHeight="40">
+        <Col w="18%" />
+        <Col w="22%" />
+        <Col w="20%" />
+        <Col w="20%" />
+        <Col w="20%" />
+        <Tr>
+          <Td text="Criterion" backgroundColor="111827" color="FFFFFF" fontSize="11" bold="true" />
+          <Td text="Atlas (build)" backgroundColor="111827" color="FFFFFF" fontSize="11" bold="true" textAlign="center" />
+          <Td text="Vendor-X (buy)" backgroundColor="111827" color="FFFFFF" fontSize="11" bold="true" textAlign="center" />
+          <Td text="Extend Envoy" backgroundColor="111827" color="FFFFFF" fontSize="11" bold="true" textAlign="center" />
+          <Td text="Status quo" backgroundColor="111827" color="FFFFFF" fontSize="11" bold="true" textAlign="center" />
+        </Tr>
+        <Tr>
+          <Td text="Operational ergonomics" fontSize="11" bold="true" color="111827" />
+          <Td text="OK · one config" backgroundColor="DCFCE7" fontSize="11" bold="true" color="166534" textAlign="center" />
+          <Td text="OK · their console" backgroundColor="DCFCE7" fontSize="11" bold="true" color="166534" textAlign="center" />
+          <Td text="WARN · YAML sprawl" backgroundColor="FEF3C7" fontSize="11" bold="true" color="92400E" textAlign="center" />
+          <Td text="BLOCK · 5 paths" backgroundColor="FEE2E2" fontSize="11" bold="true" color="991B1B" textAlign="center" />
+        </Tr>
+        <Tr>
+          <Td text="Customer impact (downtime)" fontSize="11" bold="true" color="111827" />
+          <Td text="OK · phased, 0 min" backgroundColor="DCFCE7" fontSize="11" bold="true" color="166534" textAlign="center" />
+          <Td text="WARN · cutover" backgroundColor="FEF3C7" fontSize="11" bold="true" color="92400E" textAlign="center" />
+          <Td text="OK · in-place" backgroundColor="DCFCE7" fontSize="11" bold="true" color="166534" textAlign="center" />
+          <Td text="OK · none" backgroundColor="DCFCE7" fontSize="11" bold="true" color="166534" textAlign="center" />
+        </Tr>
+        <Tr>
+          <Td text="3-yr TCO (vs. status quo)" fontSize="11" bold="true" color="111827" />
+          <Td text="-26%" backgroundColor="DCFCE7" fontSize="11" bold="true" color="166534" textAlign="center" />
+          <Td text="+38%" backgroundColor="FEE2E2" fontSize="11" bold="true" color="991B1B" textAlign="center" />
+          <Td text="-12%" backgroundColor="DCFCE7" fontSize="11" bold="true" color="166534" textAlign="center" />
+          <Td text="0" fontSize="11" color="6B7280" textAlign="center" />
+        </Tr>
+        <Tr>
+          <Td text="Migration risk" fontSize="11" bold="true" color="111827" />
+          <Td text="WARN · novel control plane" backgroundColor="FEF3C7" fontSize="11" bold="true" color="92400E" textAlign="center" />
+          <Td text="BLOCK · vendor dependence" backgroundColor="FEE2E2" fontSize="11" bold="true" color="991B1B" textAlign="center" />
+          <Td text="WARN · upstream churn" backgroundColor="FEF3C7" fontSize="11" bold="true" color="92400E" textAlign="center" />
+          <Td text="BLOCK · ongoing incidents" backgroundColor="FEE2E2" fontSize="11" bold="true" color="991B1B" textAlign="center" />
+        </Tr>
+      </Table>
+
+      <HStack gap="14" alignItems="center" padding.top="14">
+        <Use template="risk-pill-ok" label="proceed" />
+        <Use template="risk-pill-warn" label="proceed with mitigation" />
+        <Use template="risk-pill-block" label="rejected · do not pursue" />
+        <Text class="body-soft" margin.left="10">Cells follow the same semantic grade.</Text>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

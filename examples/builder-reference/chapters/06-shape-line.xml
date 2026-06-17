@@ -1,0 +1,141 @@
+<Fragment>
+  <!-- Chapter 06 — Shape & Line. -->
+  <Use template="section-mint"
+       number="06"
+       kicker="Native PPTX shapes + connectors"
+       title="Shape &amp; Line."
+       subtitle="Native PowerPoint shapes and connectors."
+       inside1="Shape · ~50 PPTX presets, fill + line + text"
+       inside2="Line · straight connector with optional arrows"
+       inside3="dashType · solid, dash, dashDot, lgDash, sysDash"
+       inside4="beginArrow / endArrow · triangle, stealth, diamond, oval"
+       epigraph="Shapes do the work that an Image cannot — they remain editable downstream."
+       epigraphAttrib="builder design notes"
+       meta="Shape · Line · arrows · presets"
+       leftMeta="2 leaf nodes · ~50 PPTX shape presets · single + double-arrow connectors" />
+
+  <Use template="page" eyebrow="06 / Shape" kicker="Preset shapes"
+       title="Shape — native PPTX shape presets"
+       lede="Wraps any built-in PowerPoint shape (rectangle, ellipse, callout, arrow, polygon). The shapeType selects the preset; fill and line drive the styling.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Attributes" />
+          <Foreach items='[
+            {"attr":"shapeType","type":"string","desc":"PPTX shape preset (rect · ellipse · roundRect · upArrow · star5 …).","req":true},
+            {"attr":"fill","type":"object","desc":"{color, transparency} or {{gradient}}."},
+            {"attr":"line","type":"object","desc":"Stroke colour + width + dashType."},
+            {"attr":"text","type":"string","desc":"Optional text inside the shape (single line)."},
+            {"attr":"textAlign / textVAlign","type":"enum","desc":"In-shape alignment (left/center/right · top/middle/bottom)."},
+            {"attr":"rotate","type":"number","desc":"Rotation in degrees."},
+            {"attr":"fontFamily · fontSize · color · bold","type":"run","desc":"Inline label styling."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <!-- Right column card inner width is ~243px (40% gutter minus
+               card padding 16+16). Shapes are sized to fit that band:
+               4×44 + 1×32 + 4×6 gaps = 232 ≤ 243. Keeps the original
+               4:3 rectangle aspect and a square star. -->
+          <Use template="h2" text="Sample · five preset shapes" />
+          <VStack class="card-canvas" gap="10">
+            <HStack gap="6" alignItems="center" justifyContent="center" h="56">
+              <Shape shapeType="rect" w="44" h="32" fill.color="AA2D00" line.color="DDDDDD" line.width="0" />
+              <Shape shapeType="ellipse" w="44" h="32" fill.color="0A2E0E" />
+              <Shape shapeType="roundRect" w="44" h="32" fill.color="D9A441" />
+              <Shape shapeType="rightArrow" w="44" h="32" fill.color="181D26" />
+              <Shape shapeType="star5" w="32" h="32" fill.color="F4D35E" />
+            </HStack>
+            <Text class="body-muted" textAlign="center">rect · ellipse · roundRect · rightArrow · star5</Text>
+          </VStack>
+
+          <!-- Two-shape band: 110 + 6 gap + 124 = 240 ≤ 243. -->
+          <Use template="h2" text="Sample · shape with text" />
+          <VStack class="card-canvas" gap="6">
+            <HStack gap="6" alignItems="center" justifyContent="center" h="56">
+              <Shape shapeType="roundRect" w="110" h="36" fill.color="AA2D00"
+                     text="Coral pill" textAlign="center" textVAlign="middle"
+                     fontFamily="Inter Display" fontSize="12" bold="true" color="FFFFFF" />
+              <Shape shapeType="callout1" w="124" h="44" fill.color="F5E9D4"
+                     text="Cream callout" textAlign="center" textVAlign="middle"
+                     fontFamily="Inter Display" fontSize="11" bold="true" color="181D26" />
+            </HStack>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-row" label="Shape · roundRect with label" rightLabel="rendered output">
+        <Slot name="code">
+          <Text class="code-text">&lt;Shape</Text>
+          <Text class="code-text">  shapeType="roundRect"</Text>
+          <Text class="code-text">  w="160" h="48"</Text>
+          <Text class="code-text">  fill.color="AA2D00"</Text>
+          <Text class="code-text">  text="Coral pill"</Text>
+          <Text class="code-text">  textAlign="center"</Text>
+          <Text class="code-text">  textVAlign="middle"</Text>
+          <Text class="code-text">  fontSize="14" bold="true"</Text>
+          <Text class="code-text">  color="FFFFFF" /&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <VStack alignItems="center" justifyContent="center" h="80">
+            <Shape shapeType="roundRect" w="160" h="48" fill.color="AA2D00"
+                   text="Coral pill" textAlign="center" textVAlign="middle"
+                   fontFamily="Inter Display" fontSize="14" bold="true" color="FFFFFF" />
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <Use template="page" eyebrow="06 / Line" kicker="Connectors"
+       title="Line — straight connectors with optional arrows"
+       lede="Renders a straight line. x1/y1/x2/y2 are absolute coordinates inside a Layer; outside a Layer, set x/y as well. Arrowheads on either or both ends.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Attributes" />
+          <Foreach items='[
+            {"attr":"x1 / y1 / x2 / y2","type":"number","desc":"Endpoint coordinates. Required.","req":true},
+            {"attr":"color","type":"color","desc":"Stroke colour."},
+            {"attr":"lineWidth","type":"number","desc":"Stroke width in pixels."},
+            {"attr":"dashType","type":"enum","desc":"solid · dash · dashDot · lgDash · sysDash · etc."},
+            {"attr":"beginArrow","type":"lineArrow","desc":"triangle · stealth · diamond · oval · none."},
+            {"attr":"endArrow","type":"lineArrow","desc":"triangle · stealth · diamond · oval · none."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · arrowed connector grid" />
+          <VStack class="card-canvas" gap="0">
+            <Layer class="frame-sm" backgroundColor="F8FAFC" borderRadius="8">
+              <Text x="14" y="16" fontFamily="Inter Display" fontSize="11" bold="true" color="41454D">solid · endArrow.type=triangle</Text>
+              <Line x1="14" y1="40" x2="240" y2="40" color="181D26" lineWidth="2" endArrow.type="triangle" />
+              <Text x="14" y="58" fontFamily="Inter Display" fontSize="11" bold="true" color="41454D">dash · double arrow</Text>
+              <Line x1="14" y1="82" x2="240" y2="82" color="AA2D00" lineWidth="2" dashType="dash" beginArrow.type="triangle" endArrow.type="triangle" />
+              <Text x="14" y="100" fontFamily="Inter Display" fontSize="11" bold="true" color="41454D">dashDot · stealth ends</Text>
+              <Line x1="14" y1="124" x2="240" y2="124" color="0A2E0E" lineWidth="2" dashType="dashDot" beginArrow.type="stealth" endArrow.type="stealth" />
+              <Text x="14" y="142" fontFamily="Inter Display" fontSize="11" bold="true" color="41454D">solid · diamond ends</Text>
+              <Line x1="14" y1="166" x2="240" y2="166" color="1B61C9" lineWidth="2" beginArrow.type="diamond" endArrow.type="diamond" />
+            </Layer>
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+</Fragment>

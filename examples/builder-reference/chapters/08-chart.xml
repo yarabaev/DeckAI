@@ -1,0 +1,80 @@
+<Fragment>
+  <!-- Chapter 08 — Chart. -->
+  <Use template="section-coral"
+       number="08"
+       kicker="Series-based diagrams"
+       title="Chart."
+       subtitle="Native PPTX charts. Six types share one schema."
+       inside1="chartType · bar, line, pie, area, doughnut, radar"
+       inside2="data · series array of label + value pairs"
+       inside3="chartColors · explicit per-series palette"
+       inside4="barGrouping · clustered, stacked, percent-stacked"
+       epigraph="Charts behave as native shapes — every label, axis, and grid stays editable in PowerPoint."
+       epigraphAttrib="builder runtime notes"
+       meta="Chart · bar · line · pie · area · radar · doughnut"
+       leftMeta="1 multi-child node · 6 chart types · series + categorical data" />
+
+  <Use template="page" eyebrow="08 / Chart" kicker="Bar · line · area"
+       title="Chart — series-based diagrams"
+       lede="Renders a native PowerPoint chart. data takes an array of series, each with labels and values; chartType selects the rendering. Charts behave as native PPTX shapes — editable downstream.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Core attributes" />
+          <Foreach items='[
+            {"attr":"chartType","type":"enum","desc":"bar · line · pie · area · doughnut · radar.","req":true},
+            {"attr":"data","type":"json","desc":"Series array — [{name?, labels[], values[]}]."},
+            {"attr":"title","type":"string","desc":"Chart title (with showTitle=true)."},
+            {"attr":"showLegend","type":"boolean","desc":"Default true."},
+            {"attr":"legendPos","type":"enum","desc":"t · b · l · r · tr."},
+            {"attr":"chartColors","type":"json","desc":"Series palette (hex array)."},
+            {"attr":"barGrouping","type":"enum","desc":"clustered · stacked · percentStacked."},
+            {"attr":"valAxisMinVal/Max","type":"number","desc":"Y-axis range lock."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · clustered bar" />
+          <VStack class="card-canvas" gap="6">
+            <Chart
+              chartType="bar" w="100%" h="220"
+              showLegend="true" legendPos="b" legendFontSize="10"
+              chartColors='["AA2D00","D9A441"]'
+              data='[{"name":"2025","labels":["Q1","Q2","Q3","Q4"],"values":[820,1100,940,1280]},{"name":"2026","labels":["Q1","Q2","Q3","Q4"],"values":[1200,1450,1180,1620]}]' />
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="row2-cards">
+        <Slot name="left">
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">Sample · line chart</Text>
+            <Chart
+              chartType="line" w="100%" h="140"
+              showLegend="false"
+              chartColors='["AA2D00"]'
+              data='[{"name":"Sessions","labels":["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],"values":[122,168,198,210,260,290,320]}]' />
+          </VStack>
+        </Slot>
+        <Slot name="right">
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">Sample · doughnut</Text>
+            <Chart
+              chartType="doughnut" w="100%" h="140"
+              showLegend="true" legendPos="r" legendFontSize="10"
+              chartColors='["AA2D00","0A2E0E","D9A441","181D26"]'
+              data='[{"name":"share","labels":["Coral","Forest","Mustard","Dark"],"values":[34,28,22,16]}]' />
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+</Fragment>

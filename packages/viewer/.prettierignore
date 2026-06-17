@@ -1,0 +1,4 @@
+dist
+# `dist/` is gitignored — emitted by `vite build && tsc --emitDeclarationOnly`
+# in CI ahead of downstream typechecks. Prettier should not touch
+# generated .d.ts / .js, otherwise fmt:check fails on every fresh build.

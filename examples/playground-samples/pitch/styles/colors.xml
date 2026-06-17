@@ -1,0 +1,29 @@
+<Fragment>
+  <!--
+    Pitch deck palette. Black-purple primary with cyan/coral
+    accents. Every other XML in this deck references colors via
+    `class="…"` so individual hex literals never travel beyond
+    this file.
+  -->
+  <Styles>
+    <!-- Surfaces -->
+    <Style name="bg-ink"      backgroundColor="0B0B14" />
+    <Style name="bg-deep"     backgroundColor="14142B" />
+    <Style name="bg-elev"     backgroundColor="1E1E3F" />
+    <Style name="bg-card"     backgroundColor="222244" />
+    <Style name="bg-rule"     backgroundColor="2C2C55" />
+    <Style name="bg-accent"   backgroundColor="7C5CFF" />
+    <Style name="bg-accent-2" backgroundColor="2EE6CA" />
+    <Style name="bg-warn"     backgroundColor="FF6B6B" />
+
+    <!-- Type colors (most ink lives on dark surfaces) -->
+    <Style name="t-fg"        color="F5F5FA" />
+    <Style name="t-body"      color="C9C9DC" />
+    <Style name="t-muted"     color="8B8BA8" />
+    <Style name="t-soft"      color="6F6F8A" />
+    <Style name="t-accent"    color="7C5CFF" />
+    <Style name="t-accent-2"  color="2EE6CA" />
+    <Style name="t-warn"      color="FF6B6B" />
+    <Style name="t-on-accent" color="0B0B14" />
+  </Styles>
+</Fragment>

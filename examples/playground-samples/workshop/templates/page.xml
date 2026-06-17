@@ -1,0 +1,70 @@
+<Fragment>
+  <Templates>
+    <Template name="cover">
+      <Slide master="INTRO">
+        <!-- <Layer> places the decorative wrench (the workshop's visual
+             motif) absolutely behind the foreground content. opacity=0.06
+             keeps it from competing with text per icons.md guidance.
+             Layer reads child x/y (not yoga right/bottom), and content
+             past the slide edge inflates autoFit's measured overshoot,
+             so the icon stays inside the canvas at the lower right. -->
+        <Layer h="100%" w="100%">
+          <Icon name="wrench"
+                position="absolute" x="820" y="240"
+                size="420" color="EF6C42" opacity="0.06"
+                isDecorative="true" />
+          <VStack padding.left="200" padding.right="80"
+                  padding.top="120" padding.bottom="100"
+                  gap="20" h="100%" w="100%" justifyContent="center">
+            <Slot name="default" />
+          </VStack>
+        </Layer>
+      </Slide>
+    </Template>
+
+    <Template name="section-divider">
+      <Slide master="INTRO">
+        <VStack padding.left="200" padding.right="80"
+                padding.top="160" padding.bottom="160"
+                gap="20" h="100%" justifyContent="center">
+          <HStack gap="10" alignItems="center">
+            <VStack class="bg-coral" w="36" h="36" borderRadius="18"
+                    alignItems="center" justifyContent="center">
+              <Text fontFamily="Inter" fontSize="16" bold="true" color="FFFBF5" textAlign="center">{step}</Text>
+            </VStack>
+            <Text class="eyebrow">PART {step}</Text>
+          </HStack>
+          <Text class="display-lg" w="800">{title}</Text>
+          <Text class="subtitle" w="700">{lede}</Text>
+        </VStack>
+      </Slide>
+    </Template>
+
+    <Template name="lesson">
+      <Slide master="LESSON">
+        <!-- Vertical padding tightened from 80 → 64 to give the
+             dense code-block + callout + exercise-card pages room
+             without autoFit shrinking them. -->
+        <VStack padding.left="56" padding.right="56"
+                padding.top="64" padding.bottom="64"
+                gap="14" h="100%">
+          <VStack gap="6">
+            <HStack gap="10" alignItems="center">
+              <VStack class="bg-coral" w="28" h="28" borderRadius="14"
+                      alignItems="center" justifyContent="center">
+                <Text fontFamily="Inter" fontSize="13" bold="true" color="FFFBF5" textAlign="center">{step}</Text>
+              </VStack>
+              <Text class="eyebrow">{eyebrow}</Text>
+            </HStack>
+            <Text class="display-md">{title}</Text>
+            <Text class="subtitle" w="820">{lede}</Text>
+          </VStack>
+          <VStack class="hairline" />
+          <VStack class="fill" gap="14">
+            <Slot name="default" />
+          </VStack>
+        </VStack>
+      </Slide>
+    </Template>
+  </Templates>
+</Fragment>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SlideGlance xmlns="urn:slideglance:builder:v1">
+  <Document size="16:9" fontFamily="Pretendard" />
+
+  <Styles>
+    <Style name="page" padding="80" />
+    <Style name="title" fontSize="44" bold="true" color="0F172A" lineHeight="1.05" />
+    <Style name="body" fontSize="20" color="1F2937" lineHeight="1.5" />
+    <Style name="muted" fontSize="14" color="64748B" />
+  </Styles>
+
+  <Slide>
+    <VStack class="page" gap="20" justifyContent="center" h="max">
+      <Text class="muted">HELLO</Text>
+      <Text class="title">A minimal slideglance deck.</Text>
+      <Text class="body">
+        One file, one slide, one style block. Build with
+        <B>buildPptx(xml, { w: 1280, h: 720 })</B>.
+      </Text>
+    </VStack>
+    <Notes>
+      This is the smallest possible slideglance deck. Use it to verify the
+      build pipeline produces a valid .pptx before scaling up.
+    </Notes>
+  </Slide>
+</SlideGlance>

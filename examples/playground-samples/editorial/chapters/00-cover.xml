@@ -1,0 +1,24 @@
+<Fragment>
+  <!-- ================================================================
+       Cover — masthead-style.
+       ================================================================ -->
+  <Use template="cover">
+    <Slot name="default">
+      <Text class="eyebrow">THE LONG TAIL</Text>
+      <Text class="hero">After the launch,</Text>
+      <Text class="hero" italic="true" color="9A2A1F">the slow work.</Text>
+
+      <VStack class="hairline" margin.top="16" />
+
+      <Text class="subtitle" w="540" margin.top="8">A field report on what teams actually maintain — the quiet hours, the configuration drift, the dashboards nobody owns — long after the marketing window closes.</Text>
+
+      <HStack gap="24" alignItems="baseline" padding.top="36">
+        <Text class="caption">FEATURE</Text>
+        <VStack class="bg-rule" w="1" h="14" />
+        <Text class="caption">5,400 WORDS</Text>
+        <VStack class="bg-rule" w="1" h="14" />
+        <Text class="caption">PUBLISHED 2026.02.14</Text>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

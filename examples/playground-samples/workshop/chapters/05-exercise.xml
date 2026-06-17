@@ -1,0 +1,53 @@
+<Fragment>
+  <Use template="lesson"
+       step="05"
+       eyebrow="PART 5 · CAPSTONE"
+       title="Ship a four-slide deck. Yours."
+       lede="Use everything from parts 1-4. You have one hour. The goal is not a beautiful deck — the goal is a deck whose styles, templates, and master you can defend in code review.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="stretch" w="100%">
+        <Use template="exercise-card" n="2A"
+             duration="20 min"
+             title="Pick a topic that is not 'about builder'."
+             body="A four-slide deck on something you actually care about — a hobby, a side project, a city. The constraint forces the design to argue with real content."
+             deliverable="One sentence: 'It's about ___, for ___.'" />
+        <Use template="exercise-card" n="2B"
+             duration="40 min"
+             title="Build it bottom-up: styles → master → templates → slides."
+             body="No copy-pasting between slides. If two slides need the same layout, that's a template. If the template needs the same chrome, that's a master."
+             deliverable="A built .pptx + your three source files (styles, master, page template)." />
+      </HStack>
+
+      <Use template="callout-info" label="REVIEW PAIRINGS"
+           body="Pair with the person to your left. Five minutes per person — they read your XML aloud and you watch where they hesitate. Hesitation is the design feedback." />
+
+      <VStack class="hairline" margin.top="6" />
+
+      <HStack gap="20" alignItems="start" w="100%" padding.top="6">
+        <VStack gap="6" w="50%">
+          <Text class="title">Wrap-up.</Text>
+          <Text class="body">We covered <Span class="kw-coral">four primitives</Span> — containers, styles, templates, masters — and built a deck end-to-end. You now have the same toolkit the @slideglance/builder reference deck uses; the only difference is scale.</Text>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="6" w="max">
+          <Text class="title">Next.</Text>
+          <Foreach items='[
+            {"t":"Composition · &lt;Import&gt;, &lt;Foreach&gt;, &lt;If&gt;","p":"part of the next workshop, Builder 201."},
+            {"t":"Pixel polish · the equalize preprocessor","p":"part 201, after lunch."},
+            {"t":"Embedding in your own product","p":"part 301, the builder/viewer course."}
+          ]' as="n">
+            <HStack gap="10" alignItems="start" w="100%">
+              <VStack class="bg-coral" w="6" h="6" borderRadius="3" margin.top="6" />
+              <VStack gap="2" w="max">
+                <Text class="body" bold="true">{n.t}</Text>
+                <Text class="body-soft">{n.p}</Text>
+              </VStack>
+            </HStack>
+          </Foreach>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>&lt;HStack&gt; · Builder XML Reference</title>
+<link rel="stylesheet" href="../styles.css" />
+<script>(()=>{const s=localStorage.getItem("sg-theme");if(s==="light"||s==="dark")document.documentElement.setAttribute("data-theme",s)})()</script>
+</head>
+<body class="ref-page">
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="ref-header">
+  <a class="brand" href="../">SlideGlance Reference</a>
+  <a class="ref-back" href="../../../build/">← Back to Build</a>
+</header>
+<div class="ref-shell">
+<nav class="ref-sidebar" aria-label="Builder elements">
+<h2>Visual nodes</h2>
+<ul><li><a href="../text/"><code>&lt;Text&gt;</code></a></li><li><a href="../ul/"><code>&lt;Ul&gt;</code></a></li><li><a href="../ol/"><code>&lt;Ol&gt;</code></a></li><li><a href="../image/"><code>&lt;Image&gt;</code></a></li><li><a href="../icon/"><code>&lt;Icon&gt;</code></a></li><li><a href="../svg/"><code>&lt;Svg&gt;</code></a></li><li><a href="../table/"><code>&lt;Table&gt;</code></a></li><li><a href="../shape/"><code>&lt;Shape&gt;</code></a></li><li><a href="../chart/"><code>&lt;Chart&gt;</code></a></li><li><a href="../line/"><code>&lt;Line&gt;</code></a></li><li><a href="../connector/"><code>&lt;Connector&gt;</code></a></li><li><a href="../vstack/"><code>&lt;VStack&gt;</code></a></li><li><a href="../hstack/" aria-current="page"><code>&lt;HStack&gt;</code></a></li><li><a href="../layer/"><code>&lt;Layer&gt;</code></a></li><li><a href="../slideglance/"><code>&lt;SlideGlance&gt;</code></a></li><li><a href="../slide/"><code>&lt;Slide&gt;</code></a></li><li><a href="../fragment/"><code>&lt;Fragment&gt;</code></a></li></ul>
+<h2>Meta &amp; composition</h2>
+<ul><li><a href="../document/"><code>&lt;Document&gt;</code></a></li><li><a href="../templates/"><code>&lt;Templates&gt;</code></a></li><li><a href="../template/"><code>&lt;Template&gt;</code></a></li><li><a href="../use/"><code>&lt;Use&gt;</code></a></li><li><a href="../slot/"><code>&lt;Slot&gt;</code></a></li><li><a href="../import/"><code>&lt;Import&gt;</code></a></li><li><a href="../styles/"><code>&lt;Styles&gt;</code></a></li><li><a href="../style/"><code>&lt;Style&gt;</code></a></li><li><a href="../if/"><code>&lt;If&gt;</code></a></li><li><a href="../choose/"><code>&lt;Choose&gt;</code></a></li><li><a href="../when/"><code>&lt;When&gt;</code></a></li><li><a href="../otherwise/"><code>&lt;Otherwise&gt;</code></a></li><li><a href="../foreach/"><code>&lt;Foreach&gt;</code></a></li></ul>
+</nav>
+<main id="main" class="ref-content">
+<h1><code>&lt;HStack&gt;</code></h1>
+<p class="ref-lede">Flex row container — children stack horizontally.</p>
+<h2>Attributes</h2>
+<table class="attr-table">
+<thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>alignItems</code></td><td><code>alignItems</code></td><td></td><td></td></tr>
+<tr><td><code>alignSelf</code></td><td><code>alignSelf</code></td><td></td><td></td></tr>
+<tr><td><code>backgroundColor</code></td><td><code>color</code></td><td></td><td></td></tr>
+<tr><td><code>backgroundImage</code></td><td><code>json</code></td><td></td><td>Background image source/sizing.</td></tr>
+<tr><td><code>border</code></td><td><code>border</code></td><td></td><td>Border style (color/width/dashType).</td></tr>
+<tr><td><code>borderBottom</code></td><td><code>border</code></td><td></td><td>Bottom-only border (color/width/dashType). Composes additively with `border`.</td></tr>
+<tr><td><code>borderLeft</code></td><td><code>border</code></td><td></td><td>Left-only border (color/width/dashType). Composes additively with `border`.</td></tr>
+<tr><td><code>borderRadius</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>borderRight</code></td><td><code>border</code></td><td></td><td>Right-only border (color/width/dashType). Composes additively with `border`.</td></tr>
+<tr><td><code>borderTop</code></td><td><code>border</code></td><td></td><td>Top-only border (color/width/dashType). Composes additively with `border`.</td></tr>
+<tr><td><code>bottom</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>flexBasis</code></td><td><code>length</code></td><td></td><td>Yoga flex-basis override (number, percentage, or &#39;max&#39;).</td></tr>
+<tr><td><code>flexGrow</code></td><td><code>number</code></td><td></td><td>Yoga flex-grow override (defaults to context-aware behavior).</td></tr>
+<tr><td><code>flexShrink</code></td><td><code>number</code></td><td></td><td>Yoga flex-shrink override (defaults to 1 inside stacks).</td></tr>
+<tr><td><code>flexWrap</code></td><td><code>flexWrap</code></td><td></td><td></td></tr>
+<tr><td><code>gap</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>group</code></td><td><code>string</code></td><td></td><td>Bundle this node and its descendants into one PowerPoint group (&lt;p:grpSp&gt;). Use `true` for an anonymous group or a string for a stable group id; nested groupings stack into nested grpSp elements.</td></tr>
+<tr><td><code>h</code></td><td><code>length</code></td><td></td><td>Height (number, percentage, or &#39;max&#39;).</td></tr>
+<tr><td><code>id</code></td><td><code>string</code></td><td></td><td>Author-facing identifier for cross-references (e.g. &lt;Connector from=&quot;...&quot; to=&quot;...&quot;/&gt;). Must be unique within a slide; XML-friendly chars only (no colon).</td></tr>
+<tr><td><code>isDecorative</code></td><td><code>boolean</code></td><td></td><td></td></tr>
+<tr><td><code>justifyContent</code></td><td><code>justifyContent</code></td><td></td><td></td></tr>
+<tr><td><code>left</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>margin</code></td><td><code>padding</code></td><td></td><td>Outer margin (number or per-side object).</td></tr>
+<tr><td><code>maxH</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>maxW</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>minH</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>minW</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>opacity</code></td><td><code>number</code></td><td></td><td>0..1 opacity.</td></tr>
+<tr><td><code>padding</code></td><td><code>padding</code></td><td></td><td>Inner padding (number or per-side object).</td></tr>
+<tr><td><code>position</code></td><td><code>string</code></td><td></td><td></td></tr>
+<tr><td><code>right</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>shadow</code></td><td><code>shadow</code></td><td></td><td></td></tr>
+<tr><td><code>top</code></td><td><code>number</code></td><td></td><td></td></tr>
+<tr><td><code>w</code></td><td><code>length</code></td><td></td><td>Width (number, percentage, or &#39;max&#39;).</td></tr>
+<tr><td><code>x</code></td><td><code>number</code></td><td></td><td>Absolute x (used inside &lt;Layer&gt;).</td></tr>
+<tr><td><code>y</code></td><td><code>number</code></td><td></td><td>Absolute y (used inside &lt;Layer&gt;).</td></tr>
+<tr><td><code>zIndex</code></td><td><code>number</code></td><td></td><td></td></tr>
+</tbody>
+</table>
+<h2>Allowed children</h2>
+<p class="ref-empty-children">This element accepts no child elements.</p>
+<h2>Used by</h2>
+<ul class="used-by"><li><a href="../vstack/"><code>&lt;VStack&gt;</code></a> <span class="ref-card-cardinality">(0..∞)</span></li>
+<li><a href="../layer/"><code>&lt;Layer&gt;</code></a> <span class="ref-card-cardinality">(0..∞)</span></li>
+<li><a href="../slide/"><code>&lt;Slide&gt;</code></a> <span class="ref-card-cardinality">(0..∞)</span></li></ul>
+
+<h2>See also</h2>
+<ul class="see-also"><li><a href="https://github.com/SlideGlance/slideglance/blob/main/packages/builder/docs/en/layout-and-styling.md">Layout &amp; styling</a></li></ul>
+<h2>Source</h2>
+<p><a href="https://github.com/SlideGlance/slideglance/blob/main/packages/builder/src/registry/compiled/index.ts#L461"><code>src/registry/compiled/index.ts</code> · line 461</a></p>
+</main>
+</div>
+<script src="../scripts/site.js" defer></script>
+</body>
+</html>

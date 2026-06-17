@@ -1,0 +1,52 @@
+<Fragment>
+  <!--
+    Pitch deck slide masters.
+
+      COVER — full bleed dark with a soft accent halo (faked via a
+              large semi-transparent circle) and a wordmark in the
+              top-left. Page-number free.
+      STAGE — every body page. Thin top hairline + brand mark +
+              section indicator, page number bottom-right.
+  -->
+
+  <Master name="COVER" backgroundColor="0B0B14">
+    <!-- Accent halo (top-right) — a large rounded rect with
+         transparency to fake a gradient glow. Stacked twice with
+         different sizes / transparencies for depth. -->
+    <MasterRect x="780" y="-200" w="700" h="700"
+                fill.color="7C5CFF" fill.transparency="80" />
+    <MasterRect x="900" y="-100" w="500" h="500"
+                fill.color="2EE6CA" fill.transparency="88" />
+
+    <!-- Wordmark strip — accent bar + brand text. -->
+    <MasterRect x="56" y="56" w="4" h="20" fill.color="2EE6CA" />
+    <MasterText x="68" y="56" w="240" h="20"
+                fontFamily="Inter" fontSize="12" bold="true" color="F5F5FA">
+      ◆ FLOWBASE
+    </MasterText>
+  </Master>
+
+  <Master name="STAGE" backgroundColor="0B0B14">
+    <!-- Top hairline + brand. -->
+    <MasterRect x="56" y="32" w="4" h="14" fill.color="2EE6CA" />
+    <MasterText x="68" y="32" w="240" h="14"
+                fontFamily="Inter" fontSize="10" bold="true" color="8B8BA8">
+      ◆ FLOWBASE · SERIES A
+    </MasterText>
+    <MasterText x="1024" y="32" w="200" h="14"
+                fontFamily="Inter" fontSize="10" bold="true" color="6F6F8A"
+                textAlign="right">
+      2026 INVESTOR DECK
+    </MasterText>
+    <MasterRect x="56" y="56" w="1168" h="1" fill.color="2C2C55" />
+
+    <!-- Bottom hairline + page number. -->
+    <MasterRect x="56" y="676" w="1168" h="1" fill.color="2C2C55" />
+    <MasterText x="56" y="688" w="400" h="14"
+                fontFamily="Inter" fontSize="10" bold="true" color="6F6F8A">
+      flowbase.ai · confidential
+    </MasterText>
+    <SlideNumber x="1160" y="684" w="64" h="18"
+                 fontFamily="Inter" fontSize="11" color="8B8BA8" />
+  </Master>
+</Fragment>

@@ -1,0 +1,28 @@
+[package]
+name = "slideglance-parser"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "PPTX ZIP archive + OOXML XML parser for slideglance (themes, slides, layouts, masters, charts, tables)"
+readme = "../../README.md"
+keywords = ["pptx", "powerpoint", "ooxml", "parser", "xml"]
+categories = ["parser-implementations", "multimedia"]
+
+[lints]
+workspace = true
+
+[dependencies]
+slideglance-utils = { workspace = true, features = ["serde"] }
+slideglance-color = { workspace = true, features = ["serde"] }
+slideglance-model = { workspace = true, features = ["serde"] }
+zip = { workspace = true }
+quick-xml = { workspace = true }
+regex = { workspace = true }
+base64 = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+serde = { workspace = true }

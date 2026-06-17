@@ -1,0 +1,65 @@
+<Fragment>
+  <!--
+    Slide masters. Two layouts are registered:
+
+      BODY  — every reference body page. Magazine-style top strip with
+              brand mark · publication slug · running issue caption,
+              plus a refined footer with column rule, page number,
+              and an editorial right-hand colophon.
+      COVER — chapter cover pages. No chrome (the page itself is a
+              full-bleed signature surface).
+  -->
+
+  <Master name="BODY" backgroundColor="FFFFFF">
+    <!-- Top brand bar. Three-segment layout: brand mark + product name
+         on the left, sectional caption in the middle, issue meta on
+         the right. A thin hairline closes the strip. -->
+    <MasterRect x="32"  y="14"  w="2"   h="20"   fill.color="AA2D00" />
+    <MasterText x="42"  y="13"  w="160" h="20"
+                fontFamily="Inter Display" fontSize="11" bold="true" color="181D26">
+      slideglance / builder
+    </MasterText>
+    <MasterText x="206" y="13"  w="120" h="20"
+                fontFamily="Inter Display" fontSize="10" bold="true" color="9297A0">
+      ·  XML REFERENCE
+    </MasterText>
+
+    <!-- Right-aligned issue caption. -->
+    <MasterText x="500" y="13"  w="261" h="20"
+                fontFamily="Inter Display" fontSize="10" bold="true" color="9297A0"
+                textAlign="right">
+      ISSUE 2026.05  ·  A4 PORTRAIT  ·  PRINT EDITION
+    </MasterText>
+
+    <!-- Top hairline. -->
+    <MasterRect x="32"  y="40"  w="729" h="1"    fill.color="DDDDDD" />
+
+    <!-- Bottom hairline + footer strip. -->
+    <MasterRect x="32"  y="1080" w="729" h="1"   fill.color="DDDDDD" />
+
+    <!-- Left footer: brand colophon. -->
+    <MasterText x="32"  y="1090" w="320" h="20"
+                fontFamily="Inter Display" fontSize="10" bold="true" color="41454D">
+      slideglance / builder
+    </MasterText>
+    <MasterText x="142"  y="1090" w="500" h="20"
+                fontFamily="Inter Display" fontSize="10" bold="false" color="9297A0">
+      A4 portrait reference deck  ·  edition 2026.05
+    </MasterText>
+
+    <!-- Right footer: page number with leading rule and italic
+         "FOLIO" caption that signals the column. -->
+    <MasterText x="640" y="1090" w="60"  h="20"
+                fontFamily="Inter Display" fontSize="9"  bold="true"  color="9297A0"
+                textAlign="right">
+      FOLIO
+    </MasterText>
+    <SlideNumber x="708" y="1086" w="56" h="24"
+                 fontFamily="Inter Display" fontSize="14" color="181D26" />
+  </Master>
+
+  <Master name="COVER" backgroundColor="FFFFFF">
+    <!-- Cover slides are full-bleed; no chrome here so the signature
+         surface can paint to every edge. -->
+  </Master>
+</Fragment>

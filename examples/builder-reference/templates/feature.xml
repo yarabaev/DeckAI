@@ -1,0 +1,265 @@
+<Fragment>
+  <!--
+    Feature templates: section heads, attribute rows, key-value rows,
+    sub-section labels. These compose every reference body page.
+
+    Layout calibration: the editorial body inside `gutter` is 793 - 80 = 713px
+    wide. Attribute name column is 200px so even the longest tokens
+    (`backgroundImage`, `flexWrap`) sit on a single line; the type column
+    is 96px; the description fills the remaining ~400px. No wrapping.
+  -->
+  <Templates>
+    <!-- Section header inside a page. The coral indicator bar uses the
+         `h="capbar:title-md"` sentinel — the build-time preprocessor
+         (lib/equalize.ts) reads the title-md style's fontSize and
+         lineHeight and automatically rewrites h + margin.top so the bar
+         spans cap-height to baseline of the rendered title. -->
+    <Template name="h2">
+      <HStack gap="10" alignItems="start">
+        <VStack class="bg-coral" w="3" h="capbar:title-md" />
+        <Text class="title-md">{text}</Text>
+      </HStack>
+    </Template>
+
+    <Template name="h3">
+      <Text class="caption" color="AA2D00">{text}</Text>
+    </Template>
+
+    <!-- Attribute reference row. Name + type sit on the header line; the
+         description wraps onto its own full-width line below so long prose
+         never has to fight the narrow editorial gutter for space. -->
+    <Template name="attr-row">
+      <VStack gap="2" w="100%">
+        <HStack gap="8" alignItems="start" w="100%">
+          <Text class="kw-ink" w="160">{attr}</Text>
+          <Text class="caption" w="max" color="41454D">{type}</Text>
+        </HStack>
+        <Text class="body-muted" w="100%">{desc}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Required-attribute row variant (small coral dot prefix). -->
+    <Template name="attr-row-req">
+      <VStack gap="2" w="100%">
+        <HStack gap="8" alignItems="start" w="100%">
+          <HStack gap="6" alignItems="center" w="160">
+            <VStack class="dot-coral" w="6" h="6" borderRadius="3" />
+            <Text class="kw-ink">{attr}</Text>
+          </HStack>
+          <Text class="caption" w="max" color="AA2D00">{type}</Text>
+        </HStack>
+        <Text class="body-muted" w="100%">{desc}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Pattern row. Header carries attr + example value; description
+         wraps onto its own line below. Same two-row layout as attr-row. -->
+    <Template name="pattern-row">
+      <VStack gap="2" w="100%">
+        <HStack gap="8" alignItems="start" w="100%">
+          <Text class="kw-ink" w="150">{attr}</Text>
+          <Text class="kw-ink" w="max" color="AA2D00">{value}</Text>
+        </HStack>
+        <Text class="body-muted" w="100%">{desc}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Single-row label / value (table-of-contents, presets, enum lists).
+         Mixed fontSize (caption=11 / body-ink=13) ⇒ apply the
+         "mixed-size text rows" idiom: textVAlign="middle" + lineHeight=1.0
+         on every sibling so glyph baselines line up. -->
+    <Template name="kv-row">
+      <HStack gap="10" alignItems="start" w="100%">
+        <Text class="caption" w="40" color="AA2D00" textVAlign="middle" lineHeight="1.0">{k}</Text>
+        <Text class="body-ink" w="max" textVAlign="middle" lineHeight="1.0">{v}</Text>
+      </HStack>
+    </Template>
+
+    <!-- Inline summary chip used inside dense column heads. -->
+    <Template name="meta-chip">
+      <HStack gap="6" alignItems="center">
+        <VStack class="dot-{tone}" />
+        <Text class="caption" color="181D26">{text}</Text>
+      </HStack>
+    </Template>
+
+    <!-- Three-up summary stat strip (used at the top of dense reference
+         pages). Each cell shows a number + label; three cells share a row. -->
+    <Template name="summary-3up">
+      <HStack gap="14" w="100%">
+        <VStack class="card-canvas" w="33%" gap="2">
+          <Text class="caption" color="AA2D00">{l1}</Text>
+          <Text class="title-md">{v1}</Text>
+        </VStack>
+        <VStack class="card-canvas" w="33%" gap="2">
+          <Text class="caption" color="AA2D00">{l2}</Text>
+          <Text class="title-md">{v2}</Text>
+        </VStack>
+        <VStack class="card-canvas" w="33%" gap="2">
+          <Text class="caption" color="AA2D00">{l3}</Text>
+          <Text class="title-md">{v3}</Text>
+        </VStack>
+      </HStack>
+    </Template>
+
+    <!-- Two-up "do" / "don't" pair on the don'ts pages. -->
+    <Template name="do-dont">
+      <HStack gap="14" alignItems="stretch" w="100%">
+        <VStack class="callout-success" w="50%" gap="6">
+          <Text class="caption" color="006400">DO</Text>
+          <Text class="body-ink">{do}</Text>
+        </VStack>
+        <VStack class="callout-danger" w="50%" gap="6">
+          <Text class="caption" color="AA2D00">DON'T</Text>
+          <Text class="body-ink">{dont}</Text>
+        </VStack>
+      </HStack>
+    </Template>
+
+    <!-- Magazine-style figure caption. Italic, muted, smaller than body.
+         Sits directly below a sample card / illustration. -->
+    <Template name="figcaption">
+      <HStack gap="6" alignItems="start" w="100%">
+        <Text fontFamily="Inter Display" fontSize="9" bold="true" color="AA2D00">FIG.</Text>
+        <Text fontFamily="Inter Display" fontSize="11" italic="true" color="41454D" lineHeight="1.35" w="max">{text}</Text>
+      </HStack>
+    </Template>
+
+    <!-- Pull-quote. Centered, oversized, with rules above and below.
+         Use mid-page on dense reference pages to give the eye a rest. -->
+    <Template name="pullquote">
+      <VStack gap="10" w="100%" alignItems="center">
+        <VStack class="bg-coral" w="48" h="2" />
+        <Text fontFamily="Inter Display" fontSize="22" italic="true" bold="false"
+              color="181D26" lineHeight="1.3" textAlign="center" w="600">"{quote}"</Text>
+        <Text fontFamily="Inter Display" fontSize="10" bold="true" color="AA2D00">— {attrib}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Magazine-style "deck rule" — thicker accent rule used above
+         section transitions inside body pages. -->
+    <Template name="deck-rule">
+      <HStack alignItems="center" gap="0" w="100%">
+        <VStack backgroundColor="AA2D00" h="2" w="32" />
+        <VStack class="bg-hairline" h="1" w="max" />
+      </HStack>
+    </Template>
+
+    <!-- Section break dingbat: three small bullets centred between
+         major content blocks on a body page. -->
+    <Template name="dingbat">
+      <HStack gap="14" alignItems="center" justifyContent="center" w="100%">
+        <VStack backgroundColor="AA2D00" w="4" h="4" borderRadius="2" />
+        <VStack backgroundColor="AA2D00" w="4" h="4" borderRadius="2" />
+        <VStack backgroundColor="AA2D00" w="4" h="4" borderRadius="2" />
+      </HStack>
+    </Template>
+
+    <!-- Generic 3-column grid row. Caller supplies column widths once;
+         every row that follows uses the same widths so the columns stay
+         locked across rows (table-like). The `align` parameter selects
+         vertical alignment (start | center | end | stretch) so a row
+         can pin to baseline / centre / top of the tallest cell. -->
+    <Template name="grid-row3">
+      <HStack gap="{gap}" alignItems="{align}" w="100%">
+        <VStack w="{w1}" gap="0"><Slot name="c1" /></VStack>
+        <VStack w="{w2}" gap="0"><Slot name="c2" /></VStack>
+        <VStack w="{w3}" gap="0"><Slot name="c3" /></VStack>
+      </HStack>
+    </Template>
+
+    <!-- Generic 4-column grid row (same contract). -->
+    <Template name="grid-row4">
+      <HStack gap="{gap}" alignItems="{align}" w="100%">
+        <VStack w="{w1}" gap="0"><Slot name="c1" /></VStack>
+        <VStack w="{w2}" gap="0"><Slot name="c2" /></VStack>
+        <VStack w="{w3}" gap="0"><Slot name="c3" /></VStack>
+        <VStack w="{w4}" gap="0"><Slot name="c4" /></VStack>
+      </HStack>
+    </Template>
+
+    <!-- Type ramp row. Locks the three columns at 80 / 180 / max so every
+         row's columns line up regardless of fontSize:
+           1. token  — caption-coloured slug (display-xl, body, etc.)
+           2. sample — preview at the row's fontSize / weight
+           3. meta   — right-aligned caption ("48 / 500 · chapter covers")
+         Caller passes size, weight and lineHeight via attributes so the
+         template body stays single-purpose. -->
+    <Template name="type-row">
+      <HStack gap="14" alignItems="end" w="100%">
+        <Text class="caption" color="AA2D00" w="80" textVAlign="middle" lineHeight="1.0">{token}</Text>
+        <Text fontFamily="Inter Display" fontSize="{size}" bold="{bold}"
+              color="181D26" lineHeight="1.0" textVAlign="middle" w="160">{sample}</Text>
+        <Text class="caption" color="41454D" w="max" textAlign="right" textVAlign="middle" lineHeight="1.0">{meta}</Text>
+      </HStack>
+    </Template>
+
+    <!-- Comparison row used in matrix / pricing tables. Three equal-share
+         cells — no widths needed; HStack auto-distributes. Pass cell
+         backgrounds via `bg1`/`bg2`/`bg3`. Cells stretch to equal height. -->
+    <Template name="compare-row">
+      <HStack gap="0" alignItems="stretch" w="100%">
+        <VStack padding="12" backgroundColor="{bg1}"
+                border.color="DDDDDD" border.width="1" gap="0">
+          <Slot name="c1" />
+        </VStack>
+        <VStack padding="12" backgroundColor="{bg2}"
+                border.color="DDDDDD" border.width="1" gap="0">
+          <Slot name="c2" />
+        </VStack>
+        <VStack padding="12" backgroundColor="{bg3}"
+                border.color="DDDDDD" border.width="1" gap="0">
+          <Slot name="c3" />
+        </VStack>
+      </HStack>
+    </Template>
+
+    <!-- Mood card. Three-segment editorial card (eyebrow / title / body)
+         with reserved title and body heights. When several mood-cards
+         share a row, callers pass identical {titleH} and {bodyH} values so
+         the title-to-body baselines line up across cards regardless of how
+         many lines each individual title wraps to.
+
+         For automatic alignment, pass `titleH="auto"` / `bodyH="auto"`
+         and the build-time equalize preprocessor will replace `auto`
+         with the worst-case sibling height before the runtime sees it.
+
+         Parameters:
+           surface       — VStack class for the card surface (card-coral, card-soft, …)
+           eyebrow       — short slug ("SIGNATURE", "EDITORIAL")
+           eyebrowColor  — colour for the eyebrow caption
+           title         — display title (1–3 lines worst case)
+           titleColor    — title text colour
+           titleH        — reserved title height in px, or `"auto"`
+           body          — body copy
+           bodyColor     — body text colour
+           bodyH         — reserved body height in px, or `"auto"`
+
+         No `w` parameter — the card relies on its parent HStack to
+         auto-distribute equal-share widths. Just stack the cards in an
+         HStack and they line up.
+    -->
+    <Template name="mood-card">
+      <VStack class="{surface}" gap="8" padding="20">
+        <Text class="caption" color="{eyebrowColor}">{eyebrow}</Text>
+        <Text fontFamily="Inter Display" fontSize="22" bold="false"
+              color="{titleColor}" lineHeight="1.2" h="{titleH}">{title}</Text>
+        <Text fontFamily="Inter Display" fontSize="12" bold="false"
+              color="{bodyColor}" lineHeight="1.4" h="{bodyH}">{body}</Text>
+      </VStack>
+    </Template>
+
+    <!-- Summary card. Smaller-typography variant for footer-adjacent
+         info strips (RUNTIME / SURFACES / SLIDES on the cover). Same
+         eyebrow / title / body contract, same `auto` support; the only
+         difference from mood-card is the smaller fontSize on the title
+         and the canvas surface as default. No `w` — auto-distributes. -->
+    <Template name="summary-card">
+      <VStack class="card-canvas" gap="6" padding="16">
+        <Text class="caption" color="AA2D00">{eyebrow}</Text>
+        <Text class="title-md" h="{titleH}">{title}</Text>
+        <Text class="body-muted" h="{bodyH}">{body}</Text>
+      </VStack>
+    </Template>
+  </Templates>
+</Fragment>

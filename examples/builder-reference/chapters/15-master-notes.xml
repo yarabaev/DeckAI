@@ -1,0 +1,151 @@
+<Fragment>
+  <!-- Chapter 15 — Master, Notes, presentation-level options. -->
+  <Use template="section-mint"
+       number="15"
+       kicker="Document-level chrome"
+       title="Master · Notes."
+       subtitle="Presentation-level chrome and speaker notes."
+       inside1="Master · static decoration that repeats on every page"
+       inside2="MasterText / MasterRect / MasterLine · static elements"
+       inside3="SlideNumber · auto folio rendered by pptxgenjs"
+       inside4="Notes · per-slide speaker notes attached as a child"
+       epigraph="The master is the magazine's running head — invisible until you remove it."
+       epigraphAttrib="builder design notes"
+       meta="Master · MasterText · MasterRect · MasterLine · SlideNumber · Notes"
+       leftMeta="6 meta elements · pptx-master compilation · per-slide note attachment" />
+
+  <!-- Master page -->
+  <Use template="page" eyebrow="15 / Master" kicker="Slide master"
+       title="Master — chrome that repeats on every page"
+       lede="Defines static decoration that gets compiled into a true PowerPoint master via pptxgenjs.defineSlideMaster. Pages with master='NAME' inherit the chrome.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Master attributes" />
+          <Foreach items='[
+            {"attr":"name","type":"string","desc":"Master name (referenced by Slide master=&apos;…&apos;).","req":true},
+            {"attr":"backgroundColor","type":"color","desc":"Solid background tint."},
+            {"attr":"backgroundPath","type":"string","desc":"Path / URL to a background image."},
+            {"attr":"backgroundData","type":"string","desc":"Base64-encoded background."},
+            {"attr":"margin","type":"length","desc":"Number or {top,right,bottom,left}."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="h2" text="Child elements" />
+          <Foreach items='[
+            {"attr":"MasterText","type":"static","desc":"Static text label (x/y/w/h required)."},
+            {"attr":"MasterImage","type":"static","desc":"Static image (src + x/y/w/h)."},
+            {"attr":"MasterRect","type":"static","desc":"Static rectangle (fill/border)."},
+            {"attr":"MasterLine","type":"static","desc":"Static line (x/y/w/h, line.color)."},
+            {"attr":"SlideNumber","type":"auto","desc":"Auto page number — pptxgenjs built-in."},
+            {"attr":"VStack/HStack/Text/…","type":"layout","desc":"Page-like layout nodes are accepted; flattened into master objects after layout."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · this deck's BODY master" />
+          <VStack class="code-light" gap="2">
+            <Text class="code-text">&lt;Master name="BODY" backgroundColor="FFFFFF"&gt;</Text>
+            <Text class="code-text">  &lt;MasterRect x="0" y="40"</Text>
+            <Text class="code-text">              w="793" h="1"</Text>
+            <Text class="code-text">              fill.color="DDDDDD" /&gt;</Text>
+            <Text class="code-text">  &lt;MasterRect x="32" y="12"</Text>
+            <Text class="code-text">              w="18" h="18"</Text>
+            <Text class="code-text">              fill.color="181D26" /&gt;</Text>
+            <Text class="code-text">  &lt;MasterText x="56" y="11"</Text>
+            <Text class="code-text">              w="160" h="20"</Text>
+            <Text class="code-text">              fontSize="11" bold="true"</Text>
+            <Text class="code-text">              color="181D26"&gt;</Text>
+            <Text class="code-text">    slideglance / builder</Text>
+            <Text class="code-text">  &lt;/MasterText&gt;</Text>
+            <Text class="code-text">  &lt;SlideNumber x="700" y="1090"</Text>
+            <Text class="code-text">               w="60" h="20"</Text>
+            <Text class="code-text">               fontSize="10"</Text>
+            <Text class="code-text">               color="41454D" /&gt;</Text>
+            <Text class="code-text">&lt;/Master&gt;</Text>
+          </VStack>
+
+          <Use template="callout" cls="callout-warn" kind="LIMITS"
+               titleColor="92400E" title="Master vs. layout"
+               body="Each Master maps to one PPTX layout. Multiple layouts under one master (Title vs. Title-and-content) are not yet expressible via XML. &lt;Table&gt; and &lt;Chart&gt; inside a Master are not supported." />
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <!-- Notes + Document options page -->
+  <Use template="page" eyebrow="15 / Meta" kicker="Notes · Document"
+       title="Notes — speaker notes, and Document-level options"
+       lede="Notes attach to a slide via a child element. The &lt;Document&gt; child of &lt;SlideGlance&gt; carries the deck-wide options: page size, default master, and document-wide font / colour defaults inherited by every Text descendant.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Notes" />
+          <Use template="attr-row" attr="(body)" type="text" desc="Multi-line text. Becomes the slide's speaker note in PPTX." />
+
+          <VStack class="hairline-soft" />
+          <Use template="h2" text="Document attributes" />
+          <Foreach items='[
+            {"attr":"size","type":"enum","desc":"A4 · 16:9 · 4:3 · letter — built-in slide sizes."},
+            {"attr":"width / height","type":"number","desc":"Custom slide size in pixels."},
+            {"attr":"defaultMaster","type":"string","desc":"Master name for slides without master=&apos;…&apos;."},
+            {"attr":"fontFamily","type":"string","desc":"Default font family for every Text descendant."},
+            {"attr":"fontSize","type":"number","desc":"Default font size (pt)."},
+            {"attr":"color","type":"color","desc":"Default text colour."},
+            {"attr":"bold / italic / strike / underline","type":"boolean","desc":"Document-wide text attribute defaults."},
+            {"attr":"lineHeight","type":"number","desc":"Default line height multiplier."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · Slide with Notes" />
+          <VStack class="code-light" gap="2">
+            <Text class="code-text">&lt;Slide master="BODY"&gt;</Text>
+            <Text class="code-text">  &lt;Notes&gt;</Text>
+            <Text class="code-text">    Walk the audience through</Text>
+            <Text class="code-text">    the type ramp first.</Text>
+            <Text class="code-text">    Pause for two beats on</Text>
+            <Text class="code-text">    the display-md row.</Text>
+            <Text class="code-text">  &lt;/Notes&gt;</Text>
+            <Text class="code-text">  &lt;VStack&gt;</Text>
+            <Text class="code-text">    &lt;Text&gt;…page content…&lt;/Text&gt;</Text>
+            <Text class="code-text">  &lt;/VStack&gt;</Text>
+            <Text class="code-text">&lt;/Slide&gt;</Text>
+          </VStack>
+
+          <Use template="h2" text="Sample · Presentation root with defaults" />
+          <VStack class="code-light" gap="2">
+            <Text class="code-text">&lt;Presentation size="A4"</Text>
+            <Text class="code-text">              defaultMaster="BODY"</Text>
+            <Text class="code-text">              fontFamily="Inter Display"</Text>
+            <Text class="code-text">              fontSize="13"</Text>
+            <Text class="code-text">              color="333840"</Text>
+            <Text class="code-text">              lineHeight="1.35"&gt;</Text>
+            <Text class="code-text">  &lt;Import src="styles/" /&gt;</Text>
+            <Text class="code-text">  &lt;Import src="templates/" /&gt;</Text>
+            <Text class="code-text">  &lt;Import src="chapters/" /&gt;</Text>
+            <Text class="code-text">&lt;/Presentation&gt;</Text>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <!-- Final summary band. Print edition — closes the deck with a
+           static reference caption instead of a CTA. -->
+      <Use template="summary-band"
+           title="That's the entire DSL."
+           body="Every node, every meta element, every recipe — rendered with the Airtable signature surface system."
+           meta="END OF REFERENCE · 16 chapters · 42 pages" />
+    </Slot>
+  </Use>
+</Fragment>

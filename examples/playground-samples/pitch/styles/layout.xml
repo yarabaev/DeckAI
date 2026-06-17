@@ -1,0 +1,14 @@
+<Fragment>
+  <!--
+    Layout primitives reused across templates.
+
+      fill / page    — height/width contracts for full-bleed children.
+      hairline / vrule — thin separator rules.
+  -->
+  <Styles>
+    <Style name="fill"     h="max" w="100%" />
+    <Style name="page"     w="100%" h="100%" />
+    <Style name="hairline" backgroundColor="2C2C55" h="1" w="100%" />
+    <Style name="vrule"    backgroundColor="2C2C55" w="1" h="100%" />
+  </Styles>
+</Fragment>

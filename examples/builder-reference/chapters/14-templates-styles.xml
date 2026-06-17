@@ -1,0 +1,184 @@
+<Fragment>
+  <!-- Chapter 14 — Templates / Styles / Imports. -->
+  <Use template="section-dark"
+       number="14"
+       kicker="Composition mechanics"
+       title="Templates · Styles · Imports."
+       subtitle="Composition mechanics. Macros, classes, file inlining."
+       inside1="Template · macro definition with placeholders + slots"
+       inside2="Use · invocation with attribute substitution"
+       inside3="Style · named attribute bundle reusable via class"
+       inside4="Import · parse-time inlining of another XML file"
+       epigraph="Composition lives at parse time. Nothing here costs the runtime a millisecond."
+       epigraphAttrib="builder runtime notes"
+       meta="Templates · Template · Use · Slot · Styles · Style · Import"
+       leftMeta="7 meta elements · parse-time expansion · no runtime cost" />
+
+  <!-- Templates page -->
+  <Use template="page" eyebrow="14 / Composition" kicker="Templates"
+       title="Templates / Use / Slot — parse-time macros"
+       lede="Templates expand at parse time, before the runtime sees them. Each Use call substitutes attribute placeholders and resolves named slots in the template body. Recursive expansion is allowed up to depth 32.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Template attributes" />
+          <Foreach items='[
+            {"attr":"name","type":"string","desc":"Template name. Required.","req":true},
+            {"attr":"params","type":"string","desc":"Optional comma-separated parameter list (informational)."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="h2" text="Use attributes" />
+          <Foreach items='[
+            {"attr":"template","type":"string","desc":"Template name to invoke.","req":true},
+            {"attr":"(any name)","type":"string","desc":"Becomes a {{placeholder}} value inside the template body."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="h2" text="Slot attributes" />
+          <Use template="attr-row" attr="name" type="string" desc='Slot name. Default slot is "default".' />
+
+          <VStack class="hairline-soft" />
+          <Use template="callout" cls="callout-info" kind="HEADS-UP"
+               titleColor="254FAD" title="Placeholder names follow JS identifier rules"
+               body="The {name} pattern only matches [a-zA-Z_][a-zA-Z0-9_]*. Hyphens are not allowed — use camelCase (titleColor instead of title-color)." />
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · template definition + use" />
+          <VStack class="code-light" gap="2">
+            <Text class="code-text">&lt;Templates&gt;</Text>
+            <Text class="code-text">  &lt;Template name="signature-card"&gt;</Text>
+            <Text class="code-text">    &lt;VStack class="{surface}" gap="14"&gt;</Text>
+            <Text class="code-text">      &lt;Text fontSize="11"&gt;{eyebrow}&lt;/Text&gt;</Text>
+            <Text class="code-text">      &lt;Text fontSize="28"&gt;{title}&lt;/Text&gt;</Text>
+            <Text class="code-text">      &lt;Slot name="footer" /&gt;</Text>
+            <Text class="code-text">    &lt;/VStack&gt;</Text>
+            <Text class="code-text">  &lt;/Template&gt;</Text>
+            <Text class="code-text">&lt;/Templates&gt;</Text>
+          </VStack>
+
+          <Use template="h2" text="Sample · Use call" />
+          <VStack class="code-light" gap="2">
+            <Text class="code-text">&lt;Use template="signature-card"</Text>
+            <Text class="code-text">     surface="bg-coral"</Text>
+            <Text class="code-text">     eyebrow="SIGNATURE"</Text>
+            <Text class="code-text">     title="Production apps in</Text>
+            <Text class="code-text">            prototype speed."&gt;</Text>
+            <Text class="code-text">  &lt;Slot name="footer"&gt;</Text>
+            <Text class="code-text">    &lt;Text class="caption"</Text>
+            <Text class="code-text">          color="F5E0D6"&gt;</Text>
+            <Text class="code-text">      Edition 2026.05</Text>
+            <Text class="code-text">    &lt;/Text&gt;</Text>
+            <Text class="code-text">  &lt;/Slot&gt;</Text>
+            <Text class="code-text">&lt;/Use&gt;</Text>
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <!-- Styles + Imports page -->
+  <Use template="page" eyebrow="14 / Composition" kicker="Styles · Imports"
+       title="Styles / Style — class lookups, and Imports — file inlining"
+       lede="Styles register named attribute bundles that any element can opt into via class='…'. Imports inline another XML file at parse time so styles, templates, and slides can split across files.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Style attributes" />
+          <Foreach items='[
+            {"attr":"name","type":"string","desc":"Class name. Required.","req":true},
+            {"attr":"(any node attr)","type":"varies","desc":"Any attribute supported by the consumer node — backgroundColor, padding, fontSize, etc."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="h2" text="Style merging rules" />
+          <Foreach items='[
+            {"attr":"multiple classes","desc":"Allowed: class=&apos;base accent&apos;. Later classes override earlier ones."},
+            {"attr":"inline overrides","desc":"Inline node attributes always win over class-applied attributes."},
+            {"attr":"unknown class","desc":"Unknown class name → non-fatal error in diagnostics."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="rule" desc="{r.desc}" />
+          </Foreach>
+
+          <VStack class="hairline-soft" />
+          <Use template="h2" text="Import" />
+          <Foreach items='[
+            {"attr":"src","type":"string","desc":"Path to the imported file (relative to the calling file).","req":true},
+            {"attr":"(rules)","type":"rule","desc":"Imported file root must be &lt;Fragment&gt; or &lt;SlideGlance&gt;. Cycles are detected. Depth limit: 16."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · Style declaration" />
+          <VStack class="code-light" gap="2">
+            <Text class="code-text">&lt;Styles&gt;</Text>
+            <Text class="code-text">  &lt;Style name="card-coral"</Text>
+            <Text class="code-text">         backgroundColor="AA2D00"</Text>
+            <Text class="code-text">         borderRadius="12"</Text>
+            <Text class="code-text">         padding="24" /&gt;</Text>
+            <Text class="code-text">  &lt;Style name="t-on-dark"</Text>
+            <Text class="code-text">         color="FFFFFF" /&gt;</Text>
+            <Text class="code-text">&lt;/Styles&gt;</Text>
+          </VStack>
+
+          <Use template="h2" text="Sample · class application" />
+          <VStack class="code-light" gap="2">
+            <Text class="code-text">&lt;VStack class="card-coral"&gt;</Text>
+            <Text class="code-text">  &lt;Text class="t-on-dark"</Text>
+            <Text class="code-text">        fontSize="22" bold="true"&gt;</Text>
+            <Text class="code-text">    Production apps in</Text>
+            <Text class="code-text">    prototype speed.</Text>
+            <Text class="code-text">  &lt;/Text&gt;</Text>
+            <Text class="code-text">&lt;/VStack&gt;</Text>
+          </VStack>
+
+          <Use template="h2" text="Sample · Import chain" />
+          <VStack class="code-light" gap="2">
+            <Text class="code-text">&lt;SlideGlance xmlns="urn:slideglance:builder:v1"&gt;</Text>
+            <Text class="code-text">  &lt;Document size="A4" /&gt;</Text>
+            <Text class="code-text">  &lt;Import src="styles/colors.xml" /&gt;</Text>
+            <Text class="code-text">  &lt;Import src="templates/page.xml" /&gt;</Text>
+            <Text class="code-text">  &lt;Import src="chapters/00.xml" /&gt;</Text>
+            <Text class="code-text">  &lt;Import src="chapters/01.xml" /&gt;</Text>
+            <Text class="code-text">&lt;/SlideGlance&gt;</Text>
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+</Fragment>

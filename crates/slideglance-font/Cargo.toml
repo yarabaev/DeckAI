@@ -1,0 +1,41 @@
+[package]
+name = "slideglance-font"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Font mapping, measurement, and shaping for slideglance (OOXML font scheme + system/Google Fonts fallback chain)"
+readme = "../../README.md"
+keywords = ["pptx", "powerpoint", "font", "shaping", "fallback"]
+categories = ["graphics", "rendering::graphics-api"]
+
+[lints]
+workspace = true
+
+[dependencies]
+slideglance-model = { workspace = true }
+ttf-parser = { workspace = true }
+fontdb = { workspace = true, optional = true }
+font-kit = { workspace = true, optional = true }
+unicode-normalization = { workspace = true }
+
+[dev-dependencies]
+slideglance-utils = { workspace = true }
+
+[features]
+default = []
+# Opt-in system font discovery via `fontdb::Database::load_system_fonts`.
+# Enabling this feature breaks bit-equivalence between machines and
+# between native ↔ WASM builds — host-installed fonts vary. Use only
+# when reproducible output is not a requirement (e.g. interactive tools
+# that prefer the user's installed faces over OSS fallbacks).
+system-fonts = ["dep:fontdb"]
+# Opt-in PANOSE / OS/2 metric-aware best-match font resolution. Pulls
+# in font-kit (Servo's font loader) for cross-platform system font
+# enumeration plus per-face metric extraction. Determinism trade-off
+# is identical to `system-fonts`: host-installed faces vary, so the
+# resulting `font-family` chain composition does too. Pair with
+# `system-fonts` for the most accurate fallback set.
+metric-match = ["dep:font-kit"]

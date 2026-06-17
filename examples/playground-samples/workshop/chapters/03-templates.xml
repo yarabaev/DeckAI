@@ -1,0 +1,52 @@
+<Fragment>
+  <Use template="lesson"
+       step="03"
+       eyebrow="PART 3 · TEMPLATES"
+       title="Stop pasting layouts."
+       lede="If two slides share a layout, the layout belongs in a template. A template is a stack of nodes with named placeholders. A &lt;Use&gt; passes attributes; &lt;Slot&gt; carries children.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="14" w="58%">
+          <Text class="title">Declare a template.</Text>
+          <Use template="code-block" caption="templates/card.xml">
+            <Slot name="default">
+              <Text class="code"><Span class="code-keyword">&lt;Template</Span> name=<Span class="code-string">"metric"</Span><Span class="code-keyword">&gt;</Span></Text>
+              <Text class="code">  <Span class="code-keyword">&lt;VStack</Span> class=<Span class="code-string">"bg-card"</Span> padding=<Span class="code-string">"16"</Span><Span class="code-keyword">&gt;</Span></Text>
+              <Text class="code">    <Span class="code-keyword">&lt;Text</Span> class=<Span class="code-string">"eyebrow"</Span><Span class="code-keyword">&gt;</Span>{label}<Span class="code-keyword">&lt;/Text&gt;</Span></Text>
+              <Text class="code">    <Span class="code-keyword">&lt;Text</Span> class=<Span class="code-string">"title"</Span><Span class="code-keyword">&gt;</Span>{value}<Span class="code-keyword">&lt;/Text&gt;</Span></Text>
+              <Text class="code">  <Span class="code-keyword">&lt;/VStack&gt;</Span></Text>
+              <Text class="code"><Span class="code-keyword">&lt;/Template&gt;</Span></Text>
+            </Slot>
+          </Use>
+
+          <Text class="title" margin.top="6">Invoke it.</Text>
+          <Use template="code-block" caption="any chapter">
+            <Slot name="default">
+              <Text class="code"><Span class="code-keyword">&lt;Use</Span> template=<Span class="code-string">"metric"</Span> label=<Span class="code-string">"USERS"</Span> value=<Span class="code-string">"4.2M"</Span> <Span class="code-keyword">/&gt;</Span></Text>
+              <Text class="code"><Span class="code-keyword">&lt;Use</Span> template=<Span class="code-string">"metric"</Span> label=<Span class="code-string">"REV"</Span>   value=<Span class="code-string">"$1.8M"</Span> <Span class="code-keyword">/&gt;</Span></Text>
+            </Slot>
+          </Use>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="14" w="max">
+          <Text class="title">Slots carry content.</Text>
+          <Use template="code-block" caption="multi-child template invocation">
+            <Slot name="default">
+              <Text class="code"><Span class="code-keyword">&lt;Use</Span> template=<Span class="code-string">"feature"</Span> title=<Span class="code-string">"Why fast?"</Span><Span class="code-keyword">&gt;</Span></Text>
+              <Text class="code">  <Span class="code-keyword">&lt;Slot</Span> name=<Span class="code-string">"default"</Span><Span class="code-keyword">&gt;</Span></Text>
+              <Text class="code">    <Span class="code-keyword">&lt;Text&gt;</Span>Body paragraph 1<Span class="code-keyword">&lt;/Text&gt;</Span></Text>
+              <Text class="code">    <Span class="code-keyword">&lt;Text&gt;</Span>Body paragraph 2<Span class="code-keyword">&lt;/Text&gt;</Span></Text>
+              <Text class="code">  <Span class="code-keyword">&lt;/Slot&gt;</Span></Text>
+              <Text class="code"><Span class="code-keyword">&lt;/Use&gt;</Span></Text>
+            </Slot>
+          </Use>
+
+          <Use template="callout-info" label="RULE OF THREE"
+               body="The third time you copy-paste a layout block, stop and extract it as a template. The fourth time is a refactor; the third is prevention." />
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

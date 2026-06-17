@@ -1,0 +1,91 @@
+<Fragment>
+  <!-- Chapter 04 — Image. -->
+  <Use template="section-mustard"
+       number="04"
+       kicker="Bitmap + vector embed"
+       title="Image."
+       subtitle="One source, three sizings, full surface controls."
+       inside1="src · http URL, data URI, or relative path"
+       inside2="sizing · cover, contain, or manual crop"
+       inside3="altText · accessibility + decorative flag"
+       inside4="borderRadius · clip to a rounded rectangle"
+       epigraph="Photography lives at the card's surface; the image is the card, not its decoration."
+       epigraphAttrib="builder design notes"
+       meta="Image · src · sizing · alt"
+       leftMeta="1 leaf node · 3 sizing modes · accepts URL, data URI, or relative path" />
+
+  <Use template="page" eyebrow="04 / Image" kicker="Embed"
+       title="Image — raster + vector embed"
+       lede="Embeds a bitmap (PNG/JPG) or rasterised SVG. The src accepts http(s) URLs, data URIs, or paths relative to the source XML's directory.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Attributes" />
+          <Foreach items='[
+            {"attr":"src","type":"string","desc":"URL · data URI · relative path. Required.","req":true},
+            {"attr":"sizing","type":"enum","desc":"cover (fill + crop) · contain (fit + letterbox) · crop (manual)."},
+            {"attr":"altText","type":"string","desc":"Accessible alt text. Empty when isDecorative=true."},
+            {"attr":"rotate","type":"number","desc":"Rotation in degrees."},
+            {"attr":"opacity","type":"number","desc":"0..1 transparency."},
+            {"attr":"borderRadius","type":"number","desc":"Crop the image into a rounded rectangle."},
+            {"attr":"border","type":"object","desc":"Stroke around the image frame."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+
+          <Use template="rule-soft" />
+          <Use template="callout" cls="callout-warn" kind="SECURITY"
+               titleColor="92400E" title="src is forwarded as-is"
+               body="Untrusted file paths can read arbitrary server files; untrusted HTTP(S) URLs can trigger SSRF. Validate any user-supplied src against an allowlist before passing it through." />
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · sizing modes" />
+          <HStack gap="10" alignItems="stretch" w="100%">
+            <VStack class="card-canvas" gap="4" padding="10">
+              <Text class="caption" color="AA2D00">sizing="cover"</Text>
+              <VStack class="bg-coral" h="120" borderRadius="8" />
+              <Text class="body-muted">Fills the box; crops overflow.</Text>
+            </VStack>
+            <VStack class="card-canvas" gap="4" padding="10">
+              <Text class="caption" color="AA2D00">sizing="contain"</Text>
+              <VStack class="bg-soft" h="120" borderRadius="8" alignItems="center" justifyContent="center">
+                <VStack class="bg-forest" w="80%" h="60" borderRadius="6" />
+              </VStack>
+              <Text class="body-muted">Fits inside; letterboxes the rest.</Text>
+            </VStack>
+          </HStack>
+
+          <Use template="h2" text="Sample · borderRadius + border" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">an image clipped to a 12px rounded rectangle</Text>
+            <VStack class="bg-mustard" h="120" borderRadius="12" border.color="DDDDDD" border.width="1" />
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-row" label="Image · cover sizing" rightLabel="rendered output (mocked)">
+        <Slot name="code">
+          <Text class="code-text">&lt;Image</Text>
+          <Text class="code-text">  src="hero/coral-card.png"</Text>
+          <Text class="code-text">  sizing="cover"</Text>
+          <Text class="code-text">  w="100%" h="160"</Text>
+          <Text class="code-text">  borderRadius="12"</Text>
+          <Text class="code-text">  altText="Production-apps callout."</Text>
+          <Text class="code-text">/&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <VStack class="bg-coral" h="160" borderRadius="12" alignItems="center" justifyContent="center">
+            <Text fontFamily="Inter Display" fontSize="16" bold="true" color="FFFFFF">hero/coral-card.png</Text>
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+</Fragment>

@@ -1,0 +1,33 @@
+packages:
+  - "packages/*"
+  - "apps/*"
+  - "examples/*"
+  - "generated_decks"
+  - "generated_decks/*"
+
+# Single source of truth for npm dependency versions used in 2+
+# packages. Reference from any package.json with `"react": "catalog:"`
+# (etc.). pnpm 9.5+ resolves the alias at install time. Kept narrow on
+# purpose — single-use deps stay in their package.json so we don't
+# bloat the root with one-shot tooling.
+catalog:
+  # React UI runtime (apps + viewer)
+  react: ^19.2.0
+  react-dom: ^19.2.0
+  "@types/react": ^19.2.0
+  "@types/react-dom": ^19.2.0
+
+  # Build tooling shared across every JS package
+  vite: ^8.0.0
+  typescript: ^6.0.0
+  vitest: ^4.1.0
+  "@vitejs/plugin-react": ^6.0.0
+  vite-plugin-wasm: ^3.6.0
+  vite-plugin-top-level-await: ^1.6.0
+  happy-dom: ^20.9.0
+
+  # Iconography (viewer + chrome-extension)
+  "@phosphor-icons/react": ^2.1.10
+
+patchedDependencies:
+  mtx-decompressor: patches/mtx-decompressor.patch

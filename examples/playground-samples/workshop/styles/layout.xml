@@ -1,0 +1,8 @@
+<Fragment>
+  <Styles>
+    <Style name="page"     w="100%" h="100%" />
+    <Style name="fill"     h="max" w="100%" />
+    <Style name="hairline" backgroundColor="E8D8C0" h="1" w="100%" />
+    <Style name="vrule"    backgroundColor="E8D8C0" w="1" h="100%" />
+  </Styles>
+</Fragment>

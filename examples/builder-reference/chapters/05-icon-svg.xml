@@ -1,0 +1,133 @@
+<Fragment>
+  <!-- Chapter 05 — Icon & Svg. -->
+  <Use template="section-peach"
+       number="05"
+       kicker="Pictograms + inline vectors"
+       title="Icon &amp; Svg."
+       subtitle="A built-in catalogue, plus an inline SVG escape hatch."
+       inside1="Icon · curated catalogue, named glyphs"
+       inside2="variant · circle / square fill chips"
+       inside3="Svg · arbitrary raw SVG markup"
+       inside4="color · monochrome recolour for both nodes"
+       epigraph="The icon catalogue covers 95% of UI; the inline SVG escape hatch covers the rest."
+       epigraphAttrib="builder design notes"
+       meta="Icon · Svg"
+       leftMeta="2 leaf nodes · curated icon catalog · arbitrary inline SVG support" />
+
+  <Use template="page" eyebrow="05 / Icon" kicker="Catalogue"
+       title="Icon — built-in pictograms"
+       lede="Renders a curated icon by name. Optional variant wraps the glyph in a circle or square fill so a single icon can stand alone or sit in a coloured chip.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Attributes" />
+          <Foreach items='[
+            {"attr":"name","type":"string","desc":"Icon catalog name. Required.","req":true},
+            {"attr":"size","type":"number","desc":"Square pixel size (drives both w and h)."},
+            {"attr":"color","type":"iconColor","desc":"Foreground (glyph) colour."},
+            {"attr":"backgroundColor","type":"iconColor","desc":"Surface colour. Pairs with variant."},
+            {"attr":"variant","type":"enum","desc":"circle-filled · circle-outlined · square-filled · square-outlined."},
+            {"attr":"altText","type":"string","desc":"Accessible alt text."}
+          ]' as="r">
+            <Choose>
+              <When test="r.req">
+                <Use template="attr-row-req" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </When>
+              <Otherwise>
+                <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+              </Otherwise>
+            </Choose>
+          </Foreach>
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · five icons in five variants" />
+          <VStack class="card-canvas" gap="10">
+            <HStack gap="14" alignItems="center">
+              <Icon name="check" size="22" color="006400" />
+              <Icon name="info" size="22" color="1B61C9" />
+              <Icon name="triangle-alert" size="22" color="92400E" />
+              <Icon name="x" size="22" color="AA2D00" />
+              <Icon name="arrow-right" size="22" color="181D26" />
+            </HStack>
+            <Text class="body-muted">five icons rendered at size=22 with semantic colours.</Text>
+          </VStack>
+
+          <VStack class="card-canvas" gap="10">
+            <HStack gap="10" alignItems="center">
+              <Icon name="check" size="28" variant="circle-filled" color="FFFFFF" backgroundColor="006400" />
+              <Icon name="info" size="28" variant="circle-outlined" color="1B61C9" />
+              <Icon name="triangle-alert" size="28" variant="square-filled" color="FFFFFF" backgroundColor="D9A441" />
+              <Icon name="x" size="28" variant="square-outlined" color="AA2D00" />
+            </HStack>
+            <Text class="body-muted">variant attribute wraps the glyph in a circle or square chip.</Text>
+          </VStack>
+        </Slot>
+      </Use>
+
+      <Use template="code-row" label="Icon · variant=circle-filled" rightLabel="rendered output">
+        <Slot name="code">
+          <Text class="code-text">&lt;HStack gap="10" alignItems="center"&gt;</Text>
+          <Text class="code-text">  &lt;Icon name="check" size="28"</Text>
+          <Text class="code-text">    variant="circle-filled"</Text>
+          <Text class="code-text">    color="FFFFFF"</Text>
+          <Text class="code-text">    backgroundColor="006400" /&gt;</Text>
+          <Text class="code-text">  &lt;Text class="body"&gt;Done.&lt;/Text&gt;</Text>
+          <Text class="code-text">&lt;/HStack&gt;</Text>
+        </Slot>
+        <Slot name="render">
+          <HStack gap="10" alignItems="center" padding="8">
+            <Icon name="check" size="28" variant="circle-filled" color="FFFFFF" backgroundColor="006400" />
+            <Text class="body">Done.</Text>
+          </HStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+
+  <Use template="page" eyebrow="05 / Svg" kicker="Inline SVG"
+       title="Svg — bring-your-own vector"
+       lede="Embeds raw SVG markup. Useful for one-off illustrations, custom logos, or vectors that don't belong in the icon catalogue. The color attribute recolours monochrome SVGs.">
+    <Slot name="default">
+      <Use template="col2-editorial">
+        <Slot name="left">
+          <Use template="h2" text="Attributes" />
+          <Foreach items='[
+            {"attr":"w / h","type":"length","desc":"Render box. Required to size the SVG."},
+            {"attr":"color","type":"iconColor","desc":"Recolours monochrome SVGs (replaces fill=&apos;currentColor&apos;)."},
+            {"attr":"backgroundColor","type":"color","desc":"Surface fill behind the SVG."},
+            {"attr":"borderRadius","type":"number","desc":"Clip rounding."},
+            {"attr":"altText","type":"string","desc":"Accessible alt text."}
+          ]' as="r">
+            <Use template="attr-row" attr="{r.attr}" type="{r.type}" desc="{r.desc}" />
+          </Foreach>
+
+          <Use template="rule-soft" />
+          <Use template="h2" text="Child element" />
+          <Use template="attr-row" attr="&lt;svg&gt;" type="markup" desc="Required body — raw SVG markup with namespace declaration." />
+        </Slot>
+        <Slot name="right">
+          <Use template="h2" text="Sample · inline arrow" />
+          <VStack class="card-canvas" gap="6">
+            <Text class="caption" color="AA2D00">a custom right-arrow recoloured via color="AA2D00"</Text>
+            <Svg w="240" h="60" color="AA2D00" alignSelf="center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="currentColor">
+                <rect x="0" y="26" width="160" height="8" rx="4" />
+                <polygon points="160,16 200,30 160,44" />
+              </svg>
+            </Svg>
+          </VStack>
+
+          <Use template="h2" text="Sample · forest brand mark" />
+          <VStack class="card-canvas" gap="6">
+            <Svg w="80" h="80" color="0A2E0E" alignSelf="center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+                <circle cx="50" cy="50" r="40" />
+                <rect x="44" y="20" width="12" height="60" fill="white" />
+              </svg>
+            </Svg>
+          </VStack>
+        </Slot>
+      </Use>
+    </Slot>
+  </Use>
+</Fragment>

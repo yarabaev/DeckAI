@@ -1,0 +1,35 @@
+# Compose lives at packages/builder/docker/. Build context is the repo
+# root (../../..) because the Dockerfile copies the workspace lockfile +
+# every package.json. Volume host paths are relative to this file (i.e.
+# packages/builder/docker/), so most mounts point one level up to the
+# builder root via `../`.
+services:
+  vrt:
+    build:
+      context: ../../..
+      dockerfile: packages/builder/docker/Dockerfile
+    image: slideglance-builder-vrt:latest
+    volumes:
+      # Mount the deck VRT output dir back to the host.
+      - ../vrt/decks/output:/app/packages/builder/vrt/decks/output
+    command: pnpm run vrt
+
+  vrt-update:
+    build:
+      context: ../../..
+      dockerfile: packages/builder/docker/Dockerfile
+    image: slideglance-builder-vrt:latest
+    volumes:
+      # Mount the entire vrt/ tree so expected.png updates land on the host.
+      - ../vrt:/app/packages/builder/vrt
+    command: pnpm run vrt:update
+
+  preview:
+    build:
+      context: ../../..
+      dockerfile: packages/builder/docker/Dockerfile
+    image: slideglance-builder-vrt:latest
+    volumes:
+      # Mount the preview output dir back to the host.
+      - ../vrt/preview/output:/app/packages/builder/vrt/preview/output
+    command: pnpm run preview

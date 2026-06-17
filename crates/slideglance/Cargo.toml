@@ -1,0 +1,52 @@
+[package]
+name = "slideglance"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "End-to-end PPTX -> SVG/PNG conversion: parser + renderer + rasterizer + CLI"
+readme = "../../README.md"
+keywords = ["pptx", "powerpoint", "svg", "png", "renderer"]
+categories = ["graphics", "command-line-utilities", "multimedia"]
+
+[lints]
+workspace = true
+
+[dependencies]
+slideglance-utils = { workspace = true, features = ["serde"] }
+slideglance-color = { workspace = true, features = ["serde"] }
+slideglance-model = { workspace = true, features = ["serde"] }
+slideglance-parser = { workspace = true }
+slideglance-font = { workspace = true }
+slideglance-renderer = { workspace = true }
+slideglance-png = { workspace = true }
+regex = { workspace = true }
+serde = { workspace = true }
+base64 = { workspace = true }
+# Used to walk TTC bundles when registering host system fonts with the
+# auto-built OpentypeTextMeasurer for accurate wrap measurement.
+ttf-parser = { workspace = true }
+fontcull = { workspace = true }
+xxhash-rust = { workspace = true }
+
+[[bin]]
+name = "slideglance"
+path = "src/bin/slideglance.rs"
+
+[features]
+default = []
+# Enable WOFF2 compression for embedded font output.
+# When enabled, fontcull's woff2 feature (woofwoof brotli encoder) is activated.
+woff2 = ["fontcull/woff2"]
+# Opt-in host-system font discovery — re-exports `load_system_fonts`,
+# `load_system_font_bytes`, `load_system_font_bytes_for_families` from
+# slideglance-font. Enabling breaks deterministic output across machines (same
+# input PPTX renders differently depending on installed fonts), so this
+# is intended for interactive viewers / editors, not deterministic
+# batch pipelines or CI.
+system-fonts = ["slideglance-font/system-fonts"]
+
+[dev-dependencies]
+zip = { workspace = true }

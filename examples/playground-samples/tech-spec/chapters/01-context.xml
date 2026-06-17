@@ -1,0 +1,36 @@
+<Fragment>
+  <!-- ================================================================
+       Context — what we have today, goals, non-goals.
+       ================================================================ -->
+  <Use template="section"
+       eyebrow="01 · CONTEXT"
+       title="What we run today, and what's wrong with it."
+       lede="The five regional load balancers each have their own configuration language, deployment pipeline, and auth interceptor. Drift between regions is now the most common cause of customer-visible 5xx.">
+    <Slot name="default">
+      <HStack gap="24" alignItems="start" w="100%">
+        <VStack gap="10" w="50%">
+          <Text class="title">Today.</Text>
+          <Use template="kv-row" k="REGIONAL INSTANCES" v="5 (us-east, us-west, eu-central, ap-south, ap-northeast)" />
+          <Use template="kv-row" k="CONFIG SOURCES" v="3 — Terraform, YAML overlays, runtime API patch" />
+          <Use template="kv-row" k="AUTH INTERCEPTORS" v="3 sidecars per region · written in 2 languages" />
+          <Use template="kv-row" k="LAST 90 DAYS" v="14 incidents, 9 attributed to inter-region drift" />
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="10" w="max">
+          <Text class="title">Goals.</Text>
+          <Use template="bullet-row" text="Single declarative configuration source per region — no runtime patch." />
+          <Use template="bullet-row" text="Identical contract for N/S (customer ingress) and E/W (service mesh) traffic." />
+          <Use template="bullet-row" text="One canonical auth path. Sidecars deprecated within two quarters." />
+          <Use template="bullet-row" text="Zero customer-visible downtime during migration; rollback in &lt; 10 minutes." />
+
+          <VStack padding.top="14" gap="10">
+            <Text class="title" color="6B7280">Non-goals.</Text>
+            <Text class="body-soft">Not in scope: layer-7 rate limiting (already lives in the WAF tier), cross-region replication of any data plane, or migration of the long-deprecated <Span class="kw-warn">legacy/ws</Span> WebSocket gateway (separate workstream).</Text>
+          </VStack>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

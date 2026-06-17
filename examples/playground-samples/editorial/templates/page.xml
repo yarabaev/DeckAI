@@ -1,0 +1,52 @@
+<Fragment>
+  <Templates>
+    <Template name="cover">
+      <Slide master="COVER">
+        <VStack padding.left="48" padding.right="48"
+                padding.top="180" padding.bottom="64"
+                gap="20" h="100%">
+          <Slot name="default" />
+        </VStack>
+      </Slide>
+    </Template>
+
+    <Template name="feature">
+      <Slide master="BODY">
+        <VStack padding.left="48" padding.right="48"
+                padding.top="80" padding.bottom="80"
+                gap="22" h="100%">
+          <VStack gap="6">
+            <HStack gap="8" alignItems="center">
+              <VStack class="bg-accent" w="14" h="2" />
+              <Text class="eyebrow">{eyebrow}</Text>
+            </HStack>
+            <Text class="display-md">{title}</Text>
+            <Text class="subtitle" w="640">{lede}</Text>
+          </VStack>
+          <VStack class="hairline" />
+          <VStack class="fill" gap="16">
+            <Slot name="default" />
+          </VStack>
+        </VStack>
+      </Slide>
+    </Template>
+
+    <Template name="essay">
+      <Slide master="BODY">
+        <VStack padding.left="48" padding.right="48"
+                padding.top="80" padding.bottom="80"
+                gap="22" h="100%">
+          <VStack gap="6">
+            <Text class="eyebrow">{eyebrow}</Text>
+            <Text class="display-lg" w="600">{title}</Text>
+            <Text class="byline">By {author} · {date}</Text>
+          </VStack>
+          <VStack class="hairline-thick" />
+          <VStack class="fill" gap="14">
+            <Slot name="default" />
+          </VStack>
+        </VStack>
+      </Slide>
+    </Template>
+  </Templates>
+</Fragment>

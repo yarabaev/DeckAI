@@ -1,0 +1,51 @@
+<Fragment>
+  <!--
+    Page wrappers.
+
+      page         — eyebrow + display title + standfirst, then body.
+      page-bare    — full bleed body (visual / hero compositions).
+      cover-frame  — wraps the COVER master with hero stack.
+
+    Geometry — 1280×720 with 56px gutters left/right, 80px top (under
+    the master strip) and 80px bottom (above the footer rail).
+  -->
+  <Templates>
+    <Template name="page">
+      <Slide master="STAGE">
+        <VStack class="bg-ink" padding.left="56" padding.right="56"
+                padding.top="80" padding.bottom="80" gap="20" h="100%">
+          <VStack gap="8">
+            <HStack gap="8" alignItems="center">
+              <VStack class="bg-accent-2" w="12" h="3" />
+              <Text class="eyebrow">{eyebrow}</Text>
+            </HStack>
+            <Text class="display-md">{title}</Text>
+            <Text class="body" w="800">{lede}</Text>
+          </VStack>
+          <VStack class="fill" gap="20">
+            <Slot name="default" />
+          </VStack>
+        </VStack>
+      </Slide>
+    </Template>
+
+    <Template name="page-bare">
+      <Slide master="STAGE">
+        <VStack class="bg-ink" padding.left="56" padding.right="56"
+                padding.top="80" padding.bottom="80" gap="16" h="100%">
+          <Slot name="default" />
+        </VStack>
+      </Slide>
+    </Template>
+
+    <Template name="cover-frame">
+      <Slide master="COVER">
+        <VStack padding.left="56" padding.right="56"
+                padding.top="160" padding.bottom="64"
+                gap="28" h="100%" justifyContent="center">
+          <Slot name="default" />
+        </VStack>
+      </Slide>
+    </Template>
+  </Templates>
+</Fragment>

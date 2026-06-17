@@ -1,0 +1,37 @@
+<Fragment>
+  <!-- ================================================================
+       Problem — three-pillar callout grid.
+       ================================================================ -->
+  <Use template="page"
+       eyebrow="01 / PROBLEM"
+       title="Shipping software is mostly paperwork."
+       lede="Modern teams burn 40% of an engineering week on the choreography between commit and production. The cost is invisible to leadership but corrosive to teams.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="stretch" w="100%">
+        <Use template="pillar-card"
+             title="Twelve tools, one outage."
+             body="A typical deploy touches CI, CD, IAM, observability, a feature-flag service, and a status page. Any one outage stops releases for everyone." />
+        <Use template="pillar-card"
+             title="Engineers do release engineering."
+             body="The most expensive headcount on the team writes YAML to wire other YAML. Senior IC time is the most overpriced commodity in the stack." />
+        <Use template="pillar-card"
+             title="Failure mode: rollback hesitation."
+             body="When the blast radius is unknown, teams freeze. Mean-time-to-restore stretches into hours; user-visible incidents accumulate." />
+      </HStack>
+
+      <HStack gap="32" alignItems="center" w="100%" padding.top="12">
+        <VStack class="bg-elev" borderRadius="14"
+                padding.left="28" padding.right="28"
+                padding.top="22" padding.bottom="22" gap="6" w="40%">
+          <Text class="caption" color="FF6B6B">SURVEY · CIRCLECI '25</Text>
+          <Text class="metric-num" fontSize="44" color="FF6B6B">38%</Text>
+          <Text class="body-soft">of dev hours sunk into pipeline maintenance &amp; cross-tool glue.</Text>
+        </VStack>
+        <VStack gap="8" w="max">
+          <Text class="title">Where the time goes.</Text>
+          <Text class="body">The same survey puts the median pipeline at <Span class="kw-accent">11 manual touch-points</Span> between commit and prod. Every one of them is a place a senior engineer is the gatekeeper — and every one of them is automatable.</Text>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

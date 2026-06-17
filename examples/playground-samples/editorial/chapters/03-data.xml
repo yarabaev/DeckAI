@@ -1,0 +1,85 @@
+<Fragment>
+  <!-- ================================================================
+       Data spread — three stat-figures and a comparison table.
+       ================================================================ -->
+  <Use template="feature"
+       eyebrow="ESSAY · 02"
+       title="The shape of operational debt."
+       lede="When the team that built a feature moves on, what they leave behind is rarely the code. It is the operational assumptions encoded around the code — every alert threshold, every runbook, every on-call expectation.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="stretch" w="100%">
+        <Use template="stat-figure"
+             value="3.4×"
+             label="OPERATIONAL DEBT"
+             source="Hours of on-call work added per feature, year two over year one." />
+        <VStack class="vrule" />
+        <Use template="stat-figure"
+             value="71%"
+             label="RUNBOOK ROT"
+             source="Runbooks declared stale by the team that uses them, 12 months after publish." />
+        <VStack class="vrule" />
+        <Use template="stat-figure"
+             value="2.1"
+             label="OWNERS PER FEATURE"
+             source="Distinct teams holding portions of the feature's stack, median, year three." />
+      </HStack>
+
+      <VStack class="hairline" />
+
+      <VStack gap="10">
+        <Text class="title">Where the on-call hours go.</Text>
+        <Text class="body-muted">Self-reported on-call ledger entries, n = 412 incidents, Q4 2025.</Text>
+        <Table w="100%" cellBorder.color="C7B998" cellBorder.width="0.5"
+               cellMargin="8" defaultRowHeight="30">
+          <Col w="36%" />
+          <Col w="22%" />
+          <Col w="22%" />
+          <Col w="20%" />
+          <Tr>
+            <Td text="Incident class" backgroundColor="F0EADC" fontFamily="Inter" fontSize="10" bold="true" color="1F1B16" />
+            <Td text="Median hrs / event" backgroundColor="F0EADC" fontFamily="Inter" fontSize="10" bold="true" color="1F1B16" textAlign="right" />
+            <Td text="% of all events"    backgroundColor="F0EADC" fontFamily="Inter" fontSize="10" bold="true" color="1F1B16" textAlign="right" />
+            <Td text="Avg. tenure of fix" backgroundColor="F0EADC" fontFamily="Inter" fontSize="10" bold="true" color="1F1B16" textAlign="right" />
+          </Tr>
+          <Tr>
+            <Td text="Threshold drift (alert too loud / too quiet)" fontFamily="Georgia" fontSize="11" color="3A332B" />
+            <Td text="0.6"     fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="34%"     fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="11 days" fontFamily="Georgia" fontSize="11" color="9A2A1F" textAlign="right" bold="true" />
+          </Tr>
+          <Tr>
+            <Td text="Schema / API drift" fontFamily="Georgia" fontSize="11" color="3A332B" />
+            <Td text="2.4"        fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="22%"        fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="3.2 months" fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+          </Tr>
+          <Tr>
+            <Td text="Runbook contradicts prod" fontFamily="Georgia" fontSize="11" color="3A332B" />
+            <Td text="1.1"     fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="18%"     fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="6 weeks" fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+          </Tr>
+          <Tr>
+            <Td text="Forgotten dependency" fontFamily="Georgia" fontSize="11" color="3A332B" />
+            <Td text="3.8"       fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="14%"       fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="permanent" fontFamily="Georgia" fontSize="11" color="9A2A1F" textAlign="right" bold="true" />
+          </Tr>
+          <Tr>
+            <Td text="True novel incident" fontFamily="Georgia" fontSize="11" color="3A332B" />
+            <Td text="4.6" fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="12%" fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+            <Td text="—"   fontFamily="Georgia" fontSize="11" color="3A332B" textAlign="right" />
+          </Tr>
+        </Table>
+      </VStack>
+
+      <VStack padding.top="12" gap="8">
+        <Use template="footnote" n="2"
+             body="'Permanent' indicates the team's reported tenure exceeds the survey window of 36 months — i.e., the fix has not yet been replaced." />
+        <Use template="footnote" n="3"
+             body="The 'forgotten dependency' class is the most expensive: median 3.8 hours per event, and a hard-to-quantify cost of context-recovery for the on-call engineer." />
+      </VStack>
+    </Slot>
+  </Use>
+</Fragment>

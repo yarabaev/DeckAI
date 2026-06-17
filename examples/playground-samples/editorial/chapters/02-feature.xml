@@ -1,0 +1,60 @@
+<Fragment>
+  <!-- ================================================================
+       Feature essay — two-column body with editorial lead-in.
+
+       NOTE on drop caps. The classical magazine drop cap (large
+       initial letter that wraps the first 2–3 lines of body text
+       around its right edge) needs text-flow-around-shape, which
+       neither the builder's flex/layer layout nor pptxgenjs's
+       textbox API supports. We approximate the editorial energy
+       with a "lead-in" instead: a single oversized accented line
+       that introduces the first paragraph. The body then runs
+       below as a regular column. Faithful to the visual contract
+       (editorial gravity on the open) without lying about layout.
+       ================================================================ -->
+  <Use template="essay"
+       eyebrow="ESSAY · 01"
+       title="After the launch, the slow work."
+       author="Mara Olsen"
+       date="14 February 2026">
+    <Slot name="default">
+      <HStack gap="28" alignItems="start" w="100%">
+        <VStack gap="14" w="50%">
+          <!-- Editorial lead-in: oversized + accent-colored first line.
+               Replaces the unbuildable drop-cap form. -->
+          <Text fontFamily="Georgia" fontSize="22" bold="true" color="9A2A1F" lineHeight="1.2">The most photographed moment of a release is the launch day.</Text>
+
+          <Text class="body" lineHeight="1.55">The work that actually defines whether the release was good — the year that follows — gets almost no coverage. We've been counting hours, in seven companies, in the months after a shipped feature, to understand where they really go.</Text>
+
+          <Text class="body">What we found is consistent enough to call a pattern. The launch is the cheap part. <Span class="kw-accent">Eighty-two percent</Span> of the lifetime engineering effort on a customer-facing feature is spent after the marketing campaign ends — on the quiet work of keeping the thing running, growing, and honest.</Text>
+
+          <Use template="pull-quote"
+               quote="We deleted four internal services on the first day. We added six in the next year."
+               attribution="Director of Platform, Series-B fintech" />
+
+          <Text class="body">The shape of that effort is unlike the shape of building it. There are no sprints. The work arrives at irregular intervals, in fragments, often as the consequence of decisions made months earlier. It does not photograph well.</Text>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="14" w="50%">
+          <Use template="figure-card" n="01"
+               figureCaption="[chart placeholder]"
+               caption="Lifetime engineering hours per feature, normalised. n = 142 features across 7 companies." />
+
+          <Use template="stat-figure"
+               value="82%"
+               label="OF LIFETIME EFFORT"
+               source="Post-launch maintenance, growth iteration, and refactor work. 2024 cohort." />
+
+          <VStack class="hairline" />
+
+          <Text class="body-muted">The numbers come from a private survey of platform-engineering leads we conducted across the second half of 2025. The full methodology, every interview transcript, and the underlying data are in the supplement.</Text>
+
+          <Use template="footnote" n="1"
+               body="Lifetime is bounded at 36 months from GA. Features still in active growth at month 36 are excluded from the median calculation." />
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>

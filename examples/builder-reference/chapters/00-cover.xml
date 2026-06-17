@@ -1,0 +1,218 @@
+<Fragment>
+  <!-- =================================================================
+       Deck cover — full-bleed dark surface with editorial hero stack.
+       ================================================================= -->
+  <Slide master="COVER">
+    <VStack class="page" gap="0">
+      <!-- Top brand strip. -->
+      <HStack padding.top="36" padding.left="48" padding.right="48"
+              alignItems="center" justifyContent="spaceBetween">
+        <HStack gap="10" alignItems="center">
+          <VStack class="bg-dark" w="22" h="22" borderRadius="4" />
+          <Text class="caption" color="181D26">slideglance / builder</Text>
+        </HStack>
+        <Text class="caption" color="41454D" textAlign="right">Reference · Edition 2026.0511</Text>
+      </HStack>
+
+      <!-- Hero. White canvas, editorial typography stack, no atmospheric mesh. -->
+      <VStack padding.left="48" padding.right="48" padding.top="40" padding.bottom="20"
+              gap="14" h="max" justifyContent="center">
+        <HStack gap="10" alignItems="center">
+          <VStack class="bg-coral" w="3" h="20" />
+          <Text class="caption" color="AA2D00">XML DSL · A4 portrait · 16 chapters</Text>
+        </HStack>
+
+        <Text fontFamily="Inter Display" fontSize="96" bold="false" color="181D26"
+              lineHeight="0.95">SlideGlance</Text>
+        <Text fontFamily="Inter Display" fontSize="96" bold="false" color="AA2D00"
+              lineHeight="0.95">XML Reference.</Text>
+
+        <Text fontFamily="Inter Display" fontSize="16" bold="false" color="333840"
+              lineHeight="1.45" w="640">A complete tour of every node and meta element in the @slideglance/builder declarative slide DSL — rendered as a print-style A4 deck with the source XML, the rendered output, and the full attribute table for every node.</Text>
+
+        <VStack h="16" />
+
+        <!-- Edition / format meta line. Print-only, no interactive elements. -->
+        <HStack gap="14" alignItems="center" alignSelf="start">
+          <Text class="caption" color="41454D">EDITION 2026.05</Text>
+          <VStack class="bg-hairline" w="1" h="14" />
+          <Text class="caption" color="41454D">42 PAGES</Text>
+          <VStack class="bg-hairline" w="1" h="14" />
+          <Text class="caption" color="41454D">A4 PORTRAIT · 793 × 1122</Text>
+          <VStack class="bg-hairline" w="1" h="14" />
+          <Text class="caption" color="41454D">PRINT EDITION</Text>
+        </HStack>
+      </VStack>
+
+      <!-- Lower meta strip — three-up summary. titleH / bodyH are
+           sentinel `auto` so the equalize preprocessor picks the
+           worst-case across the three siblings automatically. -->
+      <HStack padding.left="48" padding.right="48" padding.bottom="36" gap="14" alignItems="stretch">
+        <Use template="summary-card" titleH="auto" bodyH="auto"
+             eyebrow="RUNTIME"
+             title="parseXml → yoga → pptxgenjs"
+             body="3-stage compile pipeline." />
+        <Use template="summary-card" titleH="auto" bodyH="auto"
+             eyebrow="SURFACES"
+             title="7 signature palettes"
+             body="Coral · forest · cream · peach · mint · yellow · mustard." />
+        <Use template="summary-card" titleH="auto" bodyH="auto"
+             eyebrow="SLIDES"
+             title="A4 · 793 × 1122"
+             body="Single master, double layout." />
+      </HStack>
+    </VStack>
+  </Slide>
+
+  <!-- =================================================================
+       Table of contents — dense 2-column index.
+       ================================================================= -->
+  <Use template="page" eyebrow="00 / Index"
+       kicker="Reading guide"
+       title="Table of contents"
+       lede="Each chapter pairs an annotated XML source with the rendered output, plus a complete attribute table for the node family it covers.">
+    <Slot name="default">
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="10" w="50%">
+          <Foreach items='[
+            {"k":"01","v":"Stack containers — VStack · HStack · Layer · base attributes"},
+            {"k":"02","v":"Text — display + inline runs (B / I / U / S / Mark / Span / A)"},
+            {"k":"03","v":"Lists — Ul · Ol · Li · marker controls"},
+            {"k":"04","v":"Image — sources, sizing, decorative flag"},
+            {"k":"05","v":"Icon &amp; Svg — built-in catalogue + inline SVG"},
+            {"k":"06","v":"Shape &amp; Line — preset shapes, connectors, arrows"},
+            {"k":"07","v":"Table — Col · Tr · Td, cellBorder, defaultRowHeight"},
+            {"k":"08","v":"Chart — bar · line · pie · area · radar · doughnut"}
+          ]' as="r">
+            <Use template="kv-row" k="{r.k}" v="{r.v}" />
+          </Foreach>
+        </VStack>
+        <VStack class="vrule" />
+        <VStack gap="10" w="50%">
+          <Foreach items='[
+            {"k":"09","v":"Diagrams · sequences (pipeline, milestone strip, vertical timeline)"},
+            {"k":"10","v":"Diagrams · hierarchies (tree, org chart, pyramid)"},
+            {"k":"11","v":"Diagrams · flow (decision, swimlane, vertical pipeline)"},
+            {"k":"12","v":"Diagrams · matrix &amp; comparison"},
+            {"k":"13","v":"Recipes — KPIs, callouts, chips, swatches, steps"},
+            {"k":"14","v":"Templates / Styles / Imports — composition mechanics"},
+            {"k":"15","v":"Master, Notes, presentation-level options"},
+            {"k":"16","v":"Control flow — If, Choose / When / Otherwise, Foreach"},
+            {"k":"--","v":"Total: 17 chapters · 50+ pages · all primitive nodes"}
+          ]' as="r">
+            <Use template="kv-row" k="{r.k}" v="{r.v}" />
+          </Foreach>
+        </VStack>
+      </HStack>
+
+      <VStack class="hairline" />
+
+      <!-- Three mood cards. titleH / bodyH are sentinel "auto" — the
+           equalize preprocessor in build.ts measures every sibling's
+           text and rewrites the XML with the worst-case pixel height
+           shared across all three cards. -->
+      <HStack gap="14" alignItems="stretch" w="100%">
+        <Use template="mood-card" surface="card-coral" titleH="auto" bodyH="auto"
+             eyebrow="SIGNATURE" eyebrowColor="F5E0D6"
+             title="Surface cards do the heavy lifting." titleColor="FFFFFF"
+             body="Brand voltage lives in full-bleed coral, forest, dark, and cream surfaces — never in atmospheric gradients." bodyColor="FFD9C8" />
+        <Use template="mood-card" surface="card-soft" titleH="auto" bodyH="auto"
+             eyebrow="EDITORIAL" eyebrowColor="AA2D00"
+             title="White canvas. Modest weights." titleColor="181D26"
+             body="Display headlines stay at weight 400. Emphasis comes from size and signature surface contrast, not from boldness." bodyColor="333840" />
+        <Use template="mood-card" surface="card-dark" titleH="auto" bodyH="auto"
+             eyebrow="RHYTHM" eyebrowColor="9297A0"
+             title="Canvas resets between every signature surface." titleColor="FFFFFF"
+             body="White → coral → white → cream → dark → white. Two whites in a row read as a typography blog." bodyColor="DDDDDD" />
+      </HStack>
+    </Slot>
+  </Use>
+
+  <!-- =================================================================
+       Design system overview — palette + type ramp + spacing.
+       ================================================================= -->
+  <Use template="page" eyebrow="00 / System"
+       kicker="Design tokens"
+       title="The 7 palettes, the type ramp, and the rhythm grid"
+       lede="Every page in the deck draws from this token table. Palette swatches map 1:1 onto the Airtable .design.md frontmatter; type sizes scale to A4 portrait.">
+    <Slot name="default">
+      <Use template="h2" text="Signature palette" />
+      <HStack gap="10" alignItems="start" w="100%">
+        <Foreach items='[
+          {"color":"AA2D00","name":"coral"},
+          {"color":"0A2E0E","name":"forest"},
+          {"color":"181D26","name":"dark"},
+          {"color":"F5E9D4","name":"cream"},
+          {"color":"FCAB79","name":"peach"},
+          {"color":"A8D8C4","name":"mint"},
+          {"color":"F4D35E","name":"yellow"},
+          {"color":"D9A441","name":"mustard"}
+        ]' as="p">
+          <Use template="palette-swatch" color="{p.color}" name="{p.name}" />
+        </Foreach>
+      </HStack>
+
+      <VStack class="hairline-soft" />
+
+      <HStack gap="20" alignItems="start" w="100%">
+        <VStack gap="10" w="60%">
+          <Use template="h2" text="Type ramp" />
+          <!-- All seven rows share the same column contract through `type-row`.
+               token col 80 + gap 14 + sample col 180 + gap 14 + meta (max,
+               right-aligned). Calibrated so every "Aa Bb Cc" sample sits at
+               the same x and every meta caption ends at the same x. -->
+          <VStack gap="6">
+            <Foreach items='[
+              {"token":"display-xl","size":"32","bold":"true","lh":"1.05","sample":"Aa Bb Cc","meta":"48 / 500 · chapter covers"},
+              {"token":"display-lg","size":"28","bold":"false","lh":"1.1","sample":"Aa Bb Cc","meta":"40 / 400 · page hero"},
+              {"token":"display-md","size":"22","bold":"false","lh":"1.15","sample":"Aa Bb Cc","meta":"32 / 400 · signature card h2"},
+              {"token":"title-lg","size":"18","bold":"true","lh":"1.2","sample":"Aa Bb Cc","meta":"24 / 500 · section heads"},
+              {"token":"title-sm","size":"14","bold":"true","lh":"1.2","sample":"Aa Bb Cc","meta":"18 / 500 · card titles"},
+              {"token":"body","size":"13","bold":"false","lh":"1.25","sample":"The quick brown fox.","meta":"13 / 400 · running text"},
+              {"token":"caption","size":"11","bold":"true","lh":"1.25","sample":"CAPTION · META","meta":"11 / 500 · meta"}
+            ]' as="t">
+              <Use template="type-row" token="{t.token}" size="{t.size}" bold="{t.bold}" lh="{t.lh}"
+                   sample="{t.sample}" meta="{t.meta}" />
+            </Foreach>
+          </VStack>
+        </VStack>
+
+        <VStack class="vrule" />
+
+        <VStack gap="10" w="34%">
+          <Use template="h2" text="Spacing &amp; radius" />
+          <VStack gap="6">
+            <Foreach items='[
+              {"k":"xxs","v":"4 · atomic gap"},
+              {"k":"xs","v":"8 · chip padding"},
+              {"k":"sm","v":"12 · code box padding"},
+              {"k":"md","v":"16 · demo card padding"},
+              {"k":"lg","v":"24 · cream callout padding"},
+              {"k":"xl","v":"32 · feature card padding"},
+              {"k":"xxl","v":"48 · signature padding"},
+              {"k":"sec","v":"96 · section rhythm"}
+            ]' as="r">
+              <Use template="kv-row" k="{r.k}" v="{r.v}" />
+            </Foreach>
+          </VStack>
+          <VStack class="hairline-soft" />
+          <Text class="caption" color="AA2D00">Radius scale</Text>
+          <HStack gap="6" w="100%" alignItems="center">
+            <Foreach items='[
+              {"r":"2","label":"xs · 2"},
+              {"r":"6","label":"sm · 6"},
+              {"r":"10","label":"md · 10"},
+              {"r":"12","label":"lg · 12"},
+              {"r":"18","label":"pill"}
+            ]' as="s">
+              <VStack gap="3" alignItems="center" w="44">
+                <VStack w="36" h="36" backgroundColor="DDDDDD" borderRadius="{s.r}" />
+                <Text class="caption">{s.label}</Text>
+              </VStack>
+            </Foreach>
+          </HStack>
+        </VStack>
+      </HStack>
+    </Slot>
+  </Use>
+</Fragment>
